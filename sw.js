@@ -1,10 +1,6 @@
-/* Entreno · service worker
-   - App shell: cache-first (arranca sin conexión)
-   - Tipografías de Google: stale-while-revalidate (tras la primera carga online, offline)
-*/
-const V = 'entreno-v10.1';
+/* Entreno 2.0 · service worker */
+const V = 'entreno-v2.0.0';
 const SHELL = V + '-shell';
-const FONTS = V + '-fonts';
 const CORE = [
   './',
   './index.html',
@@ -20,7 +16,7 @@ const CORE = [
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(SHELL)
-      .then(c => Promise.allSettled(CORE.map(u => c.add(u))))
+      .then(c => c.addAll(CORE))
       .then(() => self.skipWaiting())
   );
 });
@@ -44,17 +40,6 @@ self.addEventListener('fetch', e => {
       fetch(req)
         .then(r => { const c = r.clone(); caches.open(SHELL).then(cc => cc.put('./index.html', c)); return r; })
         .catch(() => caches.match('./index.html').then(r => r || caches.match('./')))
-    );
-    return;
-  }
-
-  // Tipografías: sirve lo cacheado y refresca por detrás
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    e.respondWith(
-      caches.open(FONTS).then(c => c.match(req).then(hit => {
-        const net = fetch(req).then(r => { if (r && (r.ok || r.type === 'opaque')) c.put(req, r.clone()); return r; }).catch(() => hit);
-        return hit || net;
-      }))
     );
     return;
   }

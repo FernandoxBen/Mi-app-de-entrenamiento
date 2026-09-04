@@ -1,20 +1,20 @@
 {
-  "name": "Entreno · Plan 2026",
+  "name": "Entreno 2.0",
   "short_name": "Entreno",
-  "description": "Tu plan de gimnasio: calentamiento, series, pesos, descansos e historial. Funciona sin conexión.",
+  "description": "Plan de fuerza y acondicionamiento con progresión, descansos e historial. Funciona sin conexión.",
   "lang": "es",
   "dir": "ltr",
   "start_url": "./index.html",
   "scope": "./",
-  "id": "/entreno/",
+  "id": "./",
   "display": "standalone",
   "display_override": [
     "standalone",
     "minimal-ui"
   ],
-  "orientation": "portrait",
-  "background_color": "#0b0f16",
-  "theme_color": "#0b0f16",
+  "orientation": "any",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
   "categories": [
     "health",
     "fitness",
