@@ -1,0 +1,74 @@
+ENTRENO · v10.1
+===============
+
+QUÉ HAY EN ESTA CARPETA
+  index.html          la app entera (HTML + CSS + JS en un solo archivo)
+  manifest.json       lo que la convierte en app instalable
+  sw.js               hace que funcione sin conexión
+  icon-*.png          icono de la app
+  ic-*-192.png        iconos de los cuatro días (accesos al mantener pulsado)
+
+  Los archivos tienen que estar todos juntos en la misma carpeta.
+
+
+QUÉ ES EL HOSTING Y POR QUÉ HACE FALTA
+  Un hosting es, simplemente, un sitio en internet donde dejas tus archivos y
+  que les da una dirección web (por ejemplo https://tunombre.github.io/entreno).
+
+  Hace falta por una razón concreta: Android solo instala una página como app
+  de verdad —con su icono, a pantalla completa y funcionando sin conexión— si
+  viene de una dirección https. Un archivo suelto abierto desde la memoria del
+  móvil no puede hacerlo. La app luego funciona sin internet igual, pero la
+  primera vez tiene que venir de una dirección.
+
+  Cuesta cero. Dos opciones buenas:
+
+  GITHUB PAGES — la recomendada si piensas ir actualizando
+    1. Crea una cuenta en github.com.
+    2. Crea un repositorio nuevo, público, llamado por ejemplo "apps".
+    3. Súbelo todo con "Add file → Upload files" (puedes arrastrar la carpeta).
+    4. Settings → Pages → Source: "Deploy from a branch", rama main, carpeta /.
+    5. En un minuto tienes https://TUUSUARIO.github.io/apps/entreno/
+    Para actualizar: subes el index.html nuevo encima del viejo. Nada más.
+
+  NETLIFY DROP — la más rápida para probar
+    1. Entra en app.netlify.com/drop.
+    2. Arrastra la carpeta. Te da una dirección al momento.
+    3. Crea la cuenta gratis si quieres conservarla.
+
+
+VARIAS APPS EN UNA CARPETA DE LA PANTALLA DE INICIO
+  Cada HTML tuyo va en su propia subcarpeta del hosting, con su manifest y su
+  icono. Así cada uno se instala como una app distinta:
+
+    apps/
+      entreno/     index.html  manifest.json  sw.js  iconos
+      recetas/     index.html  manifest.json  sw.js  iconos
+      loquesea/    index.html  manifest.json  sw.js  iconos
+
+  En el móvil: abres cada dirección en Chrome, menú ⋮ → "Instalar aplicación"
+  o "Añadir a pantalla de inicio". Cuando tengas dos o más iconos, arrastra uno
+  encima de otro y Android crea la carpeta; le pones el nombre que quieras.
+
+  Un HTML suelto no basta para que se instale con su propio icono: necesita su
+  manifest.json y su sw.js al lado. Si me pasas cualquier HTML tuyo, te lo dejo
+  empaquetado igual que este, listo para subir a su subcarpeta.
+
+
+INSTALAR ESTA APP
+  1. Sube esta carpeta al hosting.
+  2. Abre la dirección en Chrome en el móvil.
+  3. Menú ⋮ → "Instalar aplicación".
+  4. Manteniendo pulsado el icono tienes los cuatro días como accesos rápidos.
+
+
+SI YA TENÍAS LA VERSIÓN ANTERIOR
+  Sustituye el index.html antiguo por este, en la misma dirección. La app lee
+  tus notas del registro viejo y tus variantes elegidas y las convierte al
+  formato nuevo la primera vez que la abres. No hace falta hacer nada más.
+
+
+TUS DATOS
+  Se guardan solo en el navegador de ese móvil. No salen a ningún servidor.
+  Ajustes → Exportar te baja un .json con todo; Importar lo restaura en otro
+  móvil o después de limpiar el navegador. Hazlo de vez en cuando.
