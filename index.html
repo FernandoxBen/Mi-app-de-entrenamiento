@@ -418,7 +418,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.0.0',
+  version: '2.0.1',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -463,18 +463,18 @@ const P = {
       blocks:[
         {t:'warmup'},
         {t:'sec', h:'Fuerza', meta:'desc 2–3 min'},
-        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Carga exigente · RIR 2 · tempo controlado', sets:3, reps:'6–8', rest:150, kg:1},
-        {t:'ex', id:'dominada-lastrada', nm:'Dominadas lastradas', cue:'Fuerza · <b>sin llegar al fallo</b> · deja 2 reps en reserva', sets:3, reps:'4–6', rest:150, kg:1},
+        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Carga exigente · RIR 2 · tempo controlado', sets:4, reps:'6–8', rest:150, kg:1},
+        {t:'ex', id:'dominada-lastrada', nm:'Dominadas lastradas', cue:'Fuerza · hombros lejos de las orejas · deja 2 reps en reserva', sets:4, reps:'4–6', rest:150, kg:1},
         {t:'note', x:'<b>Segundo empuje sin dolor:</b> el landmine sustituye al press en máquina. Trabaja pecho y deltoide anterior en diagonal, sin llevar el codo por detrás del torso, que es donde tu hombro se queja. Si aun así molesta, prueba el press en el suelo.'},
         {t:'tip', x:'<b>Trabajo submáximo:</b> el lastre desarrolla fuerza sin exigir llegar al fallo. Mantener margen ayuda a conservar la técnica y a recuperarte para el segundo día de tren superior.'},
 
         {t:'sec', h:'Volumen', meta:'desc 60–90 s'},
         {t:'ss', tag:'SS A · empuje + bíceps', items:[
-          {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · usa un rango cómodo', sets:3, reps:'8–10/lado', rest:75, kg:1},
-          {t:'ex', id:'curl-biceps', nm:'Curl de bíceps', sets:3, reps:'10–12', rest:75, kg:1}
+          {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · usa un rango cómodo', sets:4, reps:'8–10/lado', rest:75, kg:1},
+          {t:'ex', id:'curl-biceps', nm:'Curl de bíceps', sets:4, reps:'10–12', rest:75, kg:1}
         ]},
         {t:'ss', tag:'SS B · espalda + hombro', items:[
-          {t:'ex', id:'remo', nm:'Remo', cue:'Variante elegida abajo', sets:3, reps:'10–12', rest:75, kg:1, pick:'remo'},
+          {t:'ex', id:'remo', nm:'Remo', cue:'Pecho estable · codos hacia la cadera · pausa 1 s', sets:4, reps:'10–12', rest:90, kg:1, pick:'remo'},
           {t:'ex', id:'curl-martillo', nm:'Curl martillo', cue:'Braquial y antebrazo', sets:2, reps:'12–15', rest:75, kg:1}
         ]},
         {t:'ss', tag:'SS C · tríceps + core · desc 60 s', items:[
@@ -486,18 +486,18 @@ const P = {
           '<b>Hollow body hold</b> — piernas a 30–40°, lumbar pegada al suelo. 20–30 s.'
         ]},
 
-        {t:'sec', h:'Tu remo', meta:'3×10–12'},
+        {t:'sec', h:'Tu remo', meta:'4×10–12'},
         {t:'pick', k:'remo', hint:'Ordenados de más a menos amable con tu lumbar', opts:[
-           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'3×10–12', u:'recomendado',
-           how:'Pecho contra el respaldo, agarre neutro si lo hay. Tira llevando los codos atrás y juntando los omóplatos al final. Al no tener que sostener la postura, <b>todo el esfuerzo va a la espalda</b> — lo vas a notar mucho más que en el remo libre.'},
-          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'3×10–12', u:'/lado',
+           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'4×10–12', u:'recomendado',
+           how:'Pecho pegado al respaldo y hombros lejos de las orejas. Deja que el omóplato avance al estirar; después lleva el codo hacia la cadera y pausa 1 s atrás. <b>El torso no se separa del apoyo.</b> Si el antebrazo falla antes que la espalda, usa correas solo en las últimas series.'},
+          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'4×10–12', u:'/lado',
            how:'Apoyado en el soporte, tiras con un brazo. El apoyo elimina la estabilización, y al ir de uno en uno corriges descompensaciones y consigues más rango.'},
-          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'3×10–12',
+          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'4×10–12',
            how:'Sentado, pies fijos, espalda erguida. Tira hacia el abdomen sin balancear el torso. <b>El tronco no se mueve</b>: si te vas hacia atrás para tirar, hay demasiado peso.'},
-          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'3×10–12', u:'/lado',
+          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'4×10–12', u:'/lado',
            how:'Rodilla y mano del mismo lado apoyadas en el banco, espalda plana y paralela al suelo. Tira la mancuerna hacia la cadera, codo pegado. El apoyo protege la lumbar.'}
         ]},
-        {t:'tip', x:'<b>Si notas que no haces bien los remos libres</b>, no es un fallo tuyo: el remo inclinado exige sostener la bisagra con la espalda neutra, y parte del esfuerzo se va en aguantar la postura. Con apoyo de pecho ese problema desaparece y sientes la espalda de verdad.'}
+        {t:'tip', x:'<b>Cómo valorar la serie:</b> no necesitas sentir la misma quemazón que en el pecho. Cuenta como serie exigente si el recorrido y el torso se mantienen, la última repetición se ralentiza y solo podrías hacer 1–2 repeticiones limpias más.'}
       ]
     },
 
@@ -552,15 +552,15 @@ const P = {
         {t:'tip', x:'<b>Objetivo:</b> acumular repeticiones limpias. El trabajo lejos del fallo puede mejorar fuerza y masa con menos fatiga. Si la última serie pierde dos repeticiones o la técnica cambia, reduce el objetivo.'},
 
         {t:'sec', h:'Empuje', meta:'más reps'},
-        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Más ligero que el día A · RIR 2', sets:3, reps:'8–12', rest:90, kg:1},
+        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Más ligero que el día A · RIR 2', sets:4, reps:'8–12', rest:90, kg:1},
 
         {t:'sec', h:'Volumen', meta:'desc 60–90 s'},
         {t:'ss', tag:'SS A · espalda + tríceps', items:[
-          {t:'ex', id:'jalon', nm:'Jalón al pecho', cue:'Tercer ángulo de tracción · vertical asistida', sets:3, reps:'10–12', rest:75, kg:1},
+          {t:'ex', id:'jalon', nm:'Jalón al pecho', cue:'Hombros abajo · codos hacia la cadera · RIR 1–2', sets:3, reps:'10–12', rest:90, kg:1},
           {t:'ex', id:'triceps-polea', nm:'Extensión de tríceps en polea', sets:2, reps:'12–15', rest:75, kg:1}
         ]},
         {t:'ss', tag:'SS B · espalda + bíceps', items:[
-          {t:'ex', id:'remo', nm:'Remo horizontal', cue:'Usa la misma variante que elegiste en Upper A', sets:3, reps:'10–12', rest:75, kg:1, pick:'remo'},
+          {t:'ex', id:'remo', nm:'Remo horizontal', cue:'Misma variante · recorrido completo · pausa 1 s atrás', sets:3, reps:'10–12', rest:90, kg:1, pick:'remo'},
           {t:'ex', id:'curl-martillo', nm:'Curl martillo', sets:2, reps:'12–15', rest:75, kg:1}
         ]},
         {t:'ss', tag:'Core · desc 60 s', items:[
@@ -571,7 +571,9 @@ const P = {
           '<b>Plancha con desplazamiento de manos</b> — 8–10 reps con lumbar neutra.',
           '<b>Hollow body hold</b> — 20–30 s, piernas a 30–40°.'
         ]},
-        {t:'tip', x:'<b>Espalda desde dos patrones:</b> tracción vertical con dominada o jalón y tracción horizontal con remo. Prioriza repeticiones estables y aumenta carga solo cuando completes el rango.'}
+        {t:'tip', x:'<b>Dominada:</b> empieza bajando los hombros, lleva el pecho hacia la barra y termina antes de perder el recorrido. Si no llegas a 5 repeticiones limpias con 1–2 en reserva, usa goma o máquina asistida.'},
+        {t:'tip', x:'<b>Jalón:</b> inclina el torso solo un poco, lleva los codos hacia los bolsillos y controla 2–3 s la subida. Si tiras con las manos, afloja el pulgar o usa correas en la última serie.'},
+        {t:'tip', x:'<b>Progresión de espalda:</b> cuando las últimas repeticiones sean lentas pero limpias y completes el máximo del rango, sube el peso mínimo disponible. La congestión es una sensación útil, pero no decide por sí sola si la serie ha servido.'}
       ]
     },
 
@@ -1215,16 +1217,22 @@ function renderWarmup(day){
   const w = P.warmup, live = isLive(day);
   const ck = (S.active && S.active.warm) || {};
   let i = 0;
-  const rows = w.groups.map(g => `<div class="grp">${esc(g.g)}</div>` + g.items.map(it => {
+  const upper = day && (day.id === 'upper-a' || day.id === 'upper-b');
+  const warmMin = upper ? w.min + 2 : w.min;
+  const groups = upper ? w.groups.concat([{g:'6 · Agarre · solo Upper', items:[
+    {n:'Suspensión activa en barra', d:'2×15–30 s'}
+  ]}]) : w.groups;
+  const rows = groups.map(g => `<div class="grp">${esc(g.g)}</div>` + g.items.map(it => {
     const idx = i++;
     return `<div class="m${ck[idx]?' ck':''}" data-act="warm" data-i="${idx}" role="button" tabindex="0">
       <span class="tick">✓</span><b>${esc(it.n)}</b><span class="d">${esc(it.d)}</span></div>`;
   }).join('')).join('');
   const n = Object.values(ck).filter(Boolean).length;
   return `<div class="sec fold" data-act="fold" role="button" tabindex="0" aria-expanded="false">
-      <h2>Calentamiento</h2><span class="meta">${w.min} min${live&&n?` · ${n}/${i}`:''}</span><span class="chev">▾</span></div>
+      <h2>Calentamiento</h2><span class="meta">${warmMin} min${live&&n?` · ${n}/${i}`:''}</span><span class="chev">▾</span></div>
     <div class="mini hid">${rows}</div>
-    <div class="note"><span>${w.note}</span></div>`;
+    <div class="note"><span>${w.note}</span></div>
+    ${upper?'<div class="tip"><span><b>Suspensión:</b> aprieta la barra, mantén los hombros ligeramente activos y deja 10–15 s de margen. En el calentamiento prepara el agarre; el curl martillo y el trabajo extra de muñeca aportan más estímulo directo al tamaño del antebrazo.</span></div>':''}`;
 }
 
 /* ---------------- vista: HISTORIAL ---------------- */
