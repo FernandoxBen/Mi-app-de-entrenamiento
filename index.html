@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="Entreno 2.2 · fuerza, recomposición corporal, salud postural, planificación flexible e historial sin conexión.">
-<title>Entreno 2.2</title>
+<meta name="description" content="Entreno 2.2.1 · fuerza, recomposición corporal, salud postural, planificación flexible e historial sin conexión.">
+<title>Entreno 2.2.1</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -66,7 +66,7 @@ button{background:none;border:0;cursor:pointer}
 .top h1{font-family:var(--f-disp);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.02em;line-height:1}
 .top .sub{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-top:5px}
 .top .act{margin-left:auto;display:flex;gap:8px}
-.iconbtn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+.iconbtn{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   background:var(--gl);border:1px solid var(--gb);color:var(--t2);transition:.16s}
 .iconbtn:hover{background:var(--gl2);color:var(--t1)}
 .iconbtn:focus-visible,button:focus-visible,[role=button]:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -183,14 +183,15 @@ button{background:none;border:0;cursor:pointer}
 .exguide p{font-size:12.5px;color:var(--t2);line-height:1.55;margin-top:8px}
 .exguide p b{color:var(--t1);font-weight:600}
 
-.track{display:flex;align-items:center;gap:8px;padding:0 15px 13px;flex-wrap:wrap}
+.track{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:0 15px 13px}
+.set-dots{display:grid;grid-auto-flow:column;grid-auto-columns:40px;justify-content:start;gap:8px;min-width:0}
 .dot{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;
   font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--t3);
   background:rgba(255,255,255,.05);border:1px solid var(--gb);transition:.16s}
 .dot:active{transform:scale(.92)}
 .dot.on{color:#07140f;background:var(--c-leg);border-color:var(--c-leg)}
-.wgt{margin-left:auto;display:flex;align-items:center;gap:6px}
-.wgt input{width:64px;text-align:center;font-family:var(--f-mono);font-weight:700;font-size:14px;color:var(--t1);
+.wgt{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+.wgt input{width:56px;min-height:40px;text-align:center;font-family:var(--f-mono);font-weight:700;font-size:14px;color:var(--t1);
   background:rgba(255,255,255,.05);border:1px solid var(--gb);border-radius:10px;padding:7px 6px}
 .wgt input::placeholder{color:var(--t3);font-weight:500}
 .wgt span{font-family:var(--f-mono);font-size:9.5px;color:var(--t3);letter-spacing:.08em}
@@ -206,7 +207,7 @@ button{background:none;border:0;cursor:pointer}
 /* ---------------- mini list (warmup) ---------------- */
 .mini{background:rgba(255,255,255,.045);border:1px solid var(--gb);border-radius:var(--r);padding:2px 16px}
 .mini.hid{display:none}
-.mini .m{display:flex;gap:12px;align-items:center;padding:11px 0;font-size:13.5px;color:var(--t2);
+.mini .m{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;font-size:13.5px;color:var(--t2);
   border-bottom:1px solid rgba(255,255,255,.07)}
 .mini .m:last-child{border-bottom:0}
 .mini .m b{color:var(--t1);font-weight:500;flex:1;min-width:0;overflow-wrap:break-word}
@@ -218,6 +219,9 @@ button{background:none;border:0;cursor:pointer}
   display:flex;align-items:center;justify-content:center;color:transparent;font-size:12px;transition:.15s}
 .mini .m.ck .tick{background:var(--c-leg);border-color:var(--c-leg);color:#07140f}
 .mini details summary{min-height:40px;display:flex;align-items:center;cursor:pointer}
+.warm-check{width:44px;min-width:44px!important;height:44px;min-height:44px!important;padding:0!important;align-self:center}
+.warm-how{padding:6px 0 14px 56px!important;border-bottom:1px solid rgba(255,255,255,.07)}
+.warm-how summary{padding:0;min-height:40px}
 
 /* ---------------- picker ---------------- */
 .pick{margin-bottom:10px}
@@ -337,8 +341,8 @@ button{background:none;border:0;cursor:pointer}
 .seg button{min-width:46px;min-height:36px;border-radius:10px;font-family:var(--f-mono);font-size:11px;font-weight:700;
   color:var(--t2);background:rgba(255,255,255,.05);border:1px solid var(--gb);transition:.15s}
 .seg button.on{color:#07140f;background:var(--accent);border-color:var(--accent)}
-.btnrow{display:flex;gap:9px;margin-top:6px;flex-wrap:wrap}
-.btn{flex:1;min-width:0;min-height:46px;border-radius:13px;font-family:var(--f-sans);font-size:13px;font-weight:600;color:var(--t1);
+.btnrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:10px}
+.btn{flex:1;min-width:0;min-height:46px;padding:0 14px;border-radius:13px;font-family:var(--f-sans);font-size:13px;font-weight:600;color:var(--t1);
   background:var(--gl);border:1px solid var(--gb);transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn:hover{background:var(--gl2)}
 .btn:active{transform:scale(.98)}
@@ -375,7 +379,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
 .badge-v2{display:inline-flex;align-items:center;margin-left:7px;padding:3px 7px;border-radius:999px;background:rgba(55,230,165,.14);
   border:1px solid rgba(55,230,165,.34);color:#75f0bd;font-family:var(--f-mono);font-size:8px;letter-spacing:.09em;vertical-align:middle}
 .offline-note{font-size:11px;color:var(--t3);text-align:center;margin:9px 0 0}
-.week-switch{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;gap:9px;align-items:center;margin:6px 0 10px}
+.week-switch{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;gap:10px;align-items:center;margin:10px 0}
 .week-switch .btn{width:52px;min-width:52px;padding:0}
 .week-switch span{text-align:center;min-width:0}
 .planner-row select{min-width:155px}
@@ -385,15 +389,18 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
   .wrap{padding:0 14px}.top{padding-left:14px;padding-right:14px}.top h1{font-size:23px}
   .herocard{padding:18px}.herocard .dual{flex-direction:column}
   .planner-row{align-items:stretch;flex-wrap:wrap}.planner-row .l{flex-basis:100%}.planner-row select{width:100%;max-width:none!important}
-  .ex .hd{gap:9px;padding:12px}.ex .dose{font-size:13px}.track{padding-left:12px;padding-right:12px;gap:7px}
-  .wgt{flex-basis:100%;margin-left:0;justify-content:flex-end}
+  .ex .hd{gap:9px;padding:12px}.ex .dose{font-size:13px}.track{padding-left:12px;padding-right:12px;gap:8px}
   .session-head{flex-wrap:wrap}.session-head .btn{flex-basis:100%!important}
+  .set{flex-wrap:wrap}.set .seg{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.set .seg button{width:100%;min-width:0;min-height:44px}
 }
 @media(min-width:760px){.wrap{max-width:760px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.herocard{padding:28px}.stats{gap:14px}}
 
 @media(max-width:360px){
   .stats{gap:7px}.stat{padding:12px 8px}.stat .v{font-size:19px}
   .dot{width:40px;height:40px}
+  .set-dots{gap:6px}.track{gap:6px}.wgt input{width:52px}
+  .mini .m{grid-template-columns:44px minmax(0,1fr);gap:4px 10px}.mini .m .warm-check{grid-row:1 / span 2}.mini .m .d{grid-column:2;justify-self:start}.warm-how{padding-left:54px!important}
+  .finish{font-size:18px}
 }
 
 </style>
@@ -442,7 +449,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.2.0',
+  version: '2.2.1',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -454,23 +461,23 @@ const P = {
   warmup: {
     min: 10,
     groups: [
-      { g:'1 · Sube la temperatura', items:[
-        {n:'Bici o caminar a paso vivo', d:'3 min', how:'Empieza suave y aumenta un poco el ritmo. Debes poder hablar sin jadear.'}
+      { g:'1 · Movilidad global', items:[
+        {n:"World’s Greatest Stretch", d:'4/lado', how:'Da una zancada larga y apoya las manos dentro del pie delantero. Mantén la pierna trasera extendida, acerca el codo interior al suelo y después gira ese brazo hacia el techo. Vuelve y cambia de lado. Muévete despacio y sin forzar.'}
       ]},
       { g:'2 · Espalda alta y hombros', items:[
-        {n:'Rotación torácica a cuatro apoyos', d:'6/lado', how:'Una mano detrás de la cabeza, gira el codo hacia el techo sin desplazar la pelvis. Usa un recorrido cómodo.'},
-        {n:'Deslizamiento de brazos en pared', d:'8 reps', how:'Costillas quietas. Desliza los brazos hacia arriba sin arquear la lumbar ni forzar el hombro.'}
+        {n:'Quadruped T-Spine Rotation', d:'6/lado', how:'A cuatro apoyos, coloca una mano detrás de la cabeza. Gira el codo hacia el techo sin desplazar la pelvis. Usa un recorrido cómodo.'},
+        {n:'Wall Slide', d:'8 reps', how:'Apoya la espalda en la pared y mantén las costillas quietas. Desliza los brazos hacia arriba sin arquear la zona lumbar ni forzar el hombro.'},
+        {n:'Scapular Push-up', d:'8–10 reps', how:'En posición de flexión o con las rodillas apoyadas, mantén los codos estirados. Deja que el pecho baje ligeramente al juntar los omóplatos y después empuja el suelo separándolos. No encorves la zona lumbar.'}
       ]},
       { g:'3 · Core y espalda baja', items:[
-        {n:'Dead bug', d:'8/lado', how:'Boca arriba, caderas y rodillas a 90°. Alarga brazo y pierna contrarios durante 3 segundos mientras exhalas. Mantén la lumbar estable; acorta el recorrido si se arquea. Una ronda prepara el tronco sin agotarlo.'},
-        {n:'Puente de glúteo', d:'10 reps', how:'Aprieta glúteos al subir, sin sacar las costillas ni arquear la espalda. Pausa un segundo arriba.'}
+        {n:'Dead Bug', d:'8/lado', how:'Boca arriba, caderas y rodillas a 90°. Alarga brazo y pierna contrarios durante 3 segundos mientras exhalas. Mantén la lumbar estable; acorta el recorrido si se arquea. Una ronda prepara el tronco sin agotarlo.'},
+        {n:'Glute Bridge', d:'10 reps', how:'Aprieta los glúteos al subir, sin sacar las costillas ni arquear la espalda. Pausa un segundo arriba.'}
       ]},
-      { g:'4 · Rodilla · cadera y tobillo', items:[
-        {n:'Movilidad de tobillo en pared', d:'8/lado', how:'Acerca la rodilla a la pared manteniendo el talón apoyado y la rodilla alineada con el pie.'},
-        {n:'Pasos laterales con banda', d:'8 por dirección', how:'Banda por encima de las rodillas, rodillas algo flexionadas. Da pasos cortos sin juntar los pies ni balancear el tronco. Sin banda, practica el mismo gesto suave.'}
+      { g:'4 · Tobillo', items:[
+        {n:'Knee-to-Wall Ankle Mobilization', d:'8/lado', how:'Acerca la rodilla a la pared manteniendo el talón apoyado y la rodilla alineada con el pie. Aleja un poco el pie cuando puedas completar el recorrido sin levantar el talón.'}
       ]}
     ],
-    note:'Después, haz 2–3 series de aproximación progresivas del primer ejercicio con carga; antes de la primera tracción, añade una ligera. No cuentan como series de trabajo. Detente si aparece dolor o aumenta una molestia. El calentamiento debe dejarte preparado, sin fatiga.'
+    note:'El trayecto en bici ya cubre la subida de temperatura. Después de este bloque, haz 2–3 series de aproximación progresivas del primer ejercicio con carga; antes de la primera tracción, añade una ligera. No cuentan como series de trabajo. Detente si aparece dolor o aumenta una molestia.'
   },
 
   days: [
@@ -1067,7 +1074,7 @@ function render(){
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
     <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.2</span>':''}</h1>
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.2.1</span>':''}</h1>
     <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
@@ -1153,12 +1160,12 @@ function warmCard(){
 }
 function renderWarmSession(){
   const record = warmRecord();
-  const groups = P.warmup.groups.concat([{g:'Opcional · antes de Upper',items:[{n:'Suspensión con apoyo de pies si hace falta',d:'2×10–20 s',how:'Barra estable, agarre cerrado. Mantén control del hombro sin forzarlo hacia abajo. Descansa 45 s y termina con margen amplio. Si molesta, omítela. El trabajo intenso de agarre va después de las tracciones.'}]}]);
+  const groups = P.warmup.groups.concat([{g:'Opcional · antes de Upper',items:[{n:'Supported Dead Hang',d:'2×10–20 s',how:'Usa una barra estable y apoya parte del peso con los pies si hace falta. Mantén control del hombro sin forzarlo hacia abajo. Descansa 45 segundos y termina con margen amplio. Si molesta, omítelo. El trabajo intenso de agarre va después de las tracciones.'}]}]);
   let i = 0;
   return `<div class="tip"><span>Este bloque guarda su progreso aparte: puedes abrirlo con un entrenamiento en curso. La suspensión es opcional; las aproximaciones dependen de lo que entrenes después.</span></div><div class="mini">${groups.map(g => `<div class="grp">${esc(g.g)}</div>${g.items.map(it => {
     const key = String(i++);
-    return `<div class="m"><button class="btn" style="flex:0 0 auto;min-width:44px" data-act="warm-check" data-i="${key}" aria-pressed="${!!record.checks[key]}" aria-label="Marcar ${esc(it.n)}">${record.checks[key]?'✓':'○'}</button><b>${esc(it.n)}</b><span class="d">${esc(it.d)}</span></div><details style="padding:8px 0 16px"><summary>Cómo hacerlo</summary><p>${esc(it.how)}</p></details>`;
-  }).join('')}`).join('')}</div><div class="note"><span>${P.warmup.note}</span></div><button class="finish" data-act="warm-done">${record.done?'Calentamiento completado hoy':'Marcar calentamiento terminado'}</button><button class="btn" data-act="tab" data-v="hoy">Volver a Hoy</button>`;
+    return `<div class="m"><button class="btn warm-check" data-act="warm-check" data-i="${key}" aria-pressed="${!!record.checks[key]}" aria-label="Marcar ${esc(it.n)}">${record.checks[key]?'✓':'○'}</button><b>${esc(it.n)}</b><span class="d">${esc(it.d)}</span></div><details class="warm-how"><summary>Cómo hacerlo</summary><p>${esc(it.how)}</p></details>`;
+  }).join('')}`).join('')}</div><div class="note"><span>${P.warmup.note}</span></div><button class="finish" data-act="warm-done">${record.done?'Calentamiento completado':'Completar calentamiento'}</button><button class="btn" data-act="tab" data-v="hoy">Volver a Hoy</button>`;
 }
 
 /* ---------------- vista: HOY ---------------- */
@@ -1403,7 +1410,7 @@ function exTrack(e){
     `<button class="dot${arr[i]?' on':''}" data-act="set" data-k="${esc(k)}" data-i="${i}" data-rest="${e.skipRest?0:(e.rest||S.settings.rest)}" data-nm="${esc(e.nm)}" data-n="${e.sets}" aria-label="Serie ${i+1}">${arr[i]?'✓':i+1}</button>`).join('');
   const kg = e.kg ? `<div class="wgt"><input type="number" inputmode="decimal" step="0.5" min="0" max="1000" placeholder="kg"
       value="${(S.active && S.active.kg && S.active.kg[k] != null) ? S.active.kg[k] : ''}" data-act="kg" data-k="${esc(k)}" aria-label="Peso en kg"><span>kg</span></div>` : '';
-  return `<div class="track">${dots}${kg}</div>`;
+  return `<div class="track"><div class="set-dots">${dots}</div>${kg}</div>`;
 }
 function pickOpt(k){
   for (const d of allDays()) for (const b of d.blocks) if ((b.t==='pick'||b.t==='switch') && b.k===k) return b.opts[S.picks[k]||0];
@@ -1425,7 +1432,7 @@ function renderWarmup(day){
   const upper = day && (day.id === 'upper-a' || day.id === 'upper-b');
   const warmMin = upper ? w.min + 2 : w.min;
   const groups = upper ? w.groups.concat([{g:'6 · Agarre · solo Upper', items:[
-    {n:'Suspensión activa en barra', d:'2×15–30 s'}
+    {n:'Active Dead Hang', d:'2×15–30 s'}
   ]}]) : w.groups;
   const rows = groups.map(g => `<div class="grp">${esc(g.g)}</div>` + g.items.map(it => {
     const idx = i++;

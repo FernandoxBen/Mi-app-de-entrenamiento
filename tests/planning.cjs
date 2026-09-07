@@ -64,6 +64,9 @@ const server = http.createServer((req,res) => {
       };
     });
     assert.deepEqual(program,{upperA:{landmine:3,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{hip:2,step:2},guide:21});
+    const warmup=await page.evaluate(()=>P.warmup.groups.flatMap(g=>g.items.map(x=>x.n)));
+    assert.deepEqual(warmup,["World’s Greatest Stretch",'Quadruped T-Spine Rotation','Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Mobilization']);
+    assert.equal(warmup.some(x=>/bici|band|banda|pasos laterales/i.test(x)),false);
     // Old copies and corrupt new fields receive safe defaults.
     assert.equal(await page.evaluate(()=>{const old={plans:[],warmups:{bad:null}};normalizePlanning(old);return Object.keys(old.plans).length+Object.keys(old.warmups).length;}),0);
     await page.evaluate(()=>go('hoy'));
@@ -96,13 +99,37 @@ const server = http.createServer((req,res) => {
           if(Math.min(x.right,y.right)-Math.max(x.left,y.left)>2&&Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)>2)overlaps.push([a.outerHTML.slice(0,70),b.outerHTML.slice(0,70)]);
         }
         const small=els.filter(el=>el.matches('button,a.btn,summary')&&el.getBoundingClientRect().height<36).map(el=>el.outerHTML.slice(0,90));
-        return {overflow,overlaps,small};
+        const misalignedGroups=[...document.querySelectorAll('.btnrow,.readiness,.set-dots,.sheet.on .btns')].flatMap(group=>{
+          const controls=[...group.children].filter(el=>el.matches('button,a.btn')).map(el=>el.getBoundingClientRect());
+          if(controls.length<2)return [];
+          const sameRow=controls.every(r=>Math.abs(r.top-controls[0].top)<=2);
+          const sameHeight=controls.every(r=>Math.abs(r.height-controls[0].height)<=2);
+          return sameRow&&sameHeight?[]:[group.className];
+        });
+        return {overflow,overlaps,small,misalignedGroups};
       });
       assert.equal(layout.overflow,false,`${view}/${day||''} overflows at ${width}px`);
       assert.deepEqual(layout.overlaps,[],`${view}/${day||''} has overlapping controls at ${width}px`);
       assert.deepEqual(layout.small,[],`${view}/${day||''} has controls under 36px at ${width}px`);
+      assert.deepEqual(layout.misalignedGroups,[],`${view}/${day||''} has misaligned button groups at ${width}px`);
     }
     for(const width of [320,390,768]) for(const [view,day] of [['hoy'],['semana'],['day','upper-a'],['day','pierna'],['day','upper-b'],['day','crossfit'],['day','calentamiento'],['historial'],['ajustes']]) await checkLayout(width,view,day);
+    for(const width of [320,390]){
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(()=>go('day','calentamiento'));
+      const controls=await page.locator('.warm-check').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,w:r.width,h:r.height}}));
+      assert.ok(controls.length>=7);
+      assert.ok(controls.every(x=>x.x===controls[0].x&&x.w===44&&x.h===44),`warm-up controls are misaligned at ${width}px`);
+      if(width===320)await page.screenshot({path:path.join(root,'tests','warmup-320-preview.png'),fullPage:true});
+      await page.evaluate(()=>go('day','upper-a'));
+      const series=await page.locator('.track').first().evaluate(el=>{
+        const dots=[...el.querySelectorAll('.dot')].map(x=>x.getBoundingClientRect());
+        const weight=el.querySelector('.wgt').getBoundingClientRect();
+        return {gaps:dots.slice(1).map((x,i)=>Math.round(x.left-dots[i].right)),dy:Math.round(Math.abs(dots[0].y-weight.y))};
+      });
+      assert.ok(series.gaps.every(g=>g===(width<=360?6:8)),`series buttons have uneven gaps at ${width}px`);
+      assert.ok(series.dy<=2,`weight control is not aligned with series buttons at ${width}px`);
+    }
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));

@@ -1,5 +1,12 @@
 # Cambios
 
+## 2.2.1 — 2026-09-07
+
+- Calentamiento adaptado al trayecto en bici: se eliminan la bicicleta y los pasos laterales con banda.
+- Recuperado `World’s Greatest Stretch` y añadido `Scapular Push-up`.
+- Todos los nombres de ejercicios del calentamiento se muestran en inglés, con las explicaciones en español.
+- Cuadrícula uniforme para botones de series, peso, calentamiento y ajustes en móvil.
+
 ## 2.2.0 — 2026-09-07
 
 - Pierna reorientada a fuerza y mantenimiento: sentadilla 3×4–6, búlgara 2×6–8 y nórdico 2×3–5.

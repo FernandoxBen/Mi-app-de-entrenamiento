@@ -1,4 +1,8 @@
-# Entreno 2.2
+# Entreno 2.2.1
+
+## Ajustes 2.2.1
+
+El calentamiento conserva los nombres de los ejercicios en inglés, recupera `World’s Greatest Stretch`, añade `Scapular Push-up` y elimina el cardio en bici y los pasos laterales con banda. Los controles de series, peso y calentamiento usan una cuadrícula común para mantener distancias y alineación.
 
 ## Novedades 2.2
 
