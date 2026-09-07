@@ -1,4 +1,10 @@
-# Entreno 2.1
+# Entreno 2.2
+
+## Novedades 2.2
+
+La programación prioriza fuerza y mantenimiento en pierna, añade una segunda exposición breve antes del acondicionamiento y concentra el volumen adicional en brazos mediante superseries de bíceps y tríceps.
+
+Cada ejercicio principal incluye una explicación y alternativas que conservan su intención. El planificador avisa de combinaciones consecutivas que pueden dificultar la recuperación. La interfaz adapta botones, pesos y selectores a pantallas estrechas.
 
 ## Novedades 2.1
 

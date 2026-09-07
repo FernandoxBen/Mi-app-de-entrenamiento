@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="Entreno 2.0 · plan de fuerza y acondicionamiento, progresión, descansos e historial sin conexión.">
-<title>Entreno 2.0</title>
+<meta name="description" content="Entreno 2.2 · fuerza, recomposición corporal, salud postural, planificación flexible e historial sin conexión.">
+<title>Entreno 2.2</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -175,9 +175,16 @@ button{background:none;border:0;cursor:pointer}
 .ex .dose .u{display:block;color:var(--t3);font-weight:500;font-size:9px;letter-spacing:.05em;margin-top:2px}
 .ex .last{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.05em;color:var(--t3);margin-top:6px}
 .ex .last b{color:var(--c-leg);font-weight:700}
+.exguide{margin:0 15px 12px;border-top:1px solid rgba(255,255,255,.08);padding-top:9px}
+.exguide summary{cursor:pointer;color:var(--accent);font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.05em;list-style:none;padding:8px 0;min-height:40px;display:flex;align-items:center}
+.exguide summary::-webkit-details-marker{display:none}
+.exguide summary::before{content:'＋';display:inline-block;width:18px;color:var(--t3)}
+.exguide[open] summary::before{content:'−'}
+.exguide p{font-size:12.5px;color:var(--t2);line-height:1.55;margin-top:8px}
+.exguide p b{color:var(--t1);font-weight:600}
 
 .track{display:flex;align-items:center;gap:8px;padding:0 15px 13px;flex-wrap:wrap}
-.dot{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+.dot{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;
   font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--t3);
   background:rgba(255,255,255,.05);border:1px solid var(--gb);transition:.16s}
 .dot:active{transform:scale(.92)}
@@ -192,6 +199,7 @@ button{background:none;border:0;cursor:pointer}
 .ss .tag{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.09em;
   text-transform:uppercase;font-weight:700;color:#fff;padding:8px 15px;border-bottom:1px solid var(--gb);
   background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 32%,transparent),color-mix(in srgb,var(--accent) 10%,transparent))}
+.ss .tag button{min-height:36px;padding:4px 6px;border-radius:8px}
 .ss .ex{border:0;border-radius:0;margin:0;background:none}
 .ss .ex+.ex{border-top:1px solid rgba(255,255,255,.07)}
 
@@ -209,6 +217,7 @@ button{background:none;border:0;cursor:pointer}
 .mini .tick{width:22px;height:22px;border-radius:7px;flex:0 0 auto;border:1px solid var(--gb2);
   display:flex;align-items:center;justify-content:center;color:transparent;font-size:12px;transition:.15s}
 .mini .m.ck .tick{background:var(--c-leg);border-color:var(--c-leg);color:#07140f}
+.mini details summary{min-height:40px;display:flex;align-items:center;cursor:pointer}
 
 /* ---------------- picker ---------------- */
 .pick{margin-bottom:10px}
@@ -319,17 +328,17 @@ button{background:none;border:0;cursor:pointer}
 .set .l{flex:1;min-width:0}
 .set .l b{display:block;font-size:14px;font-weight:600}
 .set .l span{font-size:11.5px;color:var(--t3);line-height:1.4;display:block;margin-top:2px}
-.sw{width:48px;height:28px;border-radius:15px;flex:0 0 auto;background:rgba(255,255,255,.1);border:1px solid var(--gb);
+.sw{width:56px;height:36px;border-radius:19px;flex:0 0 auto;background:rgba(255,255,255,.1);border:1px solid var(--gb);
   position:relative;transition:.2s}
-.sw::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--t2);transition:.2s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:var(--t2);transition:.2s}
 .sw.on{background:color-mix(in srgb,var(--accent) 60%,transparent);border-color:var(--accent)}
-.sw.on::after{transform:translateX(20px);background:#fff}
+.sw.on::after{transform:translateX(21px);background:#fff}
 .seg{display:flex;gap:6px;flex:0 0 auto}
 .seg button{min-width:46px;min-height:36px;border-radius:10px;font-family:var(--f-mono);font-size:11px;font-weight:700;
   color:var(--t2);background:rgba(255,255,255,.05);border:1px solid var(--gb);transition:.15s}
 .seg button.on{color:#07140f;background:var(--accent);border-color:var(--accent)}
-.btnrow{display:flex;gap:9px;margin-top:6px}
-.btn{flex:1;min-height:46px;border-radius:13px;font-family:var(--f-sans);font-size:13px;font-weight:600;color:var(--t1);
+.btnrow{display:flex;gap:9px;margin-top:6px;flex-wrap:wrap}
+.btn{flex:1;min-width:0;min-height:46px;border-radius:13px;font-family:var(--f-sans);font-size:13px;font-weight:600;color:var(--t1);
   background:var(--gl);border:1px solid var(--gb);transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn:hover{background:var(--gl2)}
 .btn:active{transform:scale(.98)}
@@ -366,11 +375,25 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
 .badge-v2{display:inline-flex;align-items:center;margin-left:7px;padding:3px 7px;border-radius:999px;background:rgba(55,230,165,.14);
   border:1px solid rgba(55,230,165,.34);color:#75f0bd;font-family:var(--f-mono);font-size:8px;letter-spacing:.09em;vertical-align:middle}
 .offline-note{font-size:11px;color:var(--t3);text-align:center;margin:9px 0 0}
+.week-switch{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;gap:9px;align-items:center;margin:6px 0 10px}
+.week-switch .btn{width:52px;min-width:52px;padding:0}
+.week-switch span{text-align:center;min-width:0}
+.planner-row select{min-width:155px}
+.finish + .btn{width:100%;margin-top:10px}
+.review-card summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}.review-card p{margin-top:12px;color:var(--t2);font-size:13px;line-height:1.55}.review-card p b{color:var(--t1)}
+@media(max-width:420px){
+  .wrap{padding:0 14px}.top{padding-left:14px;padding-right:14px}.top h1{font-size:23px}
+  .herocard{padding:18px}.herocard .dual{flex-direction:column}
+  .planner-row{align-items:stretch;flex-wrap:wrap}.planner-row .l{flex-basis:100%}.planner-row select{width:100%;max-width:none!important}
+  .ex .hd{gap:9px;padding:12px}.ex .dose{font-size:13px}.track{padding-left:12px;padding-right:12px;gap:7px}
+  .wgt{flex-basis:100%;margin-left:0;justify-content:flex-end}
+  .session-head{flex-wrap:wrap}.session-head .btn{flex-basis:100%!important}
+}
 @media(min-width:760px){.wrap{max-width:760px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.herocard{padding:28px}.stats{gap:14px}}
 
 @media(max-width:360px){
   .stats{gap:7px}.stat{padding:12px 8px}.stat .v{font-size:19px}
-  .dot{width:31px;height:31px}
+  .dot{width:40px;height:40px}
 }
 
 </style>
@@ -419,7 +442,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.1.0',
+  version: '2.2.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -463,17 +486,16 @@ const P = {
         {t:'note', x:'<b>Segundo empuje sin dolor:</b> el landmine sustituye al press en máquina. Trabaja pecho y deltoide anterior en diagonal, sin llevar el codo por detrás del torso, que es donde tu hombro se queja. Si aun así molesta, prueba el press en el suelo.'},
         {t:'tip', x:'<b>Trabajo submáximo:</b> el lastre desarrolla fuerza sin exigir llegar al fallo. Mantener margen ayuda a conservar la técnica y a recuperarte para el segundo día de tren superior.'},
 
-        {t:'sec', h:'Volumen', meta:'desc 60–90 s'},
-        {t:'ss', tag:'SS A · empuje + bíceps', items:[
-          {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · usa un rango cómodo', sets:4, reps:'8–10/lado', rest:75, kg:1},
-          {t:'ex', id:'curl-biceps', nm:'Curl de bíceps', sets:4, reps:'10–12', rest:75, kg:1}
+        {t:'sec', h:'Volumen', meta:'técnica estable'},
+        {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · deja 2 reps en reserva', sets:3, reps:'8–10/lado', rest:90, kg:1},
+        {t:'ex', id:'remo', nm:'Remo', cue:'Pecho estable · codos hacia la cadera · pausa 1 s', sets:4, reps:'8–12', rest:120, kg:1, pick:'remo'},
+
+        {t:'sec', h:'Brazos', meta:'superserie · 3 rondas'},
+        {t:'ss', tag:'Bíceps + tríceps · desc 60–75 s al terminar cada pareja', items:[
+          {t:'ex', id:'curl-biceps', nm:'Curl de bíceps', cue:'Sin balanceo · baja controlada', sets:3, reps:'10–12', rest:0, skipRest:1, kg:1},
+          {t:'ex', id:'triceps-overhead', nm:'Extensión de tríceps por encima de la cabeza', cue:'Polea y cuerda · codos estables · rango cómodo', sets:3, reps:'10–15', rest:75, kg:1}
         ]},
-        {t:'ss', tag:'SS B · espalda + hombro', items:[
-          {t:'ex', id:'remo', nm:'Remo', cue:'Pecho estable · codos hacia la cadera · pausa 1 s', sets:4, reps:'10–12', rest:90, kg:1, pick:'remo'},
-          {t:'ex', id:'curl-martillo', nm:'Curl martillo', cue:'Braquial y antebrazo', sets:2, reps:'12–15', rest:75, kg:1}
-        ]},
-        {t:'ss', tag:'SS C · tríceps + core · desc 60 s', items:[
-          {t:'ex', id:'triceps-polea', nm:'Extensión de tríceps en polea', sets:2, reps:'12–15', rest:60, kg:1},
+        {t:'ss', tag:'Core · desc 60 s', items:[
           {t:'ex', id:'core-anti', nm:'Core anti-extensión', cue:'Elige opción abajo', sets:2, reps:'8–10', rest:60}
         ]},
         {t:'alt', label:'Opciones de core', opts:[
@@ -481,15 +503,15 @@ const P = {
           '<b>Hollow body hold</b> — piernas a 30–40°, lumbar pegada al suelo. 20–30 s.'
         ]},
 
-        {t:'sec', h:'Tu remo', meta:'4×10–12'},
+        {t:'sec', h:'Tu remo', meta:'4×8–12'},
         {t:'pick', k:'remo', hint:'Ordenados de más a menos amable con tu lumbar', opts:[
-           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'4×10–12', u:'recomendado',
+           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'4×8–12', u:'recomendado',
            how:'Pecho pegado al respaldo y hombros lejos de las orejas. Deja que el omóplato avance al estirar; después lleva el codo hacia la cadera y pausa 1 s atrás. <b>El torso no se separa del apoyo.</b> Si el antebrazo falla antes que la espalda, usa correas solo en las últimas series.'},
-          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'4×10–12', u:'/lado',
+          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'4×8–12', u:'/lado',
            how:'Apoyado en el soporte, tiras con un brazo. El apoyo elimina la estabilización, y al ir de uno en uno corriges descompensaciones y consigues más rango.'},
-          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'4×10–12',
+          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'4×8–12',
            how:'Sentado, pies fijos, espalda erguida. Tira hacia el abdomen sin balancear el torso. <b>El tronco no se mueve</b>: si te vas hacia atrás para tirar, hay demasiado peso.'},
-          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'4×10–12', u:'/lado',
+          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'4×8–12', u:'/lado',
            how:'Rodilla y mano del mismo lado apoyadas en el banco, espalda plana y paralela al suelo. Tira la mancuerna hacia la cadera, codo pegado. El apoyo protege la lumbar.'}
         ]},
         {t:'tip', x:'<b>Cómo valorar la serie:</b> no necesitas sentir la misma quemazón que en el pecho. Cuenta como serie exigente si el recorrido y el torso se mantienen, la última repetición se ralentiza y solo podrías hacer 1–2 repeticiones limpias más.'}
@@ -499,38 +521,29 @@ const P = {
     /* ---------------- MARTES · PIERNA ---------------- */
     {
       id:'pierna', dow:2, day:'Martes', name:'Pierna', sub:'Sentadilla · búlgara · nórdico',
-      color:'--c-leg', icon:'bolt', mins:65,
-      principle:'<b>Martes · fuerza de pierna.</b> Sin AMRAP y sin prisa: seis series principales, descansos completos y técnica estable. El acondicionamiento va el jueves.',
+      color:'--c-leg', icon:'bolt', mins:50,
+      principle:'<b>Fuerza y mantenimiento de pierna.</b> Volumen contenido, descansos completos y técnica estable. El objetivo es conservar músculo, ganar algo de fuerza y tolerar bien el deporte.',
       blocks:[
         {t:'warmup'},
-        {t:'sec', h:'Aproximación', meta:'pareja fija'},
-        {t:'ss', tag:'Goblet + gemelo · desc 90 s', items:[
-          {t:'ex', id:'goblet', nm:'Goblet squat', cue:'Ligera · prepara el patrón, no la cuentes como serie dura', sets:2, reps:'8–10', rest:90, kg:1},
-          {t:'ex', id:'gemelo', nm:'Extensión de gemelo', cue:'Aquí sí aprieta · pausa 1 s arriba · cuida la fascia', sets:3, reps:'12–15', rest:90, kg:1}
-        ]},
-
-        {t:'sec', h:'Fuerza de pierna', meta:'6 series principales'},
-        {t:'ex', id:'sentadilla', nm:'Sentadilla con barra', cue:'Carga moderada-alta, sin buscar el máximo', sets:3, reps:'5–8', rest:150, kg:1},
-        {t:'ex', id:'bulgara', nm:'Sentadilla búlgara', cue:'Unilateral · empieza ligero y mantén la pelvis estable', sets:3, reps:'8/pierna', rest:90, kg:1},
-        {t:'tip', x:'<b>Estas son las series principales de pierna.</b> El jueves añade trabajo de cadera y acondicionamiento. Si quieres ganar más masa en pierna, este plan necesitará una segunda dosis semanal adaptada a tu recuperación.'},
+        {t:'sec', h:'Fuerza de pierna', meta:'5 series principales'},
+        {t:'ex', id:'sentadilla', nm:'Sentadilla con barra', cue:'Carga moderada-alta · deja 2 reps en reserva', sets:3, reps:'4–6', rest:180, kg:1},
+        {t:'ex', id:'bulgara', nm:'Sentadilla búlgara', cue:'Unilateral · pelvis estable · empieza ligero', sets:2, reps:'6–8/pierna', rest:120, kg:1},
+        {t:'tip', x:'<b>Progresión:</b> completa el máximo del rango durante dos sesiones con técnica estable antes de subir la carga. No añadas series si todavía puedes progresar así.'},
 
         {t:'sec', h:'Isquios · prevención', meta:'1×/semana'},
         {t:'ex', id:'nordico', nm:'Curl nórdico', cue:'Baja lento frenando todo lo que puedas · ayúdate con las manos al final', sets:2, reps:'3–5', rest:120},
         {t:'note', x:'<b>Empieza con poco volumen.</b> Los programas que incluyen nórdicos han reducido las lesiones de isquiotibial en estudios con deportistas, pero el efecto depende de la adherencia y del programa completo. Empieza con 2×3 y progresa sin dolor.'},
 
-        {t:'sec', h:'Hombro', meta:'superserie'},
-        {t:'ss', tag:'Medial + posterior · desc 60–90 s', items:[
-          {t:'ex', id:'elev-laterales', nm:'Elevaciones laterales', cue:'Deltoide medial — la forma en V · sin balanceo', sets:3, reps:'12–15', rest:75, kg:1},
-          {t:'ex', id:'pajaros', nm:'Pájaros (deltoide posterior)', cue:'Inclinado o en banco · peso ligero', sets:2, reps:'15', rest:75, kg:1}
-        ]},
+        {t:'sec', h:'Pantorrilla', meta:'tolerancia y mantenimiento'},
+        {t:'ex', id:'gemelo', nm:'Extensión de gemelo', cue:'Sube con control · pausa 1 s · rango sin dolor', sets:3, reps:'10–15', rest:75, kg:1},
 
         {t:'sec', h:'Core', meta:'2 rondas'},
         {t:'ex', id:'pallof', nm:'Pallof press', cue:'Antirrotación · polea o banda al costado, saca los brazos sin girar', sets:2, reps:'10/lado', rest:60},
         {t:'ex', id:'rueda', nm:'Rueda abdominal o plancha con desplazamiento', cue:'Anti-extensión · lumbar neutra todo el recorrido', sets:2, reps:'8–10', rest:60},
 
         {t:'mini', h:'Días imposibles', meta:'mínima · 20 min', groups:[{items:[
-          {n:'Goblet + gemelo', d:'2×10 · 3×15'},
-          {n:'Sentadilla con barra', d:'3×5–8'},
+          {n:'Sentadilla con barra', d:'3×4–6'},
+          {n:'Sentadilla búlgara', d:'2×6/pierna'},
           {n:'Curl nórdico', d:'2×3'}
         ]}]}
       ]
@@ -549,17 +562,19 @@ const P = {
         {t:'sec', h:'Empuje', meta:'más reps'},
         {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Más ligero que el día A · RIR 2', sets:4, reps:'8–12', rest:90, kg:1},
 
-        {t:'sec', h:'Volumen', meta:'desc 60–90 s'},
-        {t:'ss', tag:'SS A · espalda + tríceps', items:[
-          {t:'ex', id:'jalon', nm:'Jalón al pecho', cue:'Hombros abajo · codos hacia la cadera · RIR 1–2', sets:3, reps:'10–12', rest:90, kg:1},
-          {t:'ex', id:'triceps-polea', nm:'Extensión de tríceps en polea', sets:2, reps:'12–15', rest:75, kg:1}
+        {t:'sec', h:'Espalda y hombro', meta:'volumen controlado'},
+        {t:'ex', id:'remo', nm:'Remo horizontal', cue:'Misma variante · recorrido completo · pausa 1 s atrás', sets:3, reps:'8–12', rest:120, kg:1, pick:'remo'},
+        {t:'ss', tag:'Hombro lateral + posterior · desc 60–75 s', items:[
+          {t:'ex', id:'elev-laterales', nm:'Elevaciones laterales', cue:'Sin balanceo · rango cómodo', sets:3, reps:'12–15', rest:0, skipRest:1, kg:1},
+          {t:'ex', id:'pajaros', nm:'Pájaros o reverse pec deck', cue:'Peso ligero · hombros lejos de las orejas', sets:2, reps:'12–15', rest:75, kg:1}
         ]},
-        {t:'ss', tag:'SS B · espalda + bíceps', items:[
-          {t:'ex', id:'remo', nm:'Remo horizontal', cue:'Misma variante · recorrido completo · pausa 1 s atrás', sets:3, reps:'10–12', rest:90, kg:1, pick:'remo'},
-          {t:'ex', id:'curl-martillo', nm:'Curl martillo', sets:2, reps:'12–15', rest:75, kg:1}
+
+        {t:'sec', h:'Brazos', meta:'superserie · 3 rondas'},
+        {t:'ss', tag:'Bíceps + tríceps · desc 60–75 s al terminar cada pareja', items:[
+          {t:'ex', id:'curl-martillo', nm:'Curl martillo', cue:'Agarre neutro · sin balanceo', sets:3, reps:'10–15', rest:0, skipRest:1, kg:1},
+          {t:'ex', id:'triceps-polea', nm:'Extensión de tríceps en polea', cue:'Codos quietos · extensión completa sin forzar', sets:3, reps:'10–15', rest:75, kg:1}
         ]},
         {t:'ss', tag:'Core · desc 60 s', items:[
-          {t:'ex', id:'elev-laterales', nm:'Elevaciones laterales', cue:'Deltoide medial · sin balanceo', sets:2, reps:'12–15', rest:60, kg:1},
           {t:'ex', id:'core-anti', nm:'Core anti-extensión', cue:'Elige opción abajo', sets:2, reps:'8–10', rest:60}
         ]},
         {t:'alt', label:'Opciones de core', opts:[
@@ -567,18 +582,21 @@ const P = {
           '<b>Hollow body hold</b> — 20–30 s, piernas a 30–40°.'
         ]},
         {t:'tip', x:'<b>Dominada:</b> empieza bajando los hombros, lleva el pecho hacia la barra y termina antes de perder el recorrido. Si no llegas a 5 repeticiones limpias con 1–2 en reserva, usa goma o máquina asistida.'},
-        {t:'tip', x:'<b>Jalón:</b> inclina el torso solo un poco, lleva los codos hacia los bolsillos y controla la subida. Mantén el agarre cerrado y seguro. Si el agarre limita antes que la espalda, prueba correas con ayuda para aprender a usarlas.'},
-        {t:'tip', x:'<b>Progresión de espalda:</b> cuando completes todas las series en el máximo del rango durante dos sesiones, con técnica estable y el margen previsto, sube el peso mínimo disponible. La congestión no mide por sí sola el estímulo.'}
+        {t:'tip', x:'<b>Volumen semanal de espalda:</b> quedan 15 series entre dominadas y remos. Es suficiente para progresar; prioriza recorrido, carga y recuperación antes de añadir más.'}
       ]
     },
 
     /* ---------------- JUEVES · CROSSFIT ---------------- */
     {
       id:'crossfit', dow:4, day:'Jueves', name:'CrossFit', sub:'Técnica · AMRAP o intervalos',
-      color:'--c-cf', icon:'waves', mins:50,
-      principle:'<b>Jueves · CrossFit.</b> Calentamiento, técnica ligera y bloque principal. Elige el enfoque según lo que busques ese día: capacidad de trabajo o fondo para el fútbol.',
+      color:'--c-cf', icon:'waves', mins:65,
+      principle:'<b>Segunda dosis breve de pierna y acondicionamiento.</b> Haz primero la fuerza con margen; después elige capacidad de trabajo o fondo para el fútbol.',
       blocks:[
         {t:'warmup'},
+        {t:'sec', h:'Fuerza preventiva', meta:'10–15 min'},
+        {t:'ex', id:'hip-thrust', nm:'Hip thrust', cue:'Glúteo · pausa 1 s arriba · deja 2 reps en reserva', sets:2, reps:'6–8', rest:120, kg:1},
+        {t:'ex', id:'step-up', nm:'Step-up al cajón', cue:'Altura moderada · controla la bajada · pelvis estable', sets:2, reps:'6/pierna', rest:90, kg:1},
+        {t:'tip', x:'<b>Dosis pequeña:</b> estas cuatro series completan la semana de pierna sin convertirla en un bloque de hipertrofia. Si tienes fútbol al día siguiente, usa cargas ligeras o sáltalas.'},
         {t:'sec', h:'Técnica ligera', meta:'5–6 min · sin fatiga'},
         {t:'pick', k:'tecnica', hint:'Practica el patrón, no busques peso', opts:[
           {nm:'Kettlebell clean', cue:'Recepción con codo bajo · sin exigir rotación externa al hombro', dose:'3×5', u:'/lado',
@@ -751,11 +769,11 @@ const P = {
   ],
 
   /* Ejercicios cuyo progreso se sigue en la pestaña Historial */
-  keyLifts: ['press-banca','dominada-lastrada','sentadilla','bulgara','remo','jalon'],
+  keyLifts: ['press-banca','dominada-lastrada','sentadilla','bulgara','remo','hip-thrust'],
   shortNames: {
     'press-banca':'Press banca', 'dominada-lastrada':'Dominada +kg', 'sentadilla':'Sentadilla',
-    'bulgara':'Búlgara', 'remo':'Remo', 'jalon':'Jalón', 'landmine':'Landmine',
-    'curl-biceps':'Curl bíceps', 'curl-martillo':'Martillo', 'triceps-polea':'Tríceps',
+    'bulgara':'Búlgara', 'remo':'Remo', 'hip-thrust':'Hip thrust', 'step-up':'Step-up', 'landmine':'Landmine',
+    'curl-biceps':'Curl bíceps', 'curl-martillo':'Martillo', 'triceps-polea':'Tríceps', 'triceps-overhead':'Tríceps alto',
     'elev-laterales':'Laterales', 'goblet':'Goblet', 'gemelo':'Gemelo', 'pajaros':'Pájaros'
   }
 };
@@ -787,6 +805,100 @@ const IC = {
   clock:'<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>'
 };
 const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w||2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]||''}</svg>`;
+
+/* Guía breve común: ejecución y cambios equivalentes sin alterar la intención */
+const EX_GUIDE = {
+  'press-banca': {
+    how:'Pies firmes, omóplatos apoyados y muñecas sobre los codos. Baja con control hacia la parte media-baja del pecho y empuja sin despegar los hombros del banco.',
+    alts:'Press con mancuernas con agarre neutro; press en máquina convergente; press en el suelo si el hombro tolera mejor un recorrido corto.'
+  },
+  'dominada-lastrada': {
+    how:'Empieza desde una suspensión controlada, baja los hombros y lleva el pecho hacia la barra sin impulso. Detén la serie cuando pierdas altura o tengas que balancearte.',
+    alts:'Dominada neutra lastrada; dominada sin lastre más lenta; jalón en polea pesado si no puedes mantener 4 repeticiones limpias.'
+  },
+  landmine: {
+    how:'Colócate en media rodilla o de pie, sujeta el extremo delante del hombro y empuja arriba y adelante. Mantén costillas y pelvis estables.',
+    alts:'Press en máquina con agarre neutro; press en el suelo con mancuernas; flexión inclinada con asas.'
+  },
+  remo: {
+    how:'Usa la variante seleccionada abajo. Deja avanzar el omóplato al estirar, mantén el torso estable y lleva el codo hacia la cadera. Pausa un segundo sin encoger el hombro.',
+    alts:'Remo con apoyo de pecho; remo unilateral en máquina; remo sentado en polea; remo con mancuerna apoyado en banco.'
+  },
+  'curl-biceps': {
+    how:'Mantén codos cerca del torso, flexiona sin adelantar el hombro y baja el peso con control. Reduce la carga si necesitas balancearte.',
+    alts:'Curl con mancuernas; curl en polea; curl predicador en máquina.'
+  },
+  'triceps-overhead': {
+    how:'De espaldas a una polea alta, lleva la cuerda por encima de la cabeza. Mantén los codos orientados al frente y extiéndelos sin mover el tronco.',
+    alts:'Extensión unilateral en polea; press francés con mancuerna ligera; extensión en polea hacia abajo si elevar el brazo molesta.'
+  },
+  'core-anti': {
+    how:'Mantén costillas sobre la pelvis y evita que la zona lumbar se arquee mientras alejas brazos o piernas. Usa solo el recorrido que puedas controlar.',
+    alts:'Dead bug; hollow hold; plancha con desplazamiento; rueda abdominal con recorrido corto.'
+  },
+  sentadilla: {
+    how:'Apoya todo el pie, toma aire y tensa el tronco antes de bajar. Rodillas y pies siguen una dirección parecida. Usa una profundidad estable que no provoque dolor.',
+    alts:'Sentadilla con safety bar; hack squat; prensa inclinada. Mantén el rango de 4–6 para la variante principal de fuerza.'
+  },
+  bulgara: {
+    how:'Pie delantero completamente apoyado y trasero sobre un banco bajo. Baja la rodilla trasera mientras la pelvis permanece de frente; impulsa el suelo con la pierna delantera.',
+    alts:'Split squat con ambos pies en el suelo; zancada atrás; prensa unilateral; step-up bajo.'
+  },
+  nordico: {
+    how:'Arrodíllate sobre una superficie acolchada y fija bien los tobillos con una máquina, un soporte estable o un compañero. Mantén cadera y tronco alineados. Inclínate desde las rodillas frenando con los isquios; apoya las manos para terminar y ayúdate a volver. Empieza con recorridos cortos.',
+    alts:'Curl femoral sentado; curl femoral tumbado; curl deslizante con los talones; nórdico asistido con una banda fuerte.'
+  },
+  gemelo: {
+    how:'Apoya el antepié, sube el talón sin rebotar, pausa arriba y baja despacio. Mantén la presión repartida entre el dedo gordo y el pequeño.',
+    alts:'Máquina de gemelo de pie; gemelo unilateral con apoyo; elevación sentado para dar más trabajo al sóleo.'
+  },
+  pallof: {
+    how:'Colócate de lado a una polea o banda, sujétala frente al pecho y extiende los brazos sin permitir que el tronco gire. Exhala y vuelve.',
+    alts:'Plancha lateral; suitcase carry; press Pallof medio arrodillado.'
+  },
+  rueda: {
+    how:'Desde las rodillas, aprieta glúteos y desplaza la rueda solo hasta donde mantengas la lumbar estable. Vuelve empujando el suelo.',
+    alts:'Dead bug lento; plancha con desplazamiento de manos; body saw sobre antebrazos.'
+  },
+  'dominadas-bw': {
+    how:'Baja los hombros antes de doblar los codos y sube sin balancearte. Ajusta la asistencia para repetir la misma altura y dejar dos repeticiones limpias en reserva.',
+    alts:'Máquina de dominadas asistidas; banda elástica; jalón al pecho con agarre neutro.'
+  },
+  'elev-laterales': {
+    how:'Eleva los brazos algo por delante del cuerpo con codos suaves. Llega hasta una altura cómoda y baja sin dejar caer el peso.',
+    alts:'Elevación lateral en polea; máquina de deltoide lateral; mancuerna unilateral con apoyo.'
+  },
+  pajaros: {
+    how:'Apoya el pecho si puedes. Abre los brazos con codos ligeramente flexionados y hombros lejos de las orejas; usa una carga ligera.',
+    alts:'Reverse pec deck; aperturas inversas en polea; band pull-apart.'
+  },
+  'curl-martillo': {
+    how:'Mantén las palmas enfrentadas, codos quietos y muñecas neutras. Sube sin balancear el cuerpo y controla la bajada.',
+    alts:'Curl martillo con cuerda en polea; curl cruzado con mancuerna; máquina de curl con agarre neutro.'
+  },
+  'triceps-polea': {
+    how:'Fija los codos al costado y extiende hasta abajo sin mover los hombros. Deja que el antebrazo vuelva con control.',
+    alts:'Extensión con cuerda; extensión unilateral; fondos asistidos si el hombro los tolera.'
+  },
+  'hip-thrust': {
+    how:'Apoya la parte alta de la espalda en un banco estable y coloca los pies donde arriba las tibias queden casi verticales. Eleva la pelvis apretando glúteos, con costillas recogidas; pausa un segundo sin arquear la lumbar.',
+    alts:'Máquina de hip thrust; puente de glúteo en el suelo; pull-through en polea. Si el montaje te resulta incómodo, el puente es la opción más sencilla.'
+  },
+  'step-up': {
+    how:'Usa un cajón que te permita apoyar todo el pie y mantener la pelvis nivelada. Inclina ligeramente el torso, empuja con la pierna que está arriba y baja durante 2–3 segundos. Evita impulsarte con la pierna del suelo.',
+    alts:'Step-up más bajo; zancada atrás; split squat; prensa unilateral. Elige la variante que no moleste a rodilla, espalda o fascia.'
+  },
+  'plancha-lat': {
+    how:'Apoya antebrazo y rodillas o pies, eleva la cadera y mantén cabeza, tronco y pelvis alineados. Respira sin perder la postura.',
+    alts:'Plancha lateral con rodillas; suitcase carry; Pallof press.'
+  }
+};
+const WOD_GUIDE = [
+  {match:'kb swings', how:'Coloca la pesa delante, llévala atrás con una bisagra de cadera y extiende cadera y rodillas con fuerza. Los brazos acompañan; la espalda conserva su posición.', alts:'Swing más ligero; peso muerto con kettlebell; bici o remo si la bisagra se fatiga.'},
+  {match:'farmer carry', how:'Camina erguido con una carga a cada lado, pasos cortos y abdomen firme. Mantén los hombros cómodos y la carga sin golpear las piernas.', alts:'Carga unilateral tipo suitcase carry; paseo con mancuernas ligeras; trineo.'},
+  {match:'burpees', how:'Apoya las manos, lleva los pies atrás, vuelve a acercarlos y ponte de pie. Usa un ritmo repetible y una superficie estable.', alts:'Burpee sin salto; manos sobre un banco; bici o remo durante 30 segundos.'},
+  {match:'dead bug', how:'Boca arriba, extiende brazo y pierna contrarios mientras exhalas y mantienes estable la lumbar. Alterna lados.', alts:'Marcha supina; bird dog; Pallof press.'}
+];
 
 /* ---------------- estado ---------------- */
 const KEY = 'fit.v2';
@@ -955,7 +1067,7 @@ function render(){
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
     <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.1</span>':''}</h1>
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.2</span>':''}</h1>
     <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
@@ -1022,11 +1134,14 @@ function setPlan(id, value){
 function renderPlanner(){
   const date = planDate(), plan = planFor(date);
   const names = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  const a = plan['upper-a'], b = plan['upper-b'];
+  const a = plan['upper-a'], b = plan['upper-b'], l = plan.pierna, c = plan.crossfit;
+  const warnings = [];
+  if (a>=0 && b>=0 && Math.abs(a-b)<2) warnings.push('Los dos Upper están consecutivos. Deja un día entre ellos cuando puedas.');
+  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y acondicionamiento están consecutivos. Separa ambas sesiones o reduce la fuerza preventiva.');
   return `<div class="sec"><h2>Organiza tu semana</h2></div>
-    <div class="btnrow"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span style="align-self:center;white-space:nowrap">Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
-    ${P.days.map(d => `<div class="set"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
-    ${a>=0 && b>=0 && Math.abs(a-b)<2?'<div class="note"><span>Has colocado los dos Upper consecutivos. Conviene dejar un día de recuperación entre ellos.</span></div>':''}
+    <div class="week-switch"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span>Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
+    ${P.days.map(d => `<div class="set planner-row"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
+    ${warnings.map(x=>`<div class="note"><span>${esc(x)}</span></div>`).join('')}
     <div class="tip"><span>Cada semana se guarda por separado. Puedes entrenar viernes, sábado o domingo. Comprueba también el descanso entre el domingo y el lunes siguiente. Si solo puedes tres días, prioriza las sesiones de fuerza.</span></div>`;
 }
 function warmRecord(){
@@ -1134,13 +1249,12 @@ function renderSemana(){
   return `
   <div class="sec"><h2>${planWeekOffset===0?'Semana actual':'Semana elegida'}</h2><span class="meta">${esc(rango)}</span></div>
   ${renderPlanner()}
-  <details class="card" style="margin:16px 0"><summary>Revisión del plan · recomposición corporal</summary>
-    <p>La rutina combina fuerza y acondicionamiento. La recomposición también depende de alimentación, recuperación y progresión; esta app no conoce tu peso, experiencia ni disponibilidad real.</p>
-    <p><b>Distribución:</b> 18 series de tracción semanal frente a 6 series principales de sentadilla y búlgara, más 2 de nórdico. Las tracciones trabajan músculos que se solapan; 18 no es una dosis óptima automática para cada músculo de la espalda.</p>
-    <p><b>Prioridad de mejora:</b> una segunda dosis de pierna y una extensión de cadera progresiva. Una opción a valorar es convertir acondicionamiento en Pierna B + cardio corto, con prensa, curl femoral y hip thrust. Hay que ajustar el total y tu tolerancia lumbar antes de añadirlo.</p>
-    <p><b>Espalda:</b> haz el remo antes del curl si te limita el bíceps o el agarre. Puedes separar las superseries y descansar 2 minutos entre series de tracción. Aumentar series no sustituye ajustar técnica y carga.</p>
-    <p><b>Semanas cortas:</b> prioriza fuerza; con solo dos días disponibles convendría preparar dos sesiones de cuerpo completo. No acumules todas las sesiones perdidas.</p>
-    <p><b>Cómo medir:</b> anota repeticiones reales y margen en las notas, compara cargas con el mismo recorrido y sigue cintura y media semanal del peso. Son indicadores de seguimiento, no una medición directa de músculo.</p>
+  <details class="card review-card" style="margin:16px 0"><summary>Revisión del plan · recomposición corporal</summary>
+    <p><b>Pierna:</b> cinco series principales de sentadilla y búlgara, dos de nórdico y cuatro series breves de hip thrust y step-up en el acondicionamiento. La intención es fuerza, mantenimiento y tolerancia al deporte.</p>
+    <p><b>Tren superior:</b> 15 series de tracción y 11 de empuje. Cada Upper termina con una superserie de bíceps y tríceps; son seis series directas semanales para cada uno, además de dominadas y presses.</p>
+    <p><b>Superseries:</b> alterna bíceps y tríceps y descansa 60–75 segundos al terminar la pareja. Si pierdes más de dos repeticiones respecto a la primera ronda, descansa 90 segundos.</p>
+    <p><b>Semanas cortas:</b> con tres días, prioriza Upper A, Pierna y Upper B. Con dos días conviene usar dos sesiones de cuerpo completo; no amontones las sesiones perdidas.</p>
+    <p><b>Cómo medir:</b> anota repeticiones reales y margen en las notas, compara cargas con el mismo recorrido y sigue cintura y media semanal del peso.</p>
   </details>
   <div class="sec"><h2>Sesiones de esta semana</h2></div>
   <div class="cards">${P.days.map(d => dayCard(d, done.has(d.id), ws)).join('')}</div>
@@ -1185,7 +1299,7 @@ function renderDay(day){
   const live = isLive(day), pr = sessionProgress(day);
   let h = '';
   if (day.principle) h += `<div class="principle">${day.principle}</div>`;
-  h += `<div class="card" style="margin:14px 0 4px;display:flex;align-items:center;gap:14px">
+  h += `<div class="card session-head" style="margin:14px 0 4px;display:flex;align-items:center;gap:14px">
       <div style="flex:1;min-width:0">
         <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)">${live?'Sesión en curso':'Sesión'}</div>
         <div style="font-family:var(--f-disp);font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin-top:3px">${pr.done}/${pr.total} series</div>
@@ -1240,7 +1354,7 @@ function renderBlock(b, day){
         <button data-act="wod" data-sec="${wodSecs(b.clk)}" data-nm="${esc(b.hd)} ${esc(b.clk)}" style="display:flex;align-items:center;gap:6px;color:#fff;font-family:var(--f-mono);font-size:11px;font-weight:700">
           ${svg('clock',2)} ${esc(b.clk)}</button></div>
         ${b.steps.map(s => `<div class="ex" style="border:0;border-radius:0;margin:0;background:none">
-          <div class="hd"><span class="idx" style="width:34px">${esc(s.n)}</span><div class="body"><div class="nm">${esc(s.nm)}</div>${s.cue?`<div class="cue">${s.cue}</div>`:''}</div></div></div>`).join('')}
+          <div class="hd"><span class="idx" style="width:34px">${esc(s.n)}</span><div class="body"><div class="nm">${esc(s.nm)}</div>${s.cue?`<div class="cue">${s.cue}</div>`:''}</div></div>${renderWodGuide(s)}</div>`).join('')}
         <div class="track" style="border-top:1px solid rgba(255,255,255,.07);padding-top:11px">
           <button class="dot" data-act="rnd" data-k="${esc(wk)}" data-d="-1" aria-label="Quitar ronda">−</button>
           <div style="font-family:var(--f-mono);font-weight:700;font-size:17px;min-width:30px;text-align:center;color:${r?'var(--c-leg)':'var(--t3)'}">${r}</div>
@@ -1269,13 +1383,24 @@ function exBody(e, day){
       ${last?`<div class="last">Última vez: <b>${last.kg} kg</b> · ${esc(last.reps||'')} · ${esc(dstr(last.ts||Date.now()))}</div>`:''}
     </div>
     <div class="dose">${esc(e.reps||'')}${e.rest?`<span class="u">desc ${e.rest}s</span>`:''}</div>
-  </div>`;
+  </div>${renderExerciseGuide(e)}`;
+}
+function renderExerciseGuide(e){
+  const g = EX_GUIDE[e.id];
+  if (!g) return '';
+  return `<details class="exguide"><summary>Cómo hacerlo y alternativas</summary><p>${esc(g.how)}</p><p><b>Alternativas:</b> ${esc(g.alts)}</p></details>`;
+}
+function renderWodGuide(s){
+  const name = String(s.nm||'').toLowerCase();
+  const g = WOD_GUIDE.find(x => name.includes(x.match));
+  if (!g) return '';
+  return `<details class="exguide"><summary>Cómo hacerlo y alternativas</summary><p>${esc(g.how)}</p><p><b>Alternativas:</b> ${esc(g.alts)}</p></details>`;
 }
 function exTrack(e){
   if (!e.sets) return '';
   const k = exKey(e), arr = (S.active && S.active.sets[k]) || [];
   const dots = Array.from({length:e.sets}, (_,i) =>
-    `<button class="dot${arr[i]?' on':''}" data-act="set" data-k="${esc(k)}" data-i="${i}" data-rest="${e.rest||S.settings.rest}" data-nm="${esc(e.nm)}" data-n="${e.sets}" aria-label="Serie ${i+1}">${arr[i]?'✓':i+1}</button>`).join('');
+    `<button class="dot${arr[i]?' on':''}" data-act="set" data-k="${esc(k)}" data-i="${i}" data-rest="${e.skipRest?0:(e.rest||S.settings.rest)}" data-nm="${esc(e.nm)}" data-n="${e.sets}" aria-label="Serie ${i+1}">${arr[i]?'✓':i+1}</button>`).join('');
   const kg = e.kg ? `<div class="wgt"><input type="number" inputmode="decimal" step="0.5" min="0" max="1000" placeholder="kg"
       value="${(S.active && S.active.kg && S.active.kg[k] != null) ? S.active.kg[k] : ''}" data-act="kg" data-k="${esc(k)}" aria-label="Peso en kg"><span>kg</span></div>` : '';
   return `<div class="track">${dots}${kg}</div>`;
@@ -1473,7 +1598,7 @@ function toggleSet(k, i, rest, nm, n){
   arr[i] = !arr[i];
   save();
   const done = arr.filter(Boolean).length;
-  if (arr[i]) { haptic(18); startRest(rest, nm, `Serie ${done} de ${n}`); }
+  if (arr[i]) { haptic(18); if (+rest > 0) startRest(rest, nm, `Serie ${done} de ${n}`); }
   const day = dayById(a.dayId); render();
   if (arr[i] && done === +n) toast(`${esc(nm)} completado.`);
 }

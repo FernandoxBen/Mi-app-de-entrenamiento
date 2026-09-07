@@ -10,6 +10,7 @@ El plan aplica estos criterios:
 - Para hipertrofia, acercarse al fallo parece importar, aunque llegar al fallo en cada serie no ha mostrado una ventaja clara. Las indicaciones de espalda usan normalmente 1–2 repeticiones en reserva y priorizan un recorrido estable.
 - La progresión usa una regla sencilla: completar el extremo alto del rango dos sesiones antes de aumentar la carga.
 - Los nórdicos pueden formar parte de un programa de prevención de lesiones de isquiotibial, sin presentarlos como garantía ni sustituto de una valoración profesional.
+- Las superseries de músculos opuestos pueden reducir la duración manteniendo un volumen y adaptaciones similares, aunque suelen sentirse más exigentes.
 
 ## Referencias
 
@@ -21,6 +22,8 @@ El plan aplica estos criterios:
 - Vieira AF et al. *Effects of Resistance Training Performed to Failure or Not to Failure on Muscle Strength, Hypertrophy, and Power Output* (2021): https://pubmed.ncbi.nlm.nih.gov/33555822/
 - Robinson ZP et al. *Exploring the Dose-Response Relationship Between Estimated Resistance Training Proximity to Failure, Strength Gain, and Muscle Hypertrophy* (2024): https://pubmed.ncbi.nlm.nih.gov/38970765/
 - van Dyk N et al. *Including the Nordic hamstring exercise in injury prevention programmes halves the rate of hamstring injuries* (2019): https://pubmed.ncbi.nlm.nih.gov/30808663/
+- Zhang X et al. *Superset Versus Traditional Resistance Training Prescriptions: A Systematic Review and Meta-analysis* (2025): https://pubmed.ncbi.nlm.nih.gov/39903375/
+- Zhang M et al. *The Effects of Nordic Hamstring Exercise on Performance and Injury in the Lower Extremities: An Umbrella Review* (2024): https://pubmed.ncbi.nlm.nih.gov/39120165/
 
 ## Límite
 

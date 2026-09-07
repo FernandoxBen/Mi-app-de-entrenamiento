@@ -1,7 +1,7 @@
 {
-  "name": "Entreno 2.0",
+  "name": "Entreno 2.2",
   "short_name": "Entreno",
-  "description": "Plan de fuerza y acondicionamiento con progresión, descansos e historial. Funciona sin conexión.",
+  "description": "Plan flexible para recomposición, fuerza, acondicionamiento y seguimiento. Funciona sin conexión.",
   "lang": "es",
   "dir": "ltr",
   "start_url": "./index.html",

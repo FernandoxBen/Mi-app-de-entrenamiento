@@ -1,5 +1,16 @@
 # Cambios
 
+## 2.2.0 — 2026-09-07
+
+- Pierna reorientada a fuerza y mantenimiento: sentadilla 3×4–6, búlgara 2×6–8 y nórdico 2×3–5.
+- Segunda dosis corta de pierna en acondicionamiento: hip thrust y step-up, dos series cada uno.
+- Tren superior equilibrado: 15 series de tracción y superseries de bíceps y tríceps en ambos Upper.
+- Jalón redundante eliminado y hombro trasladado desde Pierna a Upper B.
+- Guías desplegables de ejecución y alternativas para los ejercicios principales y movimientos del AMRAP.
+- El temporizador descansa al terminar cada pareja de la superserie, no entre bíceps y tríceps.
+- Planificador con avisos si se juntan los dos Upper o Pierna y acondicionamiento.
+- Revisión visual para móviles estrechos, formularios, botones, panel de descanso y cabecera de sesión.
+
 ## 2.1.0 — 2026-09-07
 
 - Calentamiento independiente con progreso diario y acceso propio desde Hoy.
