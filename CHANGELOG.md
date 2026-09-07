@@ -1,5 +1,24 @@
 # Cambios
 
+## 2.4.0 — 2026-09-07
+
+- Cada hueco de la rutina puede usar un ejercicio equivalente distinto sin modificar la plantilla ni mezclar historiales.
+- Selector antes y durante la sesión, con ejercicio predeterminado, favoritos y elecciones recientes.
+- La sesión recuerda el ejercicio real, permite añadir ejercicios puntuales, saltarlos y reordenarlos.
+- Precarga el último peso y muestra las repeticiones de la última sesión del ejercicio elegido.
+- Registro rápido de repeticiones reales por ejercicio y volumen calculado con esos datos.
+- Descansos configurables: fuerza 120 segundos y estándar 60 segundos.
+- Acceso al temporizador en la barra inferior durante la sesión, con cuenta atrás, cronómetro, pausa, reinicio, ±15 y +30 segundos.
+- Migración compatible para sesiones, récords y copias antiguas.
+
+## 2.3.0 — 2026-09-07
+
+- Calentamiento reorganizado en tres bloques y presentado como tarjetas independientes con barra de progreso.
+- Añadido `Cat-Cow`; los movimientos muestran el nombre estándar en inglés y su equivalente en español.
+- La suspensión en barra pasa a ser un bloque opcional declarado en el programa.
+- Historial: los botones de progresión forman una rejilla uniforme y los bloques plegables dejan de comprimir los nombres en móvil.
+- Los récords antiguos o dañados ya no rompen Historial; cargar e importar usan la misma validación.
+
 ## 2.2.1 — 2026-09-07
 
 - Calentamiento adaptado al trayecto en bici: se eliminan la bicicleta y los pasos laterales con banda.

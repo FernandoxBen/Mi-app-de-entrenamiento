@@ -1,4 +1,16 @@
-# Entreno 2.2.1
+# Entreno 2.4.0
+
+## Novedades 2.4
+
+La sesión separa el hueco previsto del ejercicio realizado. Puedes sustituir, marcar favoritos, reutilizar recientes, añadir, saltar y reordenar sin cambiar la plantilla. Cada ejercicio conserva su historial y precarga el último peso.
+
+Los descansos de fuerza y estándar se configuran por separado. Durante una sesión hay acceso permanente a cuenta atrás y cronómetro, con pausa, reinicio y ajustes rápidos.
+
+## Novedades 2.3
+
+El calentamiento se agrupa en tres bloques más la suspensión opcional antes de Upper. Incluye `Cat-Cow`, usa nombres estándar con su equivalente en español y muestra cada movimiento como una tarjeta con marca, dosis y explicación. Una barra indica el progreso del día.
+
+Historial utiliza una rejilla uniforme y tolera récords guardados en formatos antiguos o dañados sin romper la pantalla.
 
 ## Ajustes 2.2.1
 

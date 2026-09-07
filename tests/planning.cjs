@@ -65,8 +65,10 @@ const server = http.createServer((req,res) => {
     });
     assert.deepEqual(program,{upperA:{landmine:3,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{hip:2,step:2},guide:21});
     const warmup=await page.evaluate(()=>P.warmup.groups.flatMap(g=>g.items.map(x=>x.n)));
-    assert.deepEqual(warmup,["World’s Greatest Stretch",'Quadruped T-Spine Rotation','Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Mobilization']);
+    assert.deepEqual(warmup,['Cat-Cow',"World’s Greatest Stretch",'Quadruped Thoracic Rotation','Scapular Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Dorsiflexion']);
     assert.equal(warmup.some(x=>/bici|band|banda|pasos laterales/i.test(x)),false);
+    assert.equal(await page.evaluate(()=>P.warmup.groups.concat([P.warmup.optional]).flatMap(g=>g.items).every(x=>x.es&&x.how&&x.d)),true);
+    assert.deepEqual(await page.evaluate(()=>P.warmup.optional.items.map(x=>x.n)),['Assisted Dead Hang']);
     // Old copies and corrupt new fields receive safe defaults.
     assert.equal(await page.evaluate(()=>{const old={plans:[],warmups:{bad:null}};normalizePlanning(old);return Object.keys(old.plans).length+Object.keys(old.warmups).length;}),0);
     await page.evaluate(()=>go('hoy'));
@@ -118,8 +120,14 @@ const server = http.createServer((req,res) => {
       await page.setViewportSize({width,height:844});
       await page.evaluate(()=>go('day','calentamiento'));
       const controls=await page.locator('.warm-check').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,w:r.width,h:r.height}}));
-      assert.ok(controls.length>=7);
+      assert.ok(controls.length>=9);
       assert.ok(controls.every(x=>x.x===controls[0].x&&x.w===44&&x.h===44),`warm-up controls are misaligned at ${width}px`);
+      const cards=await page.locator('.witem').evaluateAll(els=>els.map(el=>{
+        const c=el.getBoundingClientRect(),n=el.querySelector('.wname').getBoundingClientRect();
+        return {w:Math.round(c.width),nameW:Math.round(n.width),guide:!!el.querySelector('.warm-how'),marks:el.querySelectorAll('.warm-check').length};
+      }));
+      assert.ok(cards.every(c=>c.w===cards[0].w&&c.guide&&c.marks===1),`warm-up cards are inconsistent at ${width}px`);
+      assert.ok(cards.every(c=>c.nameW>=c.w*0.35),`warm-up names are squeezed at ${width}px`);
       if(width===320)await page.screenshot({path:path.join(root,'tests','warmup-320-preview.png'),fullPage:true});
       await page.evaluate(()=>go('day','upper-a'));
       const series=await page.locator('.track').first().evaluate(el=>{
@@ -130,6 +138,94 @@ const server = http.createServer((req,res) => {
       assert.ok(series.gaps.every(g=>g===(width<=360?6:8)),`series buttons have uneven gaps at ${width}px`);
       assert.ok(series.dy<=2,`weight control is not aligned with series buttons at ${width}px`);
     }
+    for(const width of [320,390]){
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(()=>go('historial'));
+      const chips=await page.locator('.liftseg button').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}}));
+      assert.ok(chips.length>=6);
+      assert.ok(chips.every(c=>c.w===chips[0].w&&c.h===chips[0].h&&c.h>=44),`lift chips are uneven at ${width}px`);
+      const cols=[...new Set(chips.map(c=>c.x))],rows=[...new Set(chips.map(c=>c.y))];
+      assert.equal(chips.length,cols.length*rows.length,`lift chips do not fill a grid at ${width}px`);
+    }
+    await page.setViewportSize({width:390,height:844});
+    await page.evaluate(()=>go('day','movilidad'));
+    await page.evaluate(()=>document.querySelectorAll('.sec.fold').forEach(el=>el.click()));
+    const miniRows=await page.locator('.mini .m').evaluateAll(els=>els.map(el=>{
+      const r=el.getBoundingClientRect(),n=el.querySelector('b').getBoundingClientRect();
+      return {w:Math.round(r.width),nameW:Math.round(n.width)};
+    }));
+    assert.ok(miniRows.length>0&&miniRows.every(n=>n.nameW>=n.w*0.5),'mini rows squeeze the movement name');
+    await page.evaluate(()=>{S.prs={'press-banca':62,'roto':null,'sentadilla':{kg:'100',nm:'Sentadilla'}};save()});
+    await page.reload();
+    const prs=await page.evaluate(()=>{go('historial');return {keys:Object.keys(S.prs).sort(),rows:document.querySelectorAll('.prow').length,text:[...document.querySelectorAll('.prow')].map(x=>x.textContent).join(' ')}});
+    assert.deepEqual(prs.keys,['press-banca','sentadilla']);
+    assert.equal(prs.rows,2);
+    assert.equal(/undefined|Invalid Date|NaN/.test(prs.text),false);
+    await page.evaluate(()=>{S.prs={};save()});
+    // Flexible session: draft swap, independent history, preload, favorite, add, skip and reorder.
+    await page.evaluate(()=>{
+      const ts=Date.now()-864e5;
+      S.active=null;S.drafts={};S.favorites={};S.recents=[];
+      S.settings.restStrength=120;S.settings.restStandard=60;
+      S.history=[{id:'seed',dayId:'upper-a',ts,dur:2400000,vol:2160,note:'',entries:[{id:'press-mancuernas',nm:'Press con mancuernas',sets:3,reps:'8 / 8 / 7',kg:30,setData:[{kg:30,reps:8},{kg:30,reps:8},{kg:30,reps:7}],ts}]}];save();go('day','upper-a');
+    });
+    const bench=page.locator('.ex').filter({has:page.locator('select.ex-select option[value="press-banca"]')}).first();
+    await bench.locator('select.ex-select').selectOption('press-mancuernas');
+    assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-mancuernas');
+    await page.locator('[data-act="start"]').click();
+    await checkLayout(320,'day','upper-a');
+    await page.setViewportSize({width:390,height:844});
+    const liveBench=page.locator('.ex').filter({has:page.locator('select.ex-select option:checked[value="press-mancuernas"]')}).first();
+    assert.equal(await liveBench.locator('[data-act="kg"]').inputValue(),'30');
+    assert.match(await liveBench.textContent(),/8 \/ 8 \/ 7/);
+    await liveBench.locator('[data-act="fav"]').click();
+    assert.equal(await page.evaluate(()=>S.favorites['press-mancuernas']),true);
+    await liveBench.locator('[data-act="repslog"]').fill('9, 8, 8');
+    await liveBench.locator('[data-act="set"]').first().click();
+    assert.deepEqual(await page.evaluate(()=>({open:document.querySelector('#sheet').classList.contains('on'),total:RT.total})),{open:true,total:120});
+    await page.locator('[data-act="rest30"]').click();
+    assert.equal(await page.evaluate(()=>RT.total),150);
+    await page.locator('[data-act="timer-pause"]').click();
+    assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Reanudar');
+    await page.locator('[data-act="timer-pause"]').click();
+    await page.locator('[data-act="skip"]').click();
+    const secondUid=await page.evaluate(()=>S.active.exercises[1]._uid);
+    await page.locator(`[data-act="skip-ex"][data-u="${secondUid}"]`).click();
+    assert.equal(await page.evaluate(uid=>S.active.exercises.find(x=>x._uid===uid).skipped,secondUid),true);
+    await page.locator('[data-act="add-ex"]').selectOption('laterales-maquina');
+    const addedUid=await page.evaluate(()=>S.active.exercises.at(-1)._uid);
+    await page.locator(`[data-act="move-ex"][data-u="${addedUid}"][data-d="-1"]`).click();
+    const added=page.locator('.ex').filter({has:page.locator('select.ex-select option:checked[value="laterales-maquina"]')}).first();
+    await added.locator('[data-act="kg"]').fill('8');
+    await added.locator('[data-act="repslog"]').fill('12');
+    await added.locator('[data-act="set"]').first().click();
+    await page.locator('[data-act="skip"]').click();
+    await page.locator('[data-act="manual-timer"]').click();
+    await page.evaluate(()=>go('semana'));
+    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),true);
+    await page.evaluate(()=>go('day','upper-a'));
+    await page.locator('[data-act="timer-mode"][data-mode="up"]').click();
+    await page.waitForTimeout(350);
+    await page.locator('[data-act="timer-pause"]').click();
+    assert.deepEqual(await page.evaluate(()=>({mode:RT.mode,running:RT.running,visible:document.querySelector('#sheet').classList.contains('on')})),{mode:'up',running:false,visible:true});
+    await page.locator('[data-act="skip"]').click();
+    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),false);
+    await page.screenshot({path:path.join(root,'tests','flexible-session-preview.png'),fullPage:true});
+    await page.locator('[data-act="finish"]').click();
+    const flexible=await page.evaluate(()=>({ids:S.history[0].entries.map(e=>e.id),press:S.history[0].entries.find(e=>e.id==='press-mancuernas'),template:flatEx(dayById('upper-a'))[0].id,recents:S.recents.slice()}));
+    assert.ok(flexible.ids.includes('press-mancuernas')&&flexible.ids.includes('laterales-maquina'));
+    assert.equal(flexible.press.reps,'9');
+    assert.equal(flexible.template,'press-banca');
+    assert.ok(flexible.recents.includes('press-mancuernas'));
+    await page.evaluate(()=>go('day','upper-a'));
+    const again=page.locator('.ex').filter({has:page.locator('select.ex-select option[value="press-banca"]')}).first();
+    await again.locator('select.ex-select').selectOption('press-banca');
+    assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-banca');
+    await page.evaluate(()=>go('ajustes'));
+    await page.locator('[data-setting="restStrength"]').fill('135');await page.locator('[data-setting="restStrength"]').blur();
+    await page.locator('[data-setting="restStandard"]').fill('75');await page.locator('[data-setting="restStandard"]').blur();
+    await page.reload();
+    assert.deepEqual(await page.evaluate(()=>[S.settings.restStrength,S.settings.restStandard]),[135,75]);
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));
@@ -156,6 +252,6 @@ const server = http.createServer((req,res) => {
     assert.match(await step.textContent(),/zancada atrás/);
     await page.screenshot({path:path.join(root,'tests','step-up-guide-preview.png'),fullPage:true});
     assert.deepEqual(errors,[]);
-    console.log('PASS: migration, planning, routine structure, superset timer, guides, stats and responsive controls.');
+    console.log('PASS: migration, planning, flexible exercises, independent history, configurable timers, guides and responsive controls.');
   } finally {await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
