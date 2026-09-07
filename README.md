@@ -1,4 +1,14 @@
-# Entreno 2.0
+# Entreno 2.1
+
+## Novedades 2.1
+
+Hoy muestra el calentamiento y la sesión en dos bloques. El calentamiento guarda sus marcas por fecha sin interrumpir la sesión activa ni contar como una sesión de fuerza. Las aproximaciones siguen siendo específicas del ejercicio.
+
+En Semana puedes asignar cada sesión de lunes a domingo o dejarla sin programar. Las flechas permiten editar semanas distintas. Una semana sin editar propone el reparto original; cambiar una semana no modifica las siguientes. Las copias de seguridad incluyen calendario y calentamientos.
+
+Se incluye una revisión del plan para recomposición y explicaciones de cada movimiento del calentamiento.
+
+Prueba funcional: `node tests/planning.cjs`, con Playwright y Chrome disponibles. Comprueba conservación de la sesión activa, calendario, persistencia, datos antiguos, progreso y anchura móvil.
 
 PWA de entrenamiento personal que funciona sin cuenta y sin conexión. Permite seguir el plan, registrar series y pesos, controlar descansos, consultar el historial y exportar una copia de seguridad.
 

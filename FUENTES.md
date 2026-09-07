@@ -13,6 +13,9 @@ El plan aplica estos criterios:
 
 ## Referencias
 
+- ACSM. *Resistance Training Guidelines Update* (2026): https://acsm.org/resistance-training-guidelines-update-2026/ — distribución de fuerza e hipertrofia; las series son referencias generales, no una dosis individual garantizada.
+- ACE Exercise Library. *Supine Dead Bug*: https://www.acefitness.org/resources/everyone/exercise-library/147/supine-dead-bug/ — técnica de control del tronco. La dosis del calentamiento es una propuesta práctica adaptable.
+
 - American College of Sports Medicine. *Resistance Training Prescription for Muscle Function, Hypertrophy, and Physical Performance in Healthy Adults* (2026): https://www.acsm.org/wp-content/uploads/2026/03/Resistance-Training-Position-Stand-infographic.pdf
 - World Health Organization. *Guidelines on physical activity and sedentary behaviour* (2020): https://www.who.int/publications/i/item/9789240015128
 - Vieira AF et al. *Effects of Resistance Training Performed to Failure or Not to Failure on Muscle Strength, Hypertrophy, and Power Output* (2021): https://pubmed.ncbi.nlm.nih.gov/33555822/

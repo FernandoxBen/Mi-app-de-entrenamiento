@@ -44,7 +44,7 @@
     {
       "name": "Entreno · Upper A",
       "short_name": "Upper A",
-      "description": "Lunes · fuerza de tren superior",
+      "description": "Fuerza de tren superior · día flexible",
       "url": "./index.html?d=upper-a",
       "icons": [
         {
@@ -57,7 +57,7 @@
     {
       "name": "Entreno · Pierna",
       "short_name": "Pierna",
-      "description": "Martes · sentadilla, búlgara y nórdico",
+      "description": "Sentadilla, búlgara y nórdico · día flexible",
       "url": "./index.html?d=pierna",
       "icons": [
         {
@@ -70,7 +70,7 @@
     {
       "name": "Entreno · Upper B",
       "short_name": "Upper B",
-      "description": "Miércoles · volumen y dominadas",
+      "description": "Volumen y dominadas · día flexible",
       "url": "./index.html?d=upper-b",
       "icons": [
         {
@@ -83,7 +83,7 @@
     {
       "name": "Entreno · CrossFit",
       "short_name": "CrossFit",
-      "description": "Jueves · técnica y bloque principal",
+      "description": "Técnica y acondicionamiento · día flexible",
       "url": "./index.html?d=crossfit",
       "icons": [
         {

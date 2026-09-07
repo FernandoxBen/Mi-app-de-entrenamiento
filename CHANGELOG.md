@@ -1,5 +1,15 @@
 # Cambios
 
+## 2.1.0 — 2026-09-07
+
+- Calentamiento independiente con progreso diario y acceso propio desde Hoy.
+- Planificación por semana: asignación de lunes a domingo, semanas futuras y sesiones sin programar.
+- Aviso de Upper consecutivos y prevención de dos sesiones en el mismo día.
+- Calentamiento explicado: entrada cardiovascular, rotación torácica, dead bug y pasos laterales; sin face pull ni chin tuck.
+- Revisión de distribución muscular y recomendaciones de recomposición en Semana.
+- El progreso semanal de cuatro sesiones excluye extras y calentamientos.
+- Corrección de indicaciones contradictorias sobre dominadas y agarre del jalón.
+
 ## 2.0.1 — 2026-09-06
 
 - Suspensión activa en barra añadida al calentamiento de los dos días Upper.

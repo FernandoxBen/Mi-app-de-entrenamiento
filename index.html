@@ -261,7 +261,8 @@ button{background:none;border:0;cursor:pointer}
   padding:16px 18px calc(18px + env(safe-area-inset-bottom));
   background:rgba(13,18,26,.94);backdrop-filter:blur(24px) saturate(1.2);-webkit-backdrop-filter:blur(24px) saturate(1.2);
   border-top:1px solid var(--gb);border-radius:22px 22px 0 0}
-.sheet.on{transform:translateY(0)}
+.sheet:not(.on){visibility:hidden;pointer-events:none}
+.sheet.on{transform:translateY(0);visibility:visible}
 .sheet .grab{width:38px;height:4px;border-radius:3px;background:var(--gb2);margin:0 auto 14px}
 .sheet .row{display:flex;align-items:center;gap:14px}
 .sheet .cd{position:relative;width:82px;height:82px;flex:0 0 auto}
@@ -418,7 +419,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.0.1',
+  version: '2.1.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -430,29 +431,23 @@ const P = {
   warmup: {
     min: 10,
     groups: [
-      { g:'1 · Apertura', items:[
-        {n:'Cat-cow', d:'8 reps'},
-        {n:'El mejor estiramiento del mundo', d:'4/lado'}
+      { g:'1 · Sube la temperatura', items:[
+        {n:'Bici o caminar a paso vivo', d:'3 min', how:'Empieza suave y aumenta un poco el ritmo. Debes poder hablar sin jadear.'}
       ]},
-      { g:'2 · Cuello y hombros', items:[
-        {n:'Chin tuck de pie', d:'3×5 s'},
-        {n:'Wall slide', d:'×10'},
-        {n:'Band pull-apart', d:'×15'},
-        {n:'Face pull con banda', d:'×15'}
+      { g:'2 · Espalda alta y hombros', items:[
+        {n:'Rotación torácica a cuatro apoyos', d:'6/lado', how:'Una mano detrás de la cabeza, gira el codo hacia el techo sin desplazar la pelvis. Usa un recorrido cómodo.'},
+        {n:'Deslizamiento de brazos en pared', d:'8 reps', how:'Costillas quietas. Desliza los brazos hacia arriba sin arquear la lumbar ni forzar el hombro.'}
       ]},
       { g:'3 · Core y espalda baja', items:[
-        {n:'Dead bug', d:'6/lado'},
-        {n:'Puente de glúteo', d:'×15'}
+        {n:'Dead bug', d:'8/lado', how:'Boca arriba, caderas y rodillas a 90°. Alarga brazo y pierna contrarios durante 3 segundos mientras exhalas. Mantén la lumbar estable; acorta el recorrido si se arquea. Una ronda prepara el tronco sin agotarlo.'},
+        {n:'Puente de glúteo', d:'10 reps', how:'Aprieta glúteos al subir, sin sacar las costillas ni arquear la espalda. Pausa un segundo arriba.'}
       ]},
       { g:'4 · Rodilla · cadera y tobillo', items:[
-        {n:'Movilidad de tobillo en pared', d:'8/lado'},
-        {n:'Clamshell con banda', d:'12/lado'}
-      ]},
-      { g:'5 · Gemelo', items:[
-        {n:'Gemelo y sóleo en pared', d:'30 s/lado'}
+        {n:'Movilidad de tobillo en pared', d:'8/lado', how:'Acerca la rodilla a la pared manteniendo el talón apoyado y la rodilla alineada con el pie.'},
+        {n:'Pasos laterales con banda', d:'8 por dirección', how:'Banda por encima de las rodillas, rodillas algo flexionadas. Da pasos cortos sin juntar los pies ni balancear el tronco. Sin banda, practica el mismo gesto suave.'}
       ]}
     ],
-    note:'Haz el calentamiento con un rango cómodo y añade dos series de aproximación del primer ejercicio. Si una molestia aumenta mientras entrenas o persiste después, detén ese movimiento y consúltalo con tu fisio.'
+    note:'Después, haz 2–3 series de aproximación progresivas del primer ejercicio con carga; antes de la primera tracción, añade una ligera. No cuentan como series de trabajo. Detente si aparece dolor o aumenta una molestia. El calentamiento debe dejarte preparado, sin fatiga.'
   },
 
   days: [
@@ -548,7 +543,7 @@ const P = {
       blocks:[
         {t:'warmup'},
         {t:'sec', h:'Dominadas', meta:'tu progreso'},
-        {t:'ex', id:'dominadas-bw', nm:'Dominadas a peso corporal', cue:'Usa 50–60 % de tu máximo por serie · <b>deja 2–3 reps en reserva</b>', sets:4, reps:'5–8', rest:90},
+        {t:'ex', id:'dominadas-bw', nm:'Dominadas a peso corporal o asistidas', cue:'Ajusta asistencia o repeticiones para dejar 2 reps limpias en reserva · sin balanceo', sets:4, reps:'5–8', rest:150},
         {t:'tip', x:'<b>Objetivo:</b> acumular repeticiones limpias. El trabajo lejos del fallo puede mejorar fuerza y masa con menos fatiga. Si la última serie pierde dos repeticiones o la técnica cambia, reduce el objetivo.'},
 
         {t:'sec', h:'Empuje', meta:'más reps'},
@@ -572,8 +567,8 @@ const P = {
           '<b>Hollow body hold</b> — 20–30 s, piernas a 30–40°.'
         ]},
         {t:'tip', x:'<b>Dominada:</b> empieza bajando los hombros, lleva el pecho hacia la barra y termina antes de perder el recorrido. Si no llegas a 5 repeticiones limpias con 1–2 en reserva, usa goma o máquina asistida.'},
-        {t:'tip', x:'<b>Jalón:</b> inclina el torso solo un poco, lleva los codos hacia los bolsillos y controla 2–3 s la subida. Si tiras con las manos, afloja el pulgar o usa correas en la última serie.'},
-        {t:'tip', x:'<b>Progresión de espalda:</b> cuando las últimas repeticiones sean lentas pero limpias y completes el máximo del rango, sube el peso mínimo disponible. La congestión es una sensación útil, pero no decide por sí sola si la serie ha servido.'}
+        {t:'tip', x:'<b>Jalón:</b> inclina el torso solo un poco, lleva los codos hacia los bolsillos y controla la subida. Mantén el agarre cerrado y seguro. Si el agarre limita antes que la espalda, prueba correas con ayuda para aprender a usarlas.'},
+        {t:'tip', x:'<b>Progresión de espalda:</b> cuando completes todas las series en el máximo del rango durante dos sesiones, con técnica estable y el margen previsto, sube el peso mínimo disponible. La congestión no mide por sí sola el estímulo.'}
       ]
     },
 
@@ -702,8 +697,8 @@ const P = {
         {t:'pick', k:'escap', hint:'Retracción escapular y salud del manguito', opts:[
           {nm:'Band pull-apart', cue:'Sin anclaje · en cualquier sitio', dose:'45', u:'s · ×2',
            how:'Sujeta la banda al frente con las dos manos. Sepárala llevando los omóplatos juntos, <b>sin encoger los hombros</b> hacia las orejas. Vuelve con control.'},
-          {nm:'Face pull con banda', cue:'Si tienes dónde anclarla', dose:'45', u:'s · ×2',
-            how:'Banda anclada a la altura de la cara. Tira hacia tu frente separando las manos y rotando los antebrazos hacia arriba. Termina en un rango cómodo, sin elevar los hombros.'},
+          {nm:'Remo suave con banda', cue:'Anclaje firme al pecho', dose:'12', u:'reps · ×2',
+            how:'Sujeta la banda con agarre cerrado y tira hacia las costillas sin balancearte ni encoger los hombros. Vuelve despacio y deja margen amplio.'},
           {nm:'Wall slide', cue:'En pared · añade movilidad', dose:'45', u:'s · ×2',
            how:'De espaldas a la pared, brazos en "W" pegados a ella. Deslízalos hacia arriba manteniendo muñecas y codos en contacto, y baja. Si pierdes el contacto, ese es tu rango.'},
           {nm:'Y-T-W boca abajo', cue:'Sin material ninguno', dose:'45', u:'s · ×2',
@@ -737,7 +732,7 @@ const P = {
         {t:'ex', id:'rot-ext', nm:'Rotación externa con goma', cue:'Codo pegado al costado, gira el antebrazo hacia afuera', sets:3, reps:'15/lado', rest:45},
         {t:'ex', id:'rot-int', nm:'Rotación interna con goma', cue:'El gesto contrario, hacia el ombligo', sets:3, reps:'15/lado', rest:45},
         {t:'ex', id:'pull-apart', nm:'Band pull-apart', cue:'Separa la goma juntando los omóplatos', sets:3, reps:'15', rest:45},
-        {t:'ex', id:'face-pull', nm:'Face pull con goma', cue:'Anclada a la altura de la cara, tira separando las manos', sets:3, reps:'15', rest:45},
+        {t:'ex', id:'remo-banda-suave', nm:'Remo suave con banda', cue:'Anclaje firme a la altura del pecho · tira hacia las costillas sin encoger hombros · deja margen amplio', sets:2, reps:'12', rest:45},
 
         {t:'sec', h:'Antebrazo', meta:'frecuencia'},
         {t:'ex', id:'dead-hang', nm:'Dead hang en barra', cue:'Agarre activo y rango cómodo · detente si molesta el hombro', sets:3, reps:'20–40 s', rest:60},
@@ -796,7 +791,14 @@ const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 /* ---------------- estado ---------------- */
 const KEY = 'fit.v2';
 const LEGACY_KEY = 'fit.v10';
-const DEF = { settings:{ rest:90, sound:true, vibe:true }, picks:{}, readiness:{}, active:null, history:[], prs:{}, notes:{} };
+const WARM_DAY = {id:'calentamiento', name:'Calentamiento', day:'Antes de entrenar', sub:'Preparación común · 10 min', color:'--c-mob', icon:'flame', mins:10, blocks:[]};
+// Los días son etiquetas de planificación, independientes del contenido de la sesión.
+P.days.forEach(d => {
+  d.blocks = d.blocks.filter(b => b.t !== 'warmup');
+  d.day = 'Flexible';
+  if (d.principle) d.principle = d.principle.replace(/Martes · |Jueves · /g, '').replace(/El acondicionamiento va el jueves\./g, 'Planifica el acondicionamiento según tu recuperación.');
+});
+const DEF = { settings:{ rest:90, sound:true, vibe:true }, picks:{}, readiness:{}, active:null, history:[], prs:{}, notes:{}, plans:{}, warmups:{} };
 let S = loadState();
 
 function loadState(){
@@ -810,6 +812,7 @@ function loadState(){
   if (!s.picks || typeof s.picks !== 'object') s.picks = {};
   if (!s.prs || typeof s.prs !== 'object') s.prs = {};
   if (!s.readiness || typeof s.readiness !== 'object') s.readiness = {};
+  normalizePlanning(s);
   s.settings.rest = [60,90,120,180].includes(+s.settings.rest) ? +s.settings.rest : 90;
   s.settings.sound = !!s.settings.sound; s.settings.vibe = !!s.settings.vibe;
   s.history = s.history.filter(h => h && typeof h === 'object' && Number.isFinite(+h.ts)).slice(0,1000);
@@ -842,7 +845,7 @@ function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){
 const $  = (q, r) => (r||document).querySelector(q);
 const $$ = (q, r) => Array.from((r||document).querySelectorAll(q));
 const esc = t => String(t==null?'':t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const allDays = () => P.days.concat(P.extras);
+const allDays = () => P.days.concat(P.extras, WARM_DAY);
 const dayById = id => allDays().find(d => d.id === id);
 const pad = n => (n<10?'0':'')+n;
 const mmss = s => { const t = Math.max(0, Math.round(s)); return Math.floor(t/60)+':'+pad(t%60); };
@@ -888,14 +891,14 @@ function lastFor(exId){
 function weekSessions(ts){
   const w = weekStart(ts || Date.now());
   const ids = new Set();
-  S.history.forEach(h => { if (weekStart(h.ts) === w) ids.add(h.dayId); });
+  S.history.forEach(h => { if (weekStart(h.ts) === w && P.days.some(d => d.id === h.dayId)) ids.add(h.dayId); });
   return ids;
 }
 function streakWeeks(){
   let n = 0, w = weekStart(Date.now());
   for (let i = 0; i < 60; i++) {
     const c = new Set();
-    S.history.forEach(h => { if (weekStart(h.ts) === w) c.add(h.dayId); });
+    S.history.forEach(h => { if (weekStart(h.ts) === w && P.days.some(d => d.id === h.dayId)) c.add(h.dayId); });
     if (c.size >= 3) n++;
     else if (i > 0) break;
     w -= 7*864e5;
@@ -907,10 +910,11 @@ function totalVol(){ return S.history.reduce((a,h) => a + (h.vol||0), 0); }
 /* ---------------- accesos directos (una entrada = un icono) ---------------- */
 const ENTRIES = [
   { id:'hoy',       nm:'Entreno',   sub:'La app completa',        view:'hoy' },
-  { id:'upper-a',   nm:'Upper A',   sub:'Lunes · fuerza',         day:'upper-a' },
-  { id:'pierna',    nm:'Pierna',    sub:'Martes',                 day:'pierna' },
-  { id:'upper-b',   nm:'Upper B',   sub:'Miércoles · volumen',    day:'upper-b' },
-  { id:'crossfit',  nm:'CrossFit',  sub:'Jueves',                 day:'crossfit' },
+  { id:'calentamiento', nm:'Calentamiento', sub:'Antes de entrenar', day:'calentamiento' },
+  { id:'upper-a',   nm:'Upper A',   sub:'Fuerza',                day:'upper-a' },
+  { id:'pierna',    nm:'Pierna',    sub:'Fuerza de pierna',       day:'pierna' },
+  { id:'upper-b',   nm:'Upper B',   sub:'Volumen',               day:'upper-b' },
+  { id:'crossfit',  nm:'CrossFit',  sub:'Acondicionamiento',     day:'crossfit' },
   { id:'movilidad', nm:'Movilidad', sub:'Circuito 17–20 min',     day:'movilidad' },
   { id:'agarre',    nm:'Agarre',    sub:'Extra opcional',         day:'agarre' },
   { id:'historial', nm:'Historial', sub:'Progreso y récords',     view:'historial' }
@@ -949,10 +953,10 @@ function render(){
 
   $('#top').innerHTML = day ? `
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
-    <div><h1>${esc(day.name)}</h1><div class="sub">${esc(day.day)} · ${esc(day.sub)}</div></div>` : `
+    <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.0</span>':''}</h1>
-    <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Lunes a jueves':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.1</span>':''}</h1>
+    <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
     const on = b.dataset.v === VIEW && !day;
@@ -974,8 +978,72 @@ function todayLabel(){
   return n.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 }
 function todayDay(){
-  const dow = new Date().getDay();
-  return P.days.find(d => d.dow === dow) || null;
+  const offset = (new Date().getDay()+6)%7;
+  const plan = planFor(Date.now());
+  return P.days.find(d => plan[d.id] === offset) || null;
+}
+
+let planWeekOffset = 0;
+function normalizePlanning(s){
+  for (const k of ['plans','warmups']) if (!s[k] || typeof s[k] !== 'object' || Array.isArray(s[k])) s[k] = {};
+  for (const [key, plan] of Object.entries(s.plans)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(key) || !plan || typeof plan !== 'object' || Array.isArray(plan)) { delete s.plans[key]; continue; }
+    const used = new Set();
+    for (const d of P.days) {
+      const v = plan[d.id];
+      plan[d.id] = Number.isInteger(v) && v >= 0 && v <= 6 && !used.has(v) ? v : -1;
+      if (plan[d.id] >= 0) used.add(plan[d.id]);
+    }
+  }
+  for (const [key, w] of Object.entries(s.warmups)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(key) || !w || typeof w !== 'object' || Array.isArray(w)) { delete s.warmups[key]; continue; }
+    if (!w.checks || typeof w.checks !== 'object' || Array.isArray(w.checks)) w.checks = {};
+  }
+}
+function planDate(){ const d = new Date(weekStart(Date.now())); d.setDate(d.getDate()+7*planWeekOffset); return d; }
+function planFor(ts){
+  const key = dateKey(new Date(weekStart(ts)));
+  return S.plans[key] || Object.fromEntries(P.days.map(d => [d.id, (d.dow+6)%7]));
+}
+function scheduleLabel(d, ts=Date.now()){
+  if (!P.days.some(x => x.id === d.id)) return d.day;
+  const n = planFor(ts)[d.id];
+  return n < 0 ? 'Sin programar' : ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][n];
+}
+function setPlan(id, value){
+  if (!P.days.some(d => d.id === id) || !Number.isInteger(value) || value < -1 || value > 6) return;
+  const date = planDate(), plan = {...planFor(date)};
+  const other = P.days.find(d => d.id !== id && value >= 0 && plan[d.id] === value);
+  if (other) { toast('Ese día ya tiene una sesión. Mueve primero la otra o déjala sin programar.'); render(); return; }
+  plan[id] = value;
+  S.plans[dateKey(date)] = plan;
+  save(); render();
+}
+function renderPlanner(){
+  const date = planDate(), plan = planFor(date);
+  const names = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const a = plan['upper-a'], b = plan['upper-b'];
+  return `<div class="sec"><h2>Organiza tu semana</h2></div>
+    <div class="btnrow"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span style="align-self:center;white-space:nowrap">Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
+    ${P.days.map(d => `<div class="set"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
+    ${a>=0 && b>=0 && Math.abs(a-b)<2?'<div class="note"><span>Has colocado los dos Upper consecutivos. Conviene dejar un día de recuperación entre ellos.</span></div>':''}
+    <div class="tip"><span>Cada semana se guarda por separado. Puedes entrenar viernes, sábado o domingo. Comprueba también el descanso entre el domingo y el lunes siguiente. Si solo puedes tres días, prioriza las sesiones de fuerza.</span></div>`;
+}
+function warmRecord(){
+  const key = dateKey();
+  return S.warmups[key] || {checks:{}, done:false};
+}
+function warmCard(){
+  return `<div class="herocard" style="--accent:var(--c-mob);margin-bottom:14px"><div class="kick">Bloque 1 · preparación</div><h2>Calentamiento</h2><p>${warmRecord().done?'Completado hoy':'10 min · explicado paso a paso'}</p><button class="go" data-act="open" data-id="calentamiento">${svg('flame')} ${warmRecord().done?'Revisar':'Abrir calentamiento'}</button></div>`;
+}
+function renderWarmSession(){
+  const record = warmRecord();
+  const groups = P.warmup.groups.concat([{g:'Opcional · antes de Upper',items:[{n:'Suspensión con apoyo de pies si hace falta',d:'2×10–20 s',how:'Barra estable, agarre cerrado. Mantén control del hombro sin forzarlo hacia abajo. Descansa 45 s y termina con margen amplio. Si molesta, omítela. El trabajo intenso de agarre va después de las tracciones.'}]}]);
+  let i = 0;
+  return `<div class="tip"><span>Este bloque guarda su progreso aparte: puedes abrirlo con un entrenamiento en curso. La suspensión es opcional; las aproximaciones dependen de lo que entrenes después.</span></div><div class="mini">${groups.map(g => `<div class="grp">${esc(g.g)}</div>${g.items.map(it => {
+    const key = String(i++);
+    return `<div class="m"><button class="btn" style="flex:0 0 auto;min-width:44px" data-act="warm-check" data-i="${key}" aria-pressed="${!!record.checks[key]}" aria-label="Marcar ${esc(it.n)}">${record.checks[key]?'✓':'○'}</button><b>${esc(it.n)}</b><span class="d">${esc(it.d)}</span></div><details style="padding:8px 0 16px"><summary>Cómo hacerlo</summary><p>${esc(it.how)}</p></details>`;
+  }).join('')}`).join('')}</div><div class="note"><span>${P.warmup.note}</span></div><button class="finish" data-act="warm-done">${record.done?'Calentamiento completado hoy':'Marcar calentamiento terminado'}</button><button class="btn" data-act="tab" data-v="hoy">Volver a Hoy</button>`;
 }
 
 /* ---------------- vista: HOY ---------------- */
@@ -985,14 +1053,14 @@ function renderHoy(){
   let hero;
   if (pend) {
     hero = `<div class="herocard" style="--accent:var(${pend.color})">
-      <div class="kick">Sesión en curso · ${esc(pend.day)}</div>
+      <div class="kick">Bloque 2 · sesión en curso</div>
       <h2>${esc(pend.name)}</h2>
       <p>${sessionProgress(pend).done} de ${sessionProgress(pend).total} series completadas.</p>
       <button class="go" data-act="open" data-id="${pend.id}">${svg('play',0)} Continuar</button>
     </div>`;
   } else if (d) {
     hero = `<div class="herocard" style="--accent:var(${d.color})">
-      <div class="kick">Hoy toca · ${esc(d.day)}</div>
+      <div class="kick">Bloque 2 · ${done.has(d.id)?'Ya completada esta semana':'Entrenamiento de hoy'}</div>
       <h2>${esc(d.name)}</h2>
       <p>${esc(d.sub)} · ~${d.mins} min</p>
       <button class="go" data-act="open" data-id="${d.id}">${svg('play',0)} Empezar sesión</button>
@@ -1001,7 +1069,7 @@ function renderHoy(){
     hero = `<div class="herocard" style="--accent:var(--c-mob)">
       <div class="kick">Hoy · descanso</div>
       <h2>Día libre</h2>
-      <p>Viernes a domingo sin entreno programado. Si te apetece moverte, tienes movilidad o el extra de agarre.</p>
+      <p>Hoy no tienes entrenamiento programado. Puedes cambiar tu calendario en Semana o abrir cualquier sesión de abajo.</p>
       <div class="dual">
         <button class="go" data-act="open" data-id="movilidad">${svg('stretch',2)} Movilidad</button>
         <button class="go ghost" data-act="open" data-id="agarre">${svg('hand',2)} Agarre</button>
@@ -1011,7 +1079,8 @@ function renderHoy(){
 
   const pct = Math.min(1, done.size/4), R = 26, C = 2*Math.PI*R;
   return `
-  <div class="hero">${hero}</div>
+  <div class="hero">${warmCard()}${hero}</div>
+  <button class="btn" style="width:100%;padding:12px" data-act="tab" data-v="semana">Planificar mis días</button>
   ${renderReadiness()}
   <div class="stats">
     <div class="stat">
@@ -1048,23 +1117,33 @@ function renderReadiness(){
 function progressionGuide(){
   return `<div class="progression">${P.progression.map(x => `<div class="step"><span><b>${esc(x.h)}</b>${esc(x.x)}</span></div>`).join('')}</div>`;
 }
-function dayCard(d, done){
+function dayCard(d, done, ts=Date.now()){
   return `<button class="dcard${done?' done':''}" style="--dc:var(${d.color})" data-act="open" data-id="${d.id}">
     <div class="ic">${svg(d.icon)}</div>
-    <div class="lab"><span class="day">${esc(d.day)}</span><span class="tt">${esc(d.name)}</span><span class="st">${esc(d.sub)}</span></div>
+    <div class="lab"><span class="day">${esc(scheduleLabel(d, ts))}</span><span class="tt">${esc(d.name)}</span><span class="st">${esc(d.sub)}</span></div>
     <div class="flag">${done?svg('check',3):svg('arrow',2.4)}</div>
   </button>`;
 }
 
 /* ---------------- vista: SEMANA ---------------- */
 function renderSemana(){
-  const done = weekSessions();
-  const ws = new Date(weekStart(Date.now()));
+  const ws = planDate(), done = weekSessions(ws);
+  const end = new Date(ws); end.setDate(end.getDate()+6);
   const rango = ws.toLocaleDateString('es-ES',{day:'numeric',month:'short'}) + ' — ' +
-    new Date(weekStart(Date.now())+6*864e5).toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+    end.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
   return `
-  <div class="sec"><h2>Semana actual</h2><span class="meta">${esc(rango)}</span></div>
-  <div class="cards">${P.days.map(d => dayCard(d, done.has(d.id))).join('')}</div>
+  <div class="sec"><h2>${planWeekOffset===0?'Semana actual':'Semana elegida'}</h2><span class="meta">${esc(rango)}</span></div>
+  ${renderPlanner()}
+  <details class="card" style="margin:16px 0"><summary>Revisión del plan · recomposición corporal</summary>
+    <p>La rutina combina fuerza y acondicionamiento. La recomposición también depende de alimentación, recuperación y progresión; esta app no conoce tu peso, experiencia ni disponibilidad real.</p>
+    <p><b>Distribución:</b> 18 series de tracción semanal frente a 6 series principales de sentadilla y búlgara, más 2 de nórdico. Las tracciones trabajan músculos que se solapan; 18 no es una dosis óptima automática para cada músculo de la espalda.</p>
+    <p><b>Prioridad de mejora:</b> una segunda dosis de pierna y una extensión de cadera progresiva. Una opción a valorar es convertir acondicionamiento en Pierna B + cardio corto, con prensa, curl femoral y hip thrust. Hay que ajustar el total y tu tolerancia lumbar antes de añadirlo.</p>
+    <p><b>Espalda:</b> haz el remo antes del curl si te limita el bíceps o el agarre. Puedes separar las superseries y descansar 2 minutos entre series de tracción. Aumentar series no sustituye ajustar técnica y carga.</p>
+    <p><b>Semanas cortas:</b> prioriza fuerza; con solo dos días disponibles convendría preparar dos sesiones de cuerpo completo. No acumules todas las sesiones perdidas.</p>
+    <p><b>Cómo medir:</b> anota repeticiones reales y margen en las notas, compara cargas con el mismo recorrido y sigue cintura y media semanal del peso. Son indicadores de seguimiento, no una medición directa de músculo.</p>
+  </details>
+  <div class="sec"><h2>Sesiones de esta semana</h2></div>
+  <div class="cards">${P.days.map(d => dayCard(d, done.has(d.id), ws)).join('')}</div>
   <div class="tip"><span>Si pierdes un día, mueve la sesión al siguiente hueco y conserva al menos un día de recuperación antes de repetir el mismo grupo muscular.</span></div>
   <div class="sec"><h2>Progresión</h2><span class="meta">regla de doble progreso</span></div>
   ${progressionGuide()}
@@ -1077,7 +1156,7 @@ function weeklyChart(){
   const now = weekStart(Date.now()), weeks = [];
   for (let i = 7; i >= 0; i--) {
     const w = now - i*7*864e5, c = new Set();
-    S.history.forEach(h => { if (weekStart(h.ts) === w) c.add(h.dayId); });
+    S.history.forEach(h => { if (weekStart(h.ts) === w && P.days.some(d => d.id === h.dayId)) c.add(h.dayId); });
     weeks.push({ w, n:c.size });
   }
   const W = 320, H = 110, bw = W/weeks.length, max = 4;
@@ -1102,6 +1181,7 @@ function sessionProgress(day){
   return { done, total, pct: total ? done/total : 0 };
 }
 function renderDay(day){
+  if (day.id === 'calentamiento') return renderWarmSession();
   const live = isLive(day), pr = sessionProgress(day);
   let h = '';
   if (day.principle) h += `<div class="principle">${day.principle}</div>`;
@@ -1342,6 +1422,7 @@ function shortcutRow(e){
 
 /* ---------------- sesión ---------------- */
 function startSession(dayId){
+  if (dayId === 'calentamiento') return;
   if (S.active && S.active.dayId !== dayId && sessionProgress(dayById(S.active.dayId)).done > 0) {
     if (!confirm('Tienes otra sesión en curso. ¿La descartas y empiezas esta?')) return;
   }
@@ -1475,6 +1556,7 @@ function importData(file){
       if (!S.picks || typeof S.picks !== 'object') S.picks = {};
       if (!S.prs || typeof S.prs !== 'object') S.prs = {};
       if (!S.readiness || typeof S.readiness !== 'object') S.readiness = {};
+      normalizePlanning(S);
       S.history = S.history.filter(h => h && typeof h === 'object' && Number.isFinite(+h.ts)).slice(0,1000);
       if (S.active && (!S.active.dayId || !allDays().some(x => x.id === S.active.dayId) || !Number.isFinite(+S.active.t0))) S.active = null;
       save(); render(); toast('Datos importados.');
@@ -1496,6 +1578,9 @@ document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const a = t.dataset.act;
   if (a === 'open')   { go('day', t.dataset.id); }
+  else if (a === 'plan-week') { planWeekOffset += Number(t.dataset.n); render(); }
+  else if (a === 'warm-check') { const w = warmRecord(); w.checks[t.dataset.i] = !w.checks[t.dataset.i]; w.done = false; S.warmups[dateKey()] = w; save(); render(); }
+  else if (a === 'warm-done') { const w = warmRecord(); w.done = true; S.warmups[dateKey()] = w; save(); go('hoy'); }
   else if (a === 'tab')    { go(t.dataset.v); }
   else if (a === 'back')   { history.length > 1 ? history.back() : go('hoy'); }
   else if (a === 'start')  { startSession(t.dataset.id); }
@@ -1530,6 +1615,7 @@ document.addEventListener('click', e => {
   else if (a === 'update') { location.reload(); }
 });
 document.addEventListener('change', e => {
+  if (e.target.dataset.plan) { setPlan(e.target.dataset.plan, Number(e.target.value)); return; }
   const t = e.target.closest('[data-act="kg"]');
   if (t) { if (!S.active) return; S.active.kg[t.dataset.k] = t.value; save(); }
   if (e.target.id === 'fimp' && e.target.files[0]) importData(e.target.files[0]);
