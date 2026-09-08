@@ -1,5 +1,14 @@
 # Cambios
 
+## 2.5.0 — 2026-09-08
+
+- La fila de ejercicio en sesión pasa de 11 controles a 6 o 7: la guía, los puntos de serie, el peso y el botón de edición.
+- Sustituir ejercicio, repeticiones reales, favorito, orden y saltar se agrupan en una hoja de edición que se abre con el botón ⋯ de cada fila.
+- El nombre del ejercicio se muestra como texto y deja de recortarse; cuando no es el del plan lleva la marca «cambiado».
+- Las flechas de orden aparecen desactivadas en el primer y el último ejercicio.
+- Ajustes: la sección que agrupa sonido y vibración pasa a llamarse «Avisos»; los descansos siguen en «Descansos».
+- Pruebas nuevas: densidad de la fila, nombre sin recortar, botón de 44 px y contenido de la hoja de edición en 320, 360 y 390 px.
+
 ## 2.4.0 — 2026-09-07
 
 - Cada hueco de la rutina puede usar un ejercicio equivalente distinto sin modificar la plantilla ni mezclar historiales.

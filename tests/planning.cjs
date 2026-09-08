@@ -162,6 +162,15 @@ const server = http.createServer((req,res) => {
     assert.equal(prs.rows,2);
     assert.equal(/undefined|Invalid Date|NaN/.test(prs.text),false);
     await page.evaluate(()=>{S.prs={};save()});
+    // Editing an exercise happens in the ⋯ sheet, not in the row.
+    async function openExMenu(nameRe){
+      await page.locator('.ex').filter({hasText:nameRe}).first().locator('[data-act="ex-menu"]').click();
+      await page.locator('#exsheet.on').waitFor();
+    }
+    async function closeExMenu(){
+      await page.locator('#exsheet [data-act="ex-menu-close"]').first().click();
+      await page.waitForFunction(()=>!document.querySelector('#exsheet').classList.contains('on'));
+    }
     // Flexible session: draft swap, independent history, preload, favorite, add, skip and reorder.
     await page.evaluate(()=>{
       const ts=Date.now()-864e5;
@@ -169,18 +178,26 @@ const server = http.createServer((req,res) => {
       S.settings.restStrength=120;S.settings.restStandard=60;
       S.history=[{id:'seed',dayId:'upper-a',ts,dur:2400000,vol:2160,note:'',entries:[{id:'press-mancuernas',nm:'Press con mancuernas',sets:3,reps:'8 / 8 / 7',kg:30,setData:[{kg:30,reps:8},{kg:30,reps:8},{kg:30,reps:7}],ts}]}];save();go('day','upper-a');
     });
-    const bench=page.locator('.ex').filter({has:page.locator('select.ex-select option[value="press-banca"]')}).first();
-    await bench.locator('select.ex-select').selectOption('press-mancuernas');
+    // The row itself carries no editing controls.
+    assert.equal(await page.locator('.ex select').count(),0);
+    assert.equal(await page.locator('.ex [data-act="move-ex"], .ex [data-act="skip-ex"], .ex [data-act="fav"], .ex [data-act="repslog"]').count(),0);
+    await openExMenu(/Press de banca/);
+    await page.locator('#exsheet select.ex-select').selectOption('press-mancuernas');
+    await closeExMenu();
     assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-mancuernas');
     await page.locator('[data-act="start"]').click();
     await checkLayout(320,'day','upper-a');
     await page.setViewportSize({width:390,height:844});
-    const liveBench=page.locator('.ex').filter({has:page.locator('select.ex-select option:checked[value="press-mancuernas"]')}).first();
+    const liveBench=page.locator('.ex').filter({hasText:'Press con mancuernas'}).first();
     assert.equal(await liveBench.locator('[data-act="kg"]').inputValue(),'30');
     assert.match(await liveBench.textContent(),/8 \/ 8 \/ 7/);
-    await liveBench.locator('[data-act="fav"]').click();
+    await openExMenu(/Press con mancuernas/);
+    await page.locator('#exsheet [data-act="fav"]').click();
     assert.equal(await page.evaluate(()=>S.favorites['press-mancuernas']),true);
-    await liveBench.locator('[data-act="repslog"]').fill('9, 8, 8');
+    await page.locator('#exsheet [data-act="repslog"]').fill('9, 8, 8');
+    // The first exercise cannot move up.
+    assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').isDisabled(),true);
+    await closeExMenu();
     await liveBench.locator('[data-act="set"]').first().click();
     assert.deepEqual(await page.evaluate(()=>({open:document.querySelector('#sheet').classList.contains('on'),total:RT.total})),{open:true,total:120});
     await page.locator('[data-act="rest30"]').click();
@@ -190,14 +207,19 @@ const server = http.createServer((req,res) => {
     await page.locator('[data-act="timer-pause"]').click();
     await page.locator('[data-act="skip"]').click();
     const secondUid=await page.evaluate(()=>S.active.exercises[1]._uid);
-    await page.locator(`[data-act="skip-ex"][data-u="${secondUid}"]`).click();
+    await page.locator(`[data-act="ex-menu"][data-slot="${secondUid}"]`).click();
+    await page.locator('#exsheet [data-act="skip-ex"]').click();
+    await closeExMenu();
     assert.equal(await page.evaluate(uid=>S.active.exercises.find(x=>x._uid===uid).skipped,secondUid),true);
     await page.locator('[data-act="add-ex"]').selectOption('laterales-maquina');
     const addedUid=await page.evaluate(()=>S.active.exercises.at(-1)._uid);
-    await page.locator(`[data-act="move-ex"][data-u="${addedUid}"][data-d="-1"]`).click();
-    const added=page.locator('.ex').filter({has:page.locator('select.ex-select option:checked[value="laterales-maquina"]')}).first();
+    await page.locator(`[data-act="ex-menu"][data-slot="${addedUid}"]`).click();
+    assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="1"]').isDisabled(),true);
+    await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').click();
+    await page.locator('#exsheet [data-act="repslog"]').fill('12');
+    await closeExMenu();
+    const added=page.locator('.ex').filter({hasText:'Máquina de deltoide lateral'}).first();
     await added.locator('[data-act="kg"]').fill('8');
-    await added.locator('[data-act="repslog"]').fill('12');
     await added.locator('[data-act="set"]').first().click();
     await page.locator('[data-act="skip"]').click();
     await page.locator('[data-act="manual-timer"]').click();
@@ -218,14 +240,46 @@ const server = http.createServer((req,res) => {
     assert.equal(flexible.template,'press-banca');
     assert.ok(flexible.recents.includes('press-mancuernas'));
     await page.evaluate(()=>go('day','upper-a'));
-    const again=page.locator('.ex').filter({has:page.locator('select.ex-select option[value="press-banca"]')}).first();
-    await again.locator('select.ex-select').selectOption('press-banca');
+    await openExMenu(/Press con mancuernas/);
+    await page.locator('#exsheet select.ex-select').selectOption('press-banca');
+    await closeExMenu();
     assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-banca');
     await page.evaluate(()=>go('ajustes'));
     await page.locator('[data-setting="restStrength"]').fill('135');await page.locator('[data-setting="restStrength"]').blur();
     await page.locator('[data-setting="restStandard"]').fill('75');await page.locator('[data-setting="restStandard"]').blur();
     await page.reload();
     assert.deepEqual(await page.evaluate(()=>[S.settings.restStrength,S.settings.restStandard]),[135,75]);
+    // The session row stays legible and thin: name, guide, series, weight and ⋯.
+    await page.evaluate(()=>{S.active=null;save();go('day','upper-a');startSession('upper-a')});
+    for(const width of [320,360,390]){
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(()=>scrollTo(0,0));
+      await page.waitForTimeout(200);
+      const rows=await page.locator('.ex').evaluateAll(els=>els.map(ex=>{
+        const name=ex.querySelector('.exname'),edit=ex.querySelector('.ex-edit'),r=edit?edit.getBoundingClientRect():null;
+        return {controls:ex.querySelectorAll('button,select,input,summary').length,
+          cut:name?name.scrollWidth>name.clientWidth+1:false,
+          edit:r?[Math.round(r.width),Math.round(r.height)]:null};
+      }));
+      assert.ok(rows.length>=6);
+      assert.ok(rows.every(r=>r.controls<=7),`too many controls per exercise at ${width}px: ${Math.max(...rows.map(r=>r.controls))}`);
+      assert.ok(rows.every(r=>!r.cut),`the exercise name is cut at ${width}px`);
+      assert.ok(rows.every(r=>r.edit&&r.edit[0]===44&&r.edit[1]===44),`the ⋯ button is not 44px at ${width}px`);
+    }
+    // The sheet carries the editing controls, fits the screen and keeps 44px targets.
+    await page.setViewportSize({width:320,height:844});
+    await openExMenu(/Press de banca/);
+    const sheet=await page.evaluate(()=>{
+      const s=document.querySelector('#exsheet'),r=s.getBoundingClientRect();
+      return {acts:[...s.querySelectorAll('[data-act]')].map(el=>el.dataset.act),
+        width:Math.round(r.width),
+        small:[...s.querySelectorAll('button,select,input')].filter(el=>el.getBoundingClientRect().height<44).map(el=>(el.dataset.act||el.tagName)+':'+Math.round(el.getBoundingClientRect().height))};
+    });
+    assert.ok(['swap-ex','repslog','fav','skip-ex','move-ex'].every(a=>sheet.acts.includes(a)),JSON.stringify(sheet.acts));
+    assert.equal(sheet.width,320);
+    assert.deepEqual(sheet.small,[],JSON.stringify(sheet));
+    await closeExMenu();
+    await page.evaluate(()=>{S.active=null;save()});
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));

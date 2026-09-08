@@ -1,4 +1,8 @@
-# Entreno 2.4.0
+# Entreno 2.5.0
+
+## Novedades 2.5
+
+Durante la sesión, cada ejercicio muestra solo lo que se usa entre series: nombre, guía, series y peso. Sustituir el ejercicio, anotar las repeticiones reales, marcar favorito, cambiar el orden y saltar están en una hoja que se abre con el botón ⋯ de la fila. El nombre se lee entero y, cuando no es el del plan, lleva la marca «cambiado».
 
 ## Novedades 2.4
 

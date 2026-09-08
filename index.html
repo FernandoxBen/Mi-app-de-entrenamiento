@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="Entreno 2.4.0 · sesiones flexibles, historial por ejercicio, descansos configurables y seguimiento sin conexión.">
-<title>Entreno 2.4.0</title>
+<meta name="description" content="Entreno 2.5.0 · sesiones flexibles, historial por ejercicio, descansos configurables y seguimiento sin conexión.">
+<title>Entreno 2.5.0</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -196,13 +196,33 @@ button{background:none;border:0;cursor:pointer}
   background:rgba(255,255,255,.05);border:1px solid var(--gb);border-radius:10px;padding:7px 6px}
 .wgt input::placeholder{color:var(--t3);font-weight:500}
 .wgt span{font-family:var(--f-mono);font-size:9.5px;color:var(--t3);letter-spacing:.08em}
-.ex-select{width:100%;margin-top:7px;min-height:42px;padding:0 36px 0 11px;border-radius:11px;background:#101b2b;border:1px solid var(--gb2);color:var(--t1);font-weight:600}
+.ex-select{width:100%;min-height:46px;padding:0 36px 0 11px;border-radius:11px;background:#101b2b;border:1px solid var(--gb2);color:var(--t1);font-weight:600}
 .slot-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
-.ex-tools{display:grid;grid-template-columns:44px 44px 1fr 44px;gap:8px;padding:0 12px 10px}
-.ex-tools button{min-height:40px;border-radius:11px;border:1px solid var(--gb);background:var(--gl);color:var(--t2);font-weight:700}
-.ex-tools .skipx{font-size:11px}.ex.skipped{opacity:.5}.ex.skipped .track{display:none}
-.repslog{display:flex;align-items:center;gap:7px;padding:0 12px 12px}.repslog label{font-size:10px;color:var(--t3);font-family:var(--f-mono);text-transform:uppercase}
-.repslog input{flex:1;min-width:0;min-height:40px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--gb);color:var(--t1)}
+.ex .nm{margin-top:3px}
+.ex .nm .exname{display:block;min-width:0;font-size:14.5px;font-weight:600;line-height:1.3;overflow-wrap:break-word}
+.ex .nm .swapped{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;vertical-align:2px;
+  font-family:var(--f-mono);font-size:8px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent);border:1px solid color-mix(in srgb,var(--accent) 34%,transparent)}
+.ex-edit{width:44px;min-width:44px;height:44px;min-height:44px;flex:0 0 auto;align-self:flex-start;border-radius:12px;
+  border:1px solid var(--gb);background:var(--gl);color:var(--t2);font-size:17px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.15s}
+.ex-edit:active{transform:scale(.94)}
+.ex.skipped{opacity:.5}.ex.skipped .track{display:none}
+.exm-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.exm-head .k{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}
+.exm-head .n{font-size:16px;font-weight:600;margin-top:3px;overflow-wrap:break-word}
+.exm-field{display:block;margin-bottom:12px}
+.exm-field span{display:block;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.exm-field input{width:100%;min-height:46px;padding:0 12px;border-radius:11px;background:rgba(255,255,255,.05);
+  border:1px solid var(--gb);color:var(--t1);font-size:14px}
+.exm-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}
+.exm-acts button{min-height:46px;border-radius:12px;border:1px solid var(--gb);background:var(--gl);color:var(--t1);
+  font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s}
+.exm-acts button[disabled]{opacity:.35}
+.exm-acts button:not([disabled]):active{transform:scale(.97)}
+.exm-acts .wide{grid-column:1 / -1}
+.exm-acts .pri-close{color:#07140f;background:var(--accent);border-color:var(--accent);font-weight:700}
+.skip-note{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--t3);padding:0 15px 13px}
 .add-ex{margin:14px 0;padding:14px;border-radius:var(--r);border:1px dashed var(--gb2);background:rgba(255,255,255,.025)}
 .add-ex select{width:100%;min-height:46px;padding:0 12px;border-radius:12px;background:#101b2b;border:1px solid var(--gb2)}
 
@@ -487,6 +507,8 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
   </div>
 </div>
 
+<div class="sheet" id="exsheet" role="dialog" aria-label="Editar ejercicio"></div>
+
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -494,7 +516,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.4.0',
+  version: '2.5.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -1123,7 +1145,7 @@ function lastFor(exId){
   for (const h of S.history) { const e = (h.entries||[]).find(x => x.id === exId); if (e) return e; }
   return null;
 }
-function renderHere(){ const y=window.scrollY; render(); window.scrollTo(0,y); }
+function renderHere(){ const y=window.scrollY; render(); renderExMenu(); window.scrollTo(0,y); }
 function slotKey(e){ return e._uid || exKey(e); }
 function chosenId(day,e){
   const slot=slotKey(e), live=S.active&&S.active.dayId===day.id&&S.active.exercises;
@@ -1201,6 +1223,7 @@ function applyEntry(){
 let VIEW = 'hoy', DAYVIEW = null;
 function go(view, dayId){
   VIEW = view; DAYVIEW = dayId || null;
+  EXMENU = null; renderExMenu();
   render();
   try { history.pushState({v:view,d:dayId||null}, '', '#'+view+(dayId?'/'+dayId:'')); } catch(e){}
   window.scrollTo({top:0});
@@ -1220,7 +1243,7 @@ function render(){
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
     <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.4.0</span>':''}</h1>
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.5.0</span>':''}</h1>
     <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
@@ -1496,8 +1519,7 @@ function renderDay(day){
 function renderLiveExercises(day){
   const xs=ensureSessionExercises(day);
   const body=xs.map(e=>`<div class="ex${exFull(e)?' full':''}${e.skipped?' skipped':''}">${exBody(e,day)}
-    <div class="ex-tools"><button data-act="move-ex" data-u="${esc(e._uid)}" data-d="-1" aria-label="Subir ejercicio">↑</button><button data-act="move-ex" data-u="${esc(e._uid)}" data-d="1" aria-label="Bajar ejercicio">↓</button><button class="skipx" data-act="skip-ex" data-u="${esc(e._uid)}">${e.skipped?'Recuperar':'Saltar'}</button><button data-act="fav" data-id="${esc(e.id)}" aria-label="Favorito">${S.favorites[e.id]?'★':'☆'}</button></div>
-    ${e.skipped?'':exTrack(e,day)}</div>`).join('');
+    ${e.skipped?'<div class="skip-note">Saltado · recupéralo en el botón de edición</div>':exTrack(e,day)}</div>`).join('');
   const opts=catalog().map(x=>`<option value="${esc(x.id)}">${esc(x.nm)}</option>`).join('');
   return `<div class="sec"><h2>Ejercicios de hoy</h2><span class="meta">cambia · ordena · salta</span></div>${body}<div class="add-ex"><select data-act="add-ex"><option value="">＋ Añadir ejercicio</option>${opts}</select></div>`;
 }
@@ -1550,16 +1572,54 @@ function exBody(e, day){
   const pk = e.pick != null ? pickOpt(e.pick) : null;
   const actualId=chosenId(day,e), actual=altList(e).find(x=>x.id===actualId)||{id:e.id,nm:e.nm};
   const last = lastFor(actual.id);
-  const opts=orderedAlternatives({...e,baseId:e.baseId||e.id}).map(x=>`<option value="${esc(x.id)}" ${x.id===actual.id?'selected':''}>${S.favorites[x.id]?'★ ':''}${esc(x.nm)}${x.id===(e.baseId||e.id)?' · predeterminado':''}</option>`).join('');
+  const swapped = actual.id !== (e.baseId||e.id);
+  // La variante elegida solo se añade si aporta algo: si repite el nombre, sobra.
+  const norm = t => String(t||'').toLowerCase();
+  const pkExtra = pk && !norm(actual.nm).includes(norm(pk.nm)) && !norm(pk.nm).includes(norm(actual.nm)) ? pk : null;
   return `<div class="hd">
     <span class="idx">${e.sets?e.sets+'×':'·'}</span>
     <div class="body">
-      <div class="slot-label">${esc(SLOT_LABELS[e.baseId||e.id]||'Ejercicio')}</div><div class="nm"><select class="ex-select" data-act="swap-ex" data-slot="${esc(slotKey(e))}" data-base="${esc(e.baseId||e.id)}" aria-label="Cambiar ejercicio">${opts}</select>${pk?` <span style="color:var(--t3);font-weight:500">· ${esc(pk.nm)}</span>`:''}</div>
+      <div class="slot-label">${esc(SLOT_LABELS[e.baseId||e.id]||'Ejercicio')}</div>
+      <div class="nm"><span class="exname">${esc(actual.nm)}${swapped?'<span class="swapped">cambiado</span>':''}${pkExtra?` <span style="color:var(--t3);font-weight:500">· ${esc(pkExtra.nm)}</span>`:''}</span></div>
       ${e.cue?`<div class="cue">${e.cue}</div>`:''}
       ${last?`<div class="last">Última vez: <b>${esc(lastText(actual.id))}</b> · ${esc(dstr(last.ts||Date.now()))}</div>`:''}
     </div>
     <div class="dose">${esc(e.reps||'')}${e.rest?`<span class="u">desc ${e.rest}s</span>`:''}</div>
+    <button class="ex-edit" data-act="ex-menu" data-slot="${esc(slotKey(e))}" aria-label="Editar ${esc(actual.nm)}">⋯</button>
   </div>${renderExerciseGuide(e)}`;
+}
+/* Hoja de edición del ejercicio: sustituir, repeticiones reales, favorito, orden y saltar.
+   Vive fuera de la fila para que en el gimnasio solo se vea lo que se toca entre series. */
+let EXMENU = null;
+function exMenuList(day){
+  return (S.active && S.active.dayId===day.id) ? ensureSessionExercises(day) : flatEx(day).filter(x=>x.sets);
+}
+function renderExMenu(){
+  const el = $('#exsheet');
+  const day = DAYVIEW ? dayById(DAYVIEW) : null;
+  const xs = EXMENU && day ? exMenuList(day) : [];
+  const i = xs.findIndex(x => slotKey(x) === EXMENU);
+  if (i < 0) { EXMENU = null; el.classList.remove('on'); el.innerHTML = ''; return; }
+  const e = xs[i], live = !!(S.active && S.active.dayId === day.id);
+  const actualId = chosenId(day,e), actual = altList(e).find(x=>x.id===actualId) || {id:e.id, nm:e.nm};
+  const opts = orderedAlternatives({...e, baseId:e.baseId||e.id}).map(x =>
+    `<option value="${esc(x.id)}" ${x.id===actual.id?'selected':''}>${S.favorites[x.id]?'★ ':''}${esc(x.nm)}${x.id===(e.baseId||e.id)?' · del plan':''}</option>`).join('');
+  const k = slotKey(e);
+  el.innerHTML = `<div class="grab"></div>
+    <div class="exm-head"><div style="flex:1;min-width:0"><div class="k">Editar ejercicio</div><div class="n">${esc(actual.nm)}</div></div>
+      <button class="ex-edit" data-act="ex-menu-close" aria-label="Cerrar">✕</button></div>
+    <label class="exm-field"><span>Ejercicio de este hueco</span>
+      <select class="ex-select" data-act="swap-ex" data-slot="${esc(k)}" data-base="${esc(e.baseId||e.id)}" aria-label="Cambiar ejercicio">${opts}</select></label>
+    ${live?`<label class="exm-field"><span>Repeticiones reales</span>
+      <input data-act="repslog" data-k="${esc(k)}" inputmode="numeric" placeholder="ej. 8, 8, 7" value="${esc((S.active.repsLog&&S.active.repsLog[k])||'')}"></label>`:''}
+    <div class="exm-acts">
+      <button class="${live?'':'wide'}" data-act="fav" data-id="${esc(actual.id)}">${S.favorites[actual.id]?'★ En favoritos':'☆ Marcar favorito'}</button>
+      ${live?`<button class="skipx" data-act="skip-ex" data-u="${esc(e._uid)}">${e.skipped?'Recuperar':'Saltar ejercicio'}</button>
+      <button data-act="move-ex" data-u="${esc(e._uid)}" data-d="-1"${i===0?' disabled':''}>↑ Subir</button>
+      <button data-act="move-ex" data-u="${esc(e._uid)}" data-d="1"${i===xs.length-1?' disabled':''}>↓ Bajar</button>`:''}
+      <button class="wide pri-close" data-act="ex-menu-close">Hecho</button>
+    </div>`;
+  el.classList.add('on');
 }
 function renderExerciseGuide(e){
   const g = EX_GUIDE[e.id] || EX_GUIDE[e.baseId];
@@ -1579,8 +1639,7 @@ function exTrack(e){
     `<button class="dot${arr[i]?' on':''}" data-act="set" data-k="${esc(k)}" data-i="${i}" data-rest="${restFor(e)}" data-nm="${esc(e.nm)}" data-n="${e.sets}" aria-label="Serie ${i+1}">${arr[i]?'✓':i+1}</button>`).join('');
   const kg = e.kg ? `<div class="wgt"><input type="number" inputmode="decimal" step="0.5" min="0" max="1000" placeholder="kg"
       value="${(S.active && S.active.kg && S.active.kg[k] != null) ? S.active.kg[k] : ''}" data-act="kg" data-k="${esc(k)}" aria-label="Peso en kg"><span>kg</span></div>` : '';
-  const reps=e._uid&&S.active?`<div class="repslog"><label>Reps</label><input data-act="repslog" data-k="${esc(k)}" inputmode="numeric" placeholder="ej. 8, 8, 7" value="${esc(S.active.repsLog&&S.active.repsLog[k]||'')}"></div>`:'';
-  return `<div class="track"><div class="set-dots">${dots}</div>${kg}</div>${reps}`;
+  return `<div class="track"><div class="set-dots">${dots}</div>${kg}</div>`;
 }
 function pickOpt(k){
   for (const d of allDays()) for (const b of d.blocks) if ((b.t==='pick'||b.t==='switch') && b.k===k) return b.opts[S.picks[k]||0];
@@ -1664,7 +1723,7 @@ function renderSet(){
   <div class="sec"><h2>Descansos</h2></div>
   <div class="set"><label class="l" for="rest-strength"><b>Fuerza</b><span>Ejercicios principales</span></label><input id="rest-strength" data-setting="restStrength" type="number" min="30" max="300" step="15" value="${S.settings.restStrength}" style="width:86px;min-height:44px;padding:0 10px;border-radius:10px;background:var(--bg);border:1px solid var(--gb2)"><span>s</span></div>
   <div class="set"><label class="l" for="rest-standard"><b>Estándar</b><span>Accesorios y trabajo general</span></label><input id="rest-standard" data-setting="restStandard" type="number" min="30" max="300" step="15" value="${S.settings.restStandard}" style="width:86px;min-height:44px;padding:0 10px;border-radius:10px;background:var(--bg);border:1px solid var(--gb2)"><span>s</span></div>
-  <div class="sec"><h2>Temporizador</h2></div>
+  <div class="sec"><h2>Avisos</h2></div>
   <div class="set"><span class="l"><b>Sonido</b><span>Aviso al terminar el descanso</span></span>
     <button class="sw${S.settings.sound?' on':''}" data-act="sw" data-k="sound" role="switch" aria-checked="${S.settings.sound}" aria-label="Sonido"></button></div>
   <div class="set"><span class="l"><b>Vibración</b><span>Al marcar series y al acabar el descanso</span></span>
@@ -1887,6 +1946,8 @@ document.addEventListener('click', e => {
   else if (a === 'cancel') { cancelSession(); }
   else if (a === 'finish') { finishSession(); }
   else if (a === 'set')    { const y = window.scrollY; toggleSet(t.dataset.k, +t.dataset.i, t.dataset.rest, t.dataset.nm, t.dataset.n); window.scrollTo(0,y); }
+  else if (a === 'ex-menu') { EXMENU = t.dataset.slot; renderExMenu(); haptic(12); }
+  else if (a === 'ex-menu-close') { EXMENU = null; renderExMenu(); }
   else if (a === 'skip-ex') { const x=S.active&&S.active.exercises.find(e=>e._uid===t.dataset.u); if(x){x.skipped=!x.skipped;save();renderHere();} }
   else if (a === 'move-ex') { const xs=S.active&&S.active.exercises,i=xs?xs.findIndex(e=>e._uid===t.dataset.u):-1,j=i+(+t.dataset.d); if(i>=0&&j>=0&&j<xs.length){[xs[i],xs[j]]=[xs[j],xs[i]];save();renderHere();} }
   else if (a === 'fav') { S.favorites[t.dataset.id]=!S.favorites[t.dataset.id];save();renderHere(); }
