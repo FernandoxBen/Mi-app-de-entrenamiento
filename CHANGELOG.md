@@ -1,5 +1,11 @@
 # Cambios
 
+## 2.6.3 — 2026-09-14
+
+- Eliminadas las transparencias que producían bordes blancos en algunos móviles.
+- El icono de instalación ya no cambia según el entrenamiento del día.
+- Iconos principales, adaptables y accesos directos regenerados con fondo opaco.
+
 ## 2.6.2 — 2026-09-14
 
 - Nueva paleta azul eléctrica con fondo azul noche y acentos turquesa.

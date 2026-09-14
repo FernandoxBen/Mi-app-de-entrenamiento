@@ -1,4 +1,8 @@
-# Entreno 2.6.2
+# Entreno 2.6.3
+
+## Novedades 2.6.3
+
+Los iconos tienen ahora un fondo azul noche completamente opaco, sin transparencias que puedan aparecer como bordes blancos al instalarlos. El icono de instalación conserva siempre el logo principal aunque cambie el entrenamiento del día.
 
 ## Novedades 2.6.2
 
