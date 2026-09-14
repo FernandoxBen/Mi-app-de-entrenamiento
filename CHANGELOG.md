@@ -1,5 +1,12 @@
 # Cambios
 
+## 2.6.2 — 2026-09-14
+
+- Nueva paleta azul eléctrica con fondo azul noche y acentos turquesa.
+- Contraste revisado en tarjetas, acciones, estados seleccionados y temporizador.
+- Logo e iconos instalables adaptados a la nueva identidad visual.
+- Sin cambios en rutinas, historial ni datos guardados.
+
 ## 2.6.1 — 2026-09-14
 
 - Reloj manual detenido al abrir, cambiar de modo y reiniciar; inicio explícito.

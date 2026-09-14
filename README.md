@@ -1,4 +1,8 @@
-# Entreno 2.6.1
+# Entreno 2.6.2
+
+## Novedades 2.6.2
+
+Nueva paleta azul eléctrica: fondo azul noche, superficies azul pizarra, acciones principales en azul y detalles turquesa. El logo y los iconos instalables usan la misma identidad visual. Se han ajustado los contrastes de tarjetas, botones, estados seleccionados y temporizador sin cambiar el plan ni el funcionamiento de la app.
 
 ## Novedades 2.6.1
 

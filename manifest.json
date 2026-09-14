@@ -1,5 +1,5 @@
 {
-  "name": "Entreno 2.6.1",
+  "name": "Entreno 2.6.2",
   "short_name": "Entreno",
   "description": "Plan flexible para recomposición, fuerza, acondicionamiento y seguimiento. Funciona sin conexión.",
   "lang": "es",
@@ -13,8 +13,8 @@
     "minimal-ui"
   ],
   "orientation": "any",
-  "background_color": "#101110",
-  "theme_color": "#101110",
+  "background_color": "#0c1118",
+  "theme_color": "#0c1118",
   "categories": [
     "health",
     "fitness",

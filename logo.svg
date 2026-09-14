@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <title>Entreno</title>
-  <rect width="512" height="512" rx="112" fill="#101b16"/>
-  <g fill="#45df98">
+  <rect width="512" height="512" rx="112" fill="#0c1118"/>
+  <g fill="#4c8dff">
     <path d="M170 132h208l-18 58H152z"/>
     <path d="M144 227h174l-18 58H126z"/>
     <path d="M118 322h208l-18 58H100z"/>

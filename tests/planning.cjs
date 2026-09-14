@@ -390,10 +390,10 @@ const server = http.createServer((req,res) => {
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.1');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.2');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.1');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.2');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);
