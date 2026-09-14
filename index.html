@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#101110">
-<meta name="description" content="Entreno 2.6.0 · tu plan 3+1: fuerza, tren superior y acondicionamiento opcional. Historial y entrenamiento sin conexión.">
-<title>Entreno 2.6.0</title>
+<meta name="description" content="Entreno 2.6.1 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.6.1</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -464,7 +464,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
 }
 
 /* 2.6 · mobile training surface */
-:root{--bg:#101110;--t1:#f6f6f0;--t2:#c2c5bc;--t3:#a0a59a;--c-upper:#d5f568;--c-upperb:#b6ccff;--c-leg:#94dbb8;--c-mob:#cfdfa7;--c-cf:#edbd84;--r:18px;--rl:20px;--f-disp:var(--f-sans)}
+:root{--bg:#101110;--t1:#f6f6f0;--t2:#c2c5bc;--t3:#a0a59a;--c-upper:#45df98;--c-upperb:#6cdeb4;--c-leg:#94dbb8;--c-mob:#8bdbac;--c-cf:#87ceb2;--c-extra:#60cba4;--r:18px;--rl:20px;--f-disp:var(--f-sans)}
 body{background:var(--bg)}
 .view{animation:none}.wrap{max-width:680px}
 .top{background:rgba(16,17,16,.96);padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:16px}
@@ -481,12 +481,13 @@ body{background:var(--bg)}
 .warm-entry>span:nth-child(2){flex:1;min-width:0}.warm-entry small,.warm-entry b,.warm-entry>span>span{display:block}
 .warm-entry small{font-size:10px;color:var(--t3)}.warm-entry b{font-size:17px;letter-spacing:-.02em}.warm-entry>span>span{font-size:12px;color:var(--t2)}
 .warm-icon{width:38px;height:38px;display:grid;place-items:center;color:var(--c-upper)}.warm-icon svg,.warm-arrow svg{width:22px;height:22px}.warm-arrow{flex:0 0 22px}
-.herocard{background:#e5edcf;color:#151910;border:0;box-shadow:none;padding:24px;border-radius:22px;margin-top:12px}
-.herocard .kick{color:#435031;font-family:var(--f-sans);font-size:11px;letter-spacing:.04em;font-weight:650}
+.herocard{background:#c3ecd5;color:#10251b;border:0;box-shadow:none;padding:24px;border-radius:22px;margin-top:12px}
+.herocard .kick{color:#305843;font-family:var(--f-sans);font-size:11px;letter-spacing:.04em;font-weight:650}
 .herocard h2{font-size:clamp(30px,8vw,42px);font-weight:850;letter-spacing:-.045em;text-transform:none;margin:12px 0 8px}
-.herocard p{color:#435031;font-size:14px;line-height:1.55}
-.herocard .go{background:#171d10;color:#f6f8ef;border-radius:28px;font-family:var(--f-sans);font-size:15px;letter-spacing:0;text-transform:none;min-height:52px}
-.herocard .go.ghost{color:#1d2615;background:transparent;border:1px solid #63734d}
+.herocard p{color:#305843;font-size:14px;line-height:1.55}
+.herocard .go{background:#103b29;color:#f2fff7;border-radius:28px;font-family:var(--f-sans);font-size:15px;letter-spacing:0;text-transform:none;min-height:52px}
+.herocard .go.ghost{color:#173e2b;background:transparent;border:1px solid #507c63}
+.plan-action{display:flex;width:100%;margin-top:18px;padding:12px;position:relative;clear:both}
 .sec{margin-top:28px;border:0;padding-bottom:0}.sec:before{display:none}
 .sec h2{font-family:var(--f-sans);font-size:18px;letter-spacing:-.025em;text-transform:none}
 .sec .meta{font-family:var(--f-sans);font-size:11px;letter-spacing:0;text-transform:none}
@@ -502,7 +503,7 @@ body{background:var(--bg)}
 .ex .ex-edit{grid-column:3;grid-row:1}.ex .dose{grid-column:2 / 4;grid-row:2;display:flex;gap:12px;align-items:center;text-align:left;font-size:14px}
 .ex .dose .u{font-family:var(--f-sans);font-size:11px;margin:0;letter-spacing:0}
 .ex .nm{font-size:17px;line-height:1.35;letter-spacing:-.02em}.ex .cue{font-size:12px;line-height:1.55;margin-top:6px}
-.slot-label{font-family:var(--f-sans);font-size:10px;letter-spacing:.04em}.ex .last{font-family:var(--f-sans);font-size:12px;letter-spacing:0;margin-top:10px}.ex .last b{color:#d5f568}
+.slot-label{font-family:var(--f-sans);font-size:10px;letter-spacing:.04em}.ex .last{font-family:var(--f-sans);font-size:12px;letter-spacing:0;margin-top:10px}.ex .last b{color:var(--c-upper)}
 .ex-edit{background:#30352b;border-color:#515a46;color:#f0f5e8;font-size:23px}
 .add-ex select{background:#24271f}
 .exguide summary,.warm-how summary{font-family:var(--f-sans);font-size:12px;min-height:44px;letter-spacing:0;display:flex;align-items:center}
@@ -515,8 +516,9 @@ body{background:var(--bg)}
 .principle,.tip,.note{font-size:13px;line-height:1.6}.principle{background:#22261c;border-color:#424b32}
 .sheet{max-width:680px;margin:auto;background:#20231e;max-height:85dvh;overflow-y:auto;border:1px solid #515846;box-shadow:0 -12px 60px #0005}
 .sheet .btns button{font-family:var(--f-sans);letter-spacing:0;text-transform:none;font-size:13px}.sheet .modes button{min-height:44px}
-.timer-minimize{display:block;margin:0 0 10px auto;min-height:44px;padding:0 14px;border:1px solid var(--gb2);border-radius:22px;font-size:12px}
-#timer-dock{display:none;position:fixed;z-index:45;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);width:min(92%,440px);min-height:52px;border-radius:28px;background:#d5f568;color:#171d10;box-shadow:0 4px 24px #0006;font-size:14px;font-weight:750}
+.timer-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;position:sticky;top:-16px;background:#20231e;padding:8px 0;z-index:1}
+.timer-header strong{font-size:17px}.timer-actions{display:flex;gap:8px}.timer-actions button{min-height:44px;padding:0 12px;border:1px solid var(--gb2);border-radius:14px;font-size:12px}
+#timer-dock{display:none;position:fixed;z-index:45;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);width:min(92%,440px);min-height:52px;border-radius:28px;background:var(--c-upper);color:#103b29;box-shadow:0 4px 24px #0006;font-size:14px;font-weight:750}
 #timer-dock.on{display:block}body:has(#timer-dock.on) #app{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 86px)}
 @media(max-width:360px){.ex .hd{padding:12px;gap:8px}.ex .nm{font-size:16px}.dcard{padding:16px;gap:10px}.dcard .ic{display:none}.herocard{padding:20px}.home-intro h2{font-size:34px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -539,6 +541,7 @@ body{background:var(--bg)}
 
 <div class="sheet" id="sheet" role="dialog" aria-label="Descanso">
   <div class="grab"></div>
+  <div class="timer-header"><strong>Reloj</strong><div class="timer-actions"><button data-act="timer-minimize" aria-label="Minimizar reloj">↓ Bajar</button><button data-act="timer-close" aria-label="Cerrar y detener reloj">✕ Cerrar</button></div></div>
   <div class="modes"><button class="on" id="mode-down" data-act="timer-mode" data-mode="down">Cuenta atrás</button><button id="mode-up" data-act="timer-mode" data-mode="up">Cronómetro</button></div>
   <div class="row">
     <div class="cd">
@@ -554,14 +557,13 @@ body{background:var(--bg)}
       <div class="s" id="sh-sub"></div>
     </div>
   </div>
-  <button class="timer-minimize" data-act="timer-minimize">Minimizar · seguir entrenando</button>
   <div class="btns">
     <button data-act="rest-">−15 s</button>
     <button data-act="rest+">+15 s</button>
     <button data-act="rest30">+30 s</button>
-    <button data-act="timer-pause">Pausar</button>
+    <button class="pri" data-act="timer-pause">Iniciar</button>
     <button data-act="timer-reset">Reiniciar</button>
-    <button class="pri" data-act="skip">Cerrar</button>
+    <button data-act="skip">Cancelar</button>
   </div>
 </div>
 
@@ -575,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.6.0',
+  version: '2.6.1',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -1448,7 +1450,7 @@ function renderHoy(){
   return `
   <div class="home-intro"><span>TU PLAN · 3 + 1</span><h2>Entrena.<br>Avanza a tu ritmo.</h2><p>Tres sesiones de fuerza. Una extra cuando puedas.</p></div>
   <div class="hero">${warmCard()}${hero}</div>
-  <button class="btn" style="width:100%;padding:12px" data-act="tab" data-v="semana">Planificar mis días</button>
+  <button class="btn plan-action" data-act="tab" data-v="semana">Planificar mis días</button>
   ${renderReadiness()}
   <div class="stats">
     <div class="stat">
@@ -1912,16 +1914,17 @@ function syncSession(){
 
 /* ---------------- descanso / cronómetro ---------------- */
 const R2 = 34, C2 = 2*Math.PI*R2;
-let RT = { mode:'down',end:0,total:0,int:null,done:false,running:false,started:0,elapsed:0,paused:0,minimized:false };
+let RT = { mode:'down',end:0,total:0,int:null,done:false,running:false,started:0,elapsed:0,paused:0,minimized:false,ready:false,hasStarted:false };
 function syncTimerDock(){
   const dock=$('#timer-dock');
   dock.classList.toggle('on',RT.minimized&&!RT.done);
-  dock.textContent=(RT.mode==='up'?'Cronómetro':'Descanso')+' · '+$('#sh-t').textContent+(RT.running?'':' · pausado')+' ↗';
+  dock.textContent=(RT.mode==='up'?'Cronómetro':'Descanso')+' · '+$('#sh-t').textContent+(RT.running?'':RT.hasStarted?' · pausado':' · listo')+' ↗';
 }
 function startRest(sec, nm, sub){
   RT.minimized=false;syncTimerDock();
   sec = +sec || S.settings.rest;
   RT.mode='down';RT.total = sec; RT.end = Date.now() + sec*1000; RT.done = false;RT.running=true;RT.paused=0;
+  RT.ready=true;RT.hasStarted=true;
   $('#sh-nm').textContent = nm || 'Descanso';
   $('#sh-sub').textContent = sub || '';
   $('#sheet').classList.add('on');
@@ -1929,7 +1932,8 @@ function startRest(sec, nm, sub){
 }
 function tickRest(){
   $('#mode-down').classList.toggle('on',RT.mode==='down');$('#mode-up').classList.toggle('on',RT.mode==='up');
-  const pause=$('[data-act="timer-pause"]');if(pause)pause.textContent=RT.running?'Pausar':'Reanudar';
+  const pause=$('[data-act="timer-pause"]');if(pause)pause.textContent=RT.running?'Pausar':RT.hasStarted&&!RT.done?'Reanudar':'Iniciar';
+  $$('#sheet [data-act="rest-"],#sheet [data-act="rest+"],#sheet [data-act="rest30"]').forEach(b=>{b.disabled=RT.mode==='up';});
   if(RT.mode==='up'){
     const seconds=(RT.elapsed+(RT.running?Date.now()-RT.started:0))/1000;
     $('#sh-t').textContent=mmss(seconds);$('#sh-fg').setAttribute('stroke-dasharray',`${C2.toFixed(1)} ${C2.toFixed(1)}`);syncTimerDock();return;
@@ -1938,9 +1942,9 @@ function tickRest(){
   $('#sh-t').textContent = mmss(left);
   const pct = RT.total ? left/RT.total : 0;
   $('#sh-fg').setAttribute('stroke-dasharray', `${(C2*pct).toFixed(1)} ${C2.toFixed(1)}`);
-  if (left <= 0 && !RT.done) {
+  if (left <= 0 && RT.running && !RT.done) {
     RT.done = true; clearInterval(RT.int);
-    RT.running=false;
+    RT.running=false;RT.hasStarted=false;
     $('#sh-t').textContent = '¡Ya!'; beep(true); haptic([130,90,130]);
     setTimeout(() => { if (RT.done) $('#sheet').classList.remove('on'); }, 2500);
   }
@@ -1952,21 +1956,24 @@ function addRest(s){
   const next = Math.max(5, left+s);
   if (RT.done) RT.done = false;
   RT.total = next;if(RT.running)RT.end=Date.now()+next*1000;else RT.paused=next;
-  clearInterval(RT.int);RT.int=setInterval(tickRest,200);tickRest();
+  clearInterval(RT.int);if(RT.running)RT.int=setInterval(tickRest,200);tickRest();
 }
 function timerMode(mode){
-  clearInterval(RT.int);RT.mode=mode;RT.done=false;RT.running=true;
-  if(mode==='up'){RT.elapsed=0;RT.started=Date.now();$('#sh-nm').textContent='Cronómetro';$('#sh-sub').textContent='Tiempo transcurrido';}
-  else {RT.total=S.settings.restStandard;RT.end=Date.now()+RT.total*1000;$('#sh-nm').textContent='Temporizador manual';$('#sh-sub').textContent='Cuenta atrás';}
-  $('#sheet').classList.add('on');RT.int=setInterval(tickRest,200);tickRest();
+  clearInterval(RT.int);RT.mode=mode;RT.done=false;RT.running=false;RT.ready=true;RT.hasStarted=false;RT.minimized=false;
+  RT.elapsed=0;RT.started=0;RT.end=0;
+  RT.total=S.settings.restStandard;RT.paused=RT.total;
+  $('#sh-nm').textContent=mode==='up'?'Cronómetro':'Temporizador manual';
+  $('#sh-sub').textContent='Pulsa Iniciar cuando estés listo';
+  $('#sheet').classList.add('on');tickRest();
 }
 function pauseTimer(){
   if(RT.running){if(RT.mode==='up')RT.elapsed+=Date.now()-RT.started;else RT.paused=Math.max(0,(RT.end-Date.now())/1000);RT.running=false;clearInterval(RT.int);}
-  else {RT.running=true;if(RT.mode==='up')RT.started=Date.now();else RT.end=Date.now()+RT.paused*1000;RT.int=setInterval(tickRest,200);}
+  else {if(RT.done&&RT.mode==='down')RT.paused=RT.total;RT.done=false;RT.running=true;RT.hasStarted=true;if(RT.mode==='up')RT.started=Date.now();else RT.end=Date.now()+RT.paused*1000;RT.int=setInterval(tickRest,200);}
+  $('#sh-sub').textContent=RT.running?'En marcha':'En pausa';
   tickRest();
 }
-function resetTimer(){if(RT.mode==='up'){RT.elapsed=0;RT.started=Date.now();}else{RT.paused=RT.total;RT.end=Date.now()+RT.total*1000;}RT.running=true;clearInterval(RT.int);RT.int=setInterval(tickRest,200);tickRest();}
-function skipRest(){ clearInterval(RT.int); RT.done = true;RT.running=false;RT.minimized=false; $('#sheet').classList.remove('on');syncTimerDock(); }
+function resetTimer(){clearInterval(RT.int);RT.elapsed=0;RT.started=0;RT.paused=RT.total;RT.end=0;RT.done=false;RT.running=false;RT.hasStarted=false;$('#sh-sub').textContent='Pulsa Iniciar cuando estés listo';tickRest();}
+function skipRest(){ clearInterval(RT.int); RT.done = true;RT.running=false;RT.ready=false;RT.hasStarted=false;RT.minimized=false; $('#sheet').classList.remove('on');syncTimerDock(); }
 function wodSecs(clk){ const m = String(clk).match(/(\d+)[:\s]*(\d+)?/); if (!m) return 600; return m[2] != null ? (+m[1])*60 + (+m[2]) : (+m[1])*60; }
 function wodKey(b){ return 'wod|'+b.hd+'|'+b.clk; }
 
@@ -2032,7 +2039,8 @@ document.addEventListener('click', e => {
   else if (a === 'skip-ex') { const x=S.active&&S.active.exercises.find(e=>e._uid===t.dataset.u); if(x){x.skipped=!x.skipped;save();renderHere();} }
   else if (a === 'move-ex') { const xs=S.active&&S.active.exercises,i=xs?xs.findIndex(e=>e._uid===t.dataset.u):-1,j=i+(+t.dataset.d); if(i>=0&&j>=0&&j<xs.length){[xs[i],xs[j]]=[xs[j],xs[i]];save();renderHere();} }
   else if (a === 'fav') { S.favorites[t.dataset.id]=!S.favorites[t.dataset.id];save();renderHere(); }
-  else if (a === 'manual-timer') { if(!RT.done&&(RT.running||RT.paused||RT.elapsed)){RT.minimized=false;$('#sheet').classList.add('on');syncTimerDock();}else startRest(S.settings.restStandard,'Temporizador manual','Cuenta atrás'); }
+  else if (a === 'manual-timer') { if(RT.ready&&!RT.done){RT.minimized=false;$('#sheet').classList.add('on');tickRest();}else timerMode('down'); }
+  else if (a === 'timer-close') { skipRest(); }
   else if (a === 'timer-minimize') { RT.minimized=true;$('#sheet').classList.remove('on');syncTimerDock(); }
   else if (a === 'timer-expand') { RT.minimized=false;$('#sheet').classList.add('on');syncTimerDock(); }
   else if (a === 'rnd')    { if (!S.active) { const d = dayById(DAYVIEW); if (!d) return; startSession(d.id); }

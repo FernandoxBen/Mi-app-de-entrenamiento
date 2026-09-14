@@ -1,5 +1,13 @@
 # Cambios
 
+## 2.6.1 — 2026-09-14
+
+- Reloj manual detenido al abrir, cambiar de modo y reiniciar; inicio explícito.
+- Botones Bajar y Cerrar en la cabecera del reloj; minimizar conserva el tiempo y cerrar lo detiene.
+- Espacio independiente para el botón de planificación.
+- Acentos verdes y nuevo logo vectorial con iconos adaptados a instalación.
+- Comprobaciones de inicio manual, pausa, reinicio, cierre, separación móvil y funcionamiento sin conexión.
+
 ## 2.6.0 — 2026-09-14
 
 - Plan 3+1 con objetivo de tres sesiones esenciales y CrossFit opcional, sin alterar calendarios guardados.

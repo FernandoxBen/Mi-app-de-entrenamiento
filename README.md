@@ -1,4 +1,10 @@
-# Entreno 2.6.0
+# Entreno 2.6.1
+
+## Novedades 2.6.1
+
+El reloj manual se abre detenido y espera a que pulses Iniciar. Cambiar de modo y reiniciar también dejan el reloj preparado. Bajar conserva el reloj; Cerrar lo detiene. Los descansos al registrar series siguen empezando automáticamente.
+
+Planificación tiene espacio propio debajo de la tarjeta de entrenamiento. La paleta pasa a verde y el logo se sustituye por una E deportiva sencilla. El original vectorial está en `logo.svg`; `scripts/build-icons.cjs` genera los iconos instalables con Sharp.
 
 ## Novedades 2.6
 

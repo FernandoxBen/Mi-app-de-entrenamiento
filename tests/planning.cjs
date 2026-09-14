@@ -223,10 +223,23 @@ const server = http.createServer((req,res) => {
     await added.locator('[data-act="set"]').first().click();
     await page.locator('[data-act="skip"]').click();
     await page.locator('[data-act="manual-timer"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),false);
+    assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Iniciar');
+    const prepared=await page.locator('#sh-t').textContent();
+    await page.waitForTimeout(1100);
+    assert.equal(await page.locator('#sh-t').textContent(),prepared);
+    await page.locator('[data-act="rest30"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),false);
+    await page.locator('[data-act="timer-pause"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),true);
+    await page.locator('[data-act="timer-reset"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),false);
     await page.evaluate(()=>go('semana'));
     assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),true);
     await page.evaluate(()=>go('day','upper-a'));
     await page.locator('[data-act="timer-mode"][data-mode="up"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),false);
+    await page.locator('[data-act="timer-pause"]').click();
     await page.waitForTimeout(350);
     await page.locator('[data-act="timer-pause"]').click();
     assert.deepEqual(await page.evaluate(()=>({mode:RT.mode,running:RT.running,visible:document.querySelector('#sheet').classList.contains('on')})),{mode:'up',running:false,visible:true});
@@ -312,7 +325,9 @@ const server = http.createServer((req,res) => {
     assert.equal(await page.locator('#timer-dock').isVisible(),true);
     await page.locator('#timer-dock').click();
     assert.equal(await page.evaluate(()=>RT.end),deadline);
-    await page.locator('[data-act="skip"]').click();
+    await page.locator('[data-act="timer-close"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),false);
+    assert.equal(await page.locator('#timer-dock').isVisible(),false);
     await page.evaluate(()=>go('day','upper-a'));
     await page.locator('[data-act="finish"]').click();
     await page.reload();
@@ -337,6 +352,13 @@ const server = http.createServer((req,res) => {
     }
     assert.equal(await page.locator('#navtimer').isVisible(),false);
     await page.waitForTimeout(2800);
+    for(const width of [320,390]){
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(()=>go('hoy'));
+      await page.waitForTimeout(300);
+      const gap=await page.evaluate(()=>document.querySelector('.plan-action').getBoundingClientRect().top-document.querySelector('.hero').getBoundingClientRect().bottom);
+      assert.ok(gap>=16,'Planning button must have its own space after the workout');
+    }
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));
@@ -366,11 +388,12 @@ const server = http.createServer((req,res) => {
     const offlineContext=await browser.newContext({serviceWorkers:'allow'});
     const offlinePage=await offlineContext.newPage();
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
-    await offlinePage.evaluate(async()=>{await navigator.serviceWorker.ready; if(!navigator.serviceWorker.controller)await new Promise(r=>navigator.serviceWorker.addEventListener('controllerchange',r,{once:true}));});
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.0');
+    await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
+    await offlinePage.waitForTimeout(500);
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.1');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.0');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.1');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);
