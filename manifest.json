@@ -1,5 +1,5 @@
 {
-  "name": "Entreno 2.5.0",
+  "name": "Entreno 2.6.0",
   "short_name": "Entreno",
   "description": "Plan flexible para recomposición, fuerza, acondicionamiento y seguimiento. Funciona sin conexión.",
   "lang": "es",
@@ -13,8 +13,8 @@
     "minimal-ui"
   ],
   "orientation": "any",
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
+  "background_color": "#101110",
+  "theme_color": "#101110",
   "categories": [
     "health",
     "fitness",
@@ -70,7 +70,7 @@
     {
       "name": "Entreno · Upper B",
       "short_name": "Upper B",
-      "description": "Volumen y dominadas · día flexible",
+      "description": "Volumen, jalón y hombros · día flexible",
       "url": "./index.html?d=upper-b",
       "icons": [
         {
@@ -83,7 +83,7 @@
     {
       "name": "Entreno · CrossFit",
       "short_name": "CrossFit",
-      "description": "Técnica y acondicionamiento · día flexible",
+      "description": "Tu día extra opcional · acondicionamiento",
       "url": "./index.html?d=crossfit",
       "icons": [
         {

@@ -1,4 +1,14 @@
-# Entreno 2.5.0
+# Entreno 2.6.0
+
+## Novedades 2.6
+
+Plan 3+1: Upper A, Pierna y Upper B son las sesiones esenciales. CrossFit es opcional y empieza sin asignación en semanas nuevas. Las semanas ya guardadas conservan sus días.
+
+Jalón al pecho como tirón predeterminado en los dos Upper, con dominadas disponibles e historiales independientes. Landmine ambos días, brazos en superserie, laterales + pájaros en Upper B y abdominales en Upper A. Pierna empieza con dos vueltas ligeras de goblet + movilidad de tobillo, fuera del registro de series efectivas; los gemelos se mantienen después de la fuerza.
+
+Interfaz deportiva con tarjetas oscuras, acción principal en contraste, nombres completos, controles amplios y preparación separada. El temporizador se puede minimizar y reabrir sin reiniciarlo. Los bloques de acondicionamiento siguen accesibles durante la sesión y sus rondas se guardan.
+
+El almacenamiento y los identificadores de los ejercicios anteriores se conservan. Las sesiones en curso que ya contienen sus ejercicios mantienen esa selección; el nuevo plan se aplica al iniciar otra sesión. Jalón y landmine tienen acceso a sus gráficas de progreso sin retirar las dominadas del historial.
 
 ## Novedades 2.5
 

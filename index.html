@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#07111f">
-<meta name="description" content="Entreno 2.5.0 · sesiones flexibles, historial por ejercicio, descansos configurables y seguimiento sin conexión.">
-<title>Entreno 2.5.0</title>
+<meta name="theme-color" content="#101110">
+<meta name="description" content="Entreno 2.6.0 · tu plan 3+1: fuerza, tren superior y acondicionamiento opcional. Historial y entrenamiento sin conexión.">
+<title>Entreno 2.6.0</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -463,6 +463,63 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
   .ex-tools{grid-template-columns:40px 40px 1fr 40px;gap:6px}
 }
 
+/* 2.6 · mobile training surface */
+:root{--bg:#101110;--t1:#f6f6f0;--t2:#c2c5bc;--t3:#a0a59a;--c-upper:#d5f568;--c-upperb:#b6ccff;--c-leg:#94dbb8;--c-mob:#cfdfa7;--c-cf:#edbd84;--r:18px;--rl:20px;--f-disp:var(--f-sans)}
+body{background:var(--bg)}
+.view{animation:none}.wrap{max-width:680px}
+.top{background:rgba(16,17,16,.96);padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:16px}
+.top h1{font-size:23px;letter-spacing:-.05em;font-weight:850;text-transform:none}
+.top .sub{font-family:var(--f-sans);font-size:11px;letter-spacing:0;text-transform:none;line-height:1.4}
+.badge-v2{font-family:var(--f-sans);font-size:10px;letter-spacing:0}
+#nav{background:rgba(16,17,16,.97)}
+#nav button{font-family:var(--f-sans);font-size:11px;letter-spacing:0;text-transform:none;font-weight:600}
+#nav button[hidden]{display:none}
+.home-intro{padding:28px 0 10px}.home-intro>span{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--c-upper)}
+.home-intro h2{font-size:clamp(32px,9vw,46px);line-height:1.06;letter-spacing:-.055em;font-weight:850;margin:12px 0}
+.home-intro p{font-size:13px;color:var(--t2)}
+.warm-entry{display:flex;align-items:center;gap:12px;width:100%;padding:16px;text-align:left;background:#22241f;border:1px solid var(--gb);border-radius:18px;margin:12px 0}
+.warm-entry>span:nth-child(2){flex:1;min-width:0}.warm-entry small,.warm-entry b,.warm-entry>span>span{display:block}
+.warm-entry small{font-size:10px;color:var(--t3)}.warm-entry b{font-size:17px;letter-spacing:-.02em}.warm-entry>span>span{font-size:12px;color:var(--t2)}
+.warm-icon{width:38px;height:38px;display:grid;place-items:center;color:var(--c-upper)}.warm-icon svg,.warm-arrow svg{width:22px;height:22px}.warm-arrow{flex:0 0 22px}
+.herocard{background:#e5edcf;color:#151910;border:0;box-shadow:none;padding:24px;border-radius:22px;margin-top:12px}
+.herocard .kick{color:#435031;font-family:var(--f-sans);font-size:11px;letter-spacing:.04em;font-weight:650}
+.herocard h2{font-size:clamp(30px,8vw,42px);font-weight:850;letter-spacing:-.045em;text-transform:none;margin:12px 0 8px}
+.herocard p{color:#435031;font-size:14px;line-height:1.55}
+.herocard .go{background:#171d10;color:#f6f8ef;border-radius:28px;font-family:var(--f-sans);font-size:15px;letter-spacing:0;text-transform:none;min-height:52px}
+.herocard .go.ghost{color:#1d2615;background:transparent;border:1px solid #63734d}
+.sec{margin-top:28px;border:0;padding-bottom:0}.sec:before{display:none}
+.sec h2{font-family:var(--f-sans);font-size:18px;letter-spacing:-.025em;text-transform:none}
+.sec .meta{font-family:var(--f-sans);font-size:11px;letter-spacing:0;text-transform:none}
+.dcard{padding:20px;background:#20221e;border:1px solid var(--gb);box-shadow:none;border-left:4px solid var(--dc);min-height:120px}
+.dcard .ic{background:transparent;color:var(--dc);border:0;width:32px;padding:4px}
+.dcard .tt{font-weight:800;letter-spacing:-.03em;font-size:24px;text-transform:none}
+.dcard .day,.dcard .st{font-family:var(--f-sans);letter-spacing:0;text-transform:none}.dcard .day{font-size:11px;color:var(--dc)}.dcard .st{font-size:12px;color:var(--t2)}
+.card-duration{font-size:11px;color:var(--t3);margin-top:5px}
+.stat{background:#1b1d19;border:0}.stat .l{font-family:var(--f-sans);font-size:11px;letter-spacing:0;text-transform:none}.stat .v{font-family:var(--f-sans);font-size:28px}
+.ex{background:#1d1f1b;margin-bottom:14px;border:1px solid #34392f;box-shadow:none}
+.ex .hd{display:grid;grid-template-columns:20px minmax(0,1fr) 44px;gap:8px 10px;padding:16px}
+.ex .body{grid-column:2;grid-row:1}.ex .idx{grid-column:1;grid-row:1;font-size:11px}
+.ex .ex-edit{grid-column:3;grid-row:1}.ex .dose{grid-column:2 / 4;grid-row:2;display:flex;gap:12px;align-items:center;text-align:left;font-size:14px}
+.ex .dose .u{font-family:var(--f-sans);font-size:11px;margin:0;letter-spacing:0}
+.ex .nm{font-size:17px;line-height:1.35;letter-spacing:-.02em}.ex .cue{font-size:12px;line-height:1.55;margin-top:6px}
+.slot-label{font-family:var(--f-sans);font-size:10px;letter-spacing:.04em}.ex .last{font-family:var(--f-sans);font-size:12px;letter-spacing:0;margin-top:10px}.ex .last b{color:#d5f568}
+.ex-edit{background:#30352b;border-color:#515a46;color:#f0f5e8;font-size:23px}
+.add-ex select{background:#24271f}
+.exguide summary,.warm-how summary{font-family:var(--f-sans);font-size:12px;min-height:44px;letter-spacing:0;display:flex;align-items:center}
+.pair-label{padding:0 16px 12px;font-size:11px;color:var(--accent)}.pair-label span{display:block;color:var(--t2);margin-top:2px}
+.prep-card{padding:16px;border:1px solid #566041;background:#252a1d;border-radius:18px;margin:16px 0}.prep-card summary{font-weight:700;min-height:44px;font-size:15px}.prep-card summary span{display:block;font-weight:400;font-size:11px;color:var(--t2)}.prep-card p{font-size:13px;line-height:1.65;margin-top:10px;color:var(--t2)}
+.btn,.finish{font-family:var(--f-sans);letter-spacing:0;text-transform:none;min-height:48px;border-radius:16px}.finish{font-size:17px;font-weight:750}
+.btnrow{gap:10px}.set{padding:16px 12px}.set .l b{font-size:14px}.set .l span{font-size:12px;line-height:1.5}
+.liftseg{grid-template-columns:repeat(2,minmax(0,1fr))}.liftseg button{font-family:var(--f-sans);min-height:48px;font-size:12px}
+@media(min-width:600px){.liftseg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.principle,.tip,.note{font-size:13px;line-height:1.6}.principle{background:#22261c;border-color:#424b32}
+.sheet{max-width:680px;margin:auto;background:#20231e;max-height:85dvh;overflow-y:auto;border:1px solid #515846;box-shadow:0 -12px 60px #0005}
+.sheet .btns button{font-family:var(--f-sans);letter-spacing:0;text-transform:none;font-size:13px}.sheet .modes button{min-height:44px}
+.timer-minimize{display:block;margin:0 0 10px auto;min-height:44px;padding:0 14px;border:1px solid var(--gb2);border-radius:22px;font-size:12px}
+#timer-dock{display:none;position:fixed;z-index:45;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);width:min(92%,440px);min-height:52px;border-radius:28px;background:#d5f568;color:#171d10;box-shadow:0 4px 24px #0006;font-size:14px;font-weight:750}
+#timer-dock.on{display:block}body:has(#timer-dock.on) #app{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 86px)}
+@media(max-width:360px){.ex .hd{padding:12px;gap:8px}.ex .nm{font-size:16px}.dcard{padding:16px;gap:10px}.dcard .ic{display:none}.herocard{padding:20px}.home-intro h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -497,6 +554,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
       <div class="s" id="sh-sub"></div>
     </div>
   </div>
+  <button class="timer-minimize" data-act="timer-minimize">Minimizar · seguir entrenando</button>
   <div class="btns">
     <button data-act="rest-">−15 s</button>
     <button data-act="rest+">+15 s</button>
@@ -507,6 +565,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
   </div>
 </div>
 
+<button id="timer-dock" data-act="timer-expand" aria-label="Abrir temporizador en curso"></button>
 <div class="sheet" id="exsheet" role="dialog" aria-label="Editar ejercicio"></div>
 
 <div id="toast" role="status" aria-live="polite"></div>
@@ -516,7 +575,7 @@ footer{color:var(--t3);font-size:9.5px;text-align:center;padding:26px 0 10px;fon
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.5.0',
+  version: '2.6.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -552,19 +611,19 @@ const P = {
   days: [
     /* ---------------- LUNES · UPPER A ---------------- */
     {
-      id:'upper-a', dow:1, day:'Lunes', name:'Upper A', sub:'Fuerza · press + dominada lastrada',
+      id:'upper-a', dow:1, day:'Lunes', name:'Upper A', sub:'Fuerza · pecho, espalda y abdominales',
       color:'--c-upper', icon:'barbell', mins:60,
       blocks:[
         {t:'warmup'},
         {t:'sec', h:'Fuerza', meta:'desc 2–3 min'},
         {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Carga exigente · RIR 2 · tempo controlado', sets:4, reps:'6–8', rest:150, kg:1},
-        {t:'ex', id:'dominada-lastrada', nm:'Dominadas lastradas', cue:'Fuerza · hombros lejos de las orejas · deja 2 reps en reserva', sets:4, reps:'4–6', rest:150, kg:1},
+        {t:'ex', id:'jalon-neutro', nm:'Jalón al pecho neutro', cue:'Codos hacia los costados · sin balanceo · RIR 2', sets:4, reps:'6–8', rest:150, kg:1},
         {t:'note', x:'<b>Segundo empuje sin dolor:</b> el landmine sustituye al press en máquina. Trabaja pecho y deltoide anterior en diagonal, sin llevar el codo por detrás del torso, que es donde tu hombro se queja. Si aun así molesta, prueba el press en el suelo.'},
-        {t:'tip', x:'<b>Trabajo submáximo:</b> el lastre desarrolla fuerza sin exigir llegar al fallo. Mantener margen ayuda a conservar la técnica y a recuperarte para el segundo día de tren superior.'},
+        {t:'tip', x:'<b>Tu tirón vertical:</b> usa el jalón mientras las dominadas reproduzcan la molestia del trapecio. Puedes cambiarlo desde ⋯; cada ejercicio conserva su historial. Deja que los omóplatos se muevan al subir los brazos, sin forzar los hombros hacia abajo.'},
 
         {t:'sec', h:'Volumen', meta:'técnica estable'},
-        {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · deja 2 reps en reserva', sets:3, reps:'8–10/lado', rest:90, kg:1},
-        {t:'ex', id:'remo', nm:'Remo', cue:'Pecho estable · codos hacia la cadera · pausa 1 s', sets:4, reps:'8–12', rest:120, kg:1, pick:'remo'},
+        {t:'ex', id:'remo', nm:'Remo', cue:'Pecho estable · codos hacia la cadera · pausa 1 s', sets:3, reps:'8–12', rest:120, kg:1, pick:'remo'},
+        {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuje en diagonal · agarre neutro · deja 2 reps en reserva', sets:2, reps:'8–10/lado', rest:90, kg:1},
 
         {t:'sec', h:'Brazos', meta:'superserie · 3 rondas'},
         {t:'ss', tag:'Bíceps + tríceps · desc 60–75 s al terminar cada pareja', items:[
@@ -579,15 +638,15 @@ const P = {
           '<b>Hollow body hold</b> — piernas a 30–40°, lumbar pegada al suelo. 20–30 s.'
         ]},
 
-        {t:'sec', h:'Tu remo', meta:'4×8–12'},
+        {t:'sec', h:'Tu remo', meta:'3×8–12'},
         {t:'pick', k:'remo', hint:'Ordenados de más a menos amable con tu lumbar', opts:[
-           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'4×8–12', u:'recomendado',
+           {nm:'Remo en máquina con apoyo de pecho', cue:'El apoyo reduce la exigencia de estabilización lumbar', dose:'3×8–12', u:'recomendado',
            how:'Pecho pegado al respaldo y hombros lejos de las orejas. Deja que el omóplato avance al estirar; después lleva el codo hacia la cadera y pausa 1 s atrás. <b>El torso no se separa del apoyo.</b> Si el antebrazo falla antes que la espalda, usa correas solo en las últimas series.'},
-          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'4×8–12', u:'/lado',
+          {nm:'Remo unilateral en máquina', cue:'Con apoyo · un lado cada vez', dose:'3×8–12', u:'/lado',
            how:'Apoyado en el soporte, tiras con un brazo. El apoyo elimina la estabilización, y al ir de uno en uno corriges descompensaciones y consigues más rango.'},
-          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'4×8–12',
+          {nm:'Remo en polea sentado', cue:'Sin apoyo de pecho, pero sentado', dose:'3×8–12',
            how:'Sentado, pies fijos, espalda erguida. Tira hacia el abdomen sin balancear el torso. <b>El tronco no se mueve</b>: si te vas hacia atrás para tirar, hay demasiado peso.'},
-          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'4×8–12', u:'/lado',
+          {nm:'Remo con mancuerna en banco', cue:'Si prefieres peso libre', dose:'3×8–12', u:'/lado',
            how:'Rodilla y mano del mismo lado apoyadas en el banco, espalda plana y paralela al suelo. Tira la mancuerna hacia la cadera, codo pegado. El apoyo protege la lumbar.'}
         ]},
         {t:'tip', x:'<b>Cómo valorar la serie:</b> no necesitas sentir la misma quemazón que en el pecho. Cuenta como serie exigente si el recorrido y el torso se mantienen, la última repetición se ralentiza y solo podrías hacer 1–2 repeticiones limpias más.'}
@@ -596,11 +655,12 @@ const P = {
 
     /* ---------------- MARTES · PIERNA ---------------- */
     {
-      id:'pierna', dow:2, day:'Martes', name:'Pierna', sub:'Sentadilla · búlgara · nórdico',
+      id:'pierna', dow:3, day:'Miércoles', name:'Pierna', sub:'Fuerza y mantenimiento · volumen contenido',
       color:'--c-leg', icon:'bolt', mins:50,
       principle:'<b>Fuerza y mantenimiento de pierna.</b> Volumen contenido, descansos completos y técnica estable. El objetivo es conservar músculo, ganar algo de fuerza y tolerar bien el deporte.',
       blocks:[
         {t:'warmup'},
+        {t:'prep', h:'Preparación de pierna', x:'2 vueltas · Goblet Squat ligera ×8 + Knee-to-Wall Ankle Dorsiflexion ×8/lado. Descansa 45 s entre vueltas. En la goblet, sujeta una mancuerna delante del pecho, apoya todo el pie y baja hasta un recorrido cómodo. Deja al menos 5 repeticiones en reserva. Después haz las aproximaciones de sentadilla con barra. Este bloque no cuenta como series efectivas.'},
         {t:'sec', h:'Fuerza de pierna', meta:'5 series principales'},
         {t:'ex', id:'sentadilla', nm:'Sentadilla con barra', cue:'Carga moderada-alta · deja 2 reps en reserva', sets:3, reps:'4–6', rest:180, kg:1},
         {t:'ex', id:'bulgara', nm:'Sentadilla búlgara', cue:'Unilateral · pelvis estable · empieza ligero', sets:2, reps:'6–8/pierna', rest:120, kg:1},
@@ -611,7 +671,7 @@ const P = {
         {t:'note', x:'<b>Empieza con poco volumen.</b> Los programas que incluyen nórdicos han reducido las lesiones de isquiotibial en estudios con deportistas, pero el efecto depende de la adherencia y del programa completo. Empieza con 2×3 y progresa sin dolor.'},
 
         {t:'sec', h:'Pantorrilla', meta:'tolerancia y mantenimiento'},
-        {t:'ex', id:'gemelo', nm:'Extensión de gemelo', cue:'Sube con control · pausa 1 s · rango sin dolor', sets:3, reps:'10–15', rest:75, kg:1},
+        {t:'ex', id:'gemelo', nm:'Elevación de gemelos en cajón', cue:'Cajón estable · sujétate · baja solo hasta un rango cómodo para el talón', sets:3, reps:'10–15', rest:75, kg:1},
 
         {t:'sec', h:'Core', meta:'2 rondas'},
         {t:'ex', id:'pallof', nm:'Pallof press', cue:'Antirrotación · polea o banda al costado, saca los brazos sin girar', sets:2, reps:'10/lado', rest:60},
@@ -627,22 +687,23 @@ const P = {
 
     /* ---------------- MIÉRCOLES · UPPER B ---------------- */
     {
-      id:'upper-b', dow:3, day:'Miércoles', name:'Upper B', sub:'Volumen · dominadas',
+      id:'upper-b', dow:5, day:'Viernes', name:'Upper B', sub:'Volumen · hombros y brazos',
       color:'--c-upperb', icon:'repeat', mins:55,
       blocks:[
         {t:'warmup'},
-        {t:'sec', h:'Dominadas', meta:'tu progreso'},
-        {t:'ex', id:'dominadas-bw', nm:'Dominadas a peso corporal o asistidas', cue:'Ajusta asistencia o repeticiones para dejar 2 reps limpias en reserva · sin balanceo', sets:4, reps:'5–8', rest:150},
-        {t:'tip', x:'<b>Objetivo:</b> acumular repeticiones limpias. El trabajo lejos del fallo puede mejorar fuerza y masa con menos fatiga. Si la última serie pierde dos repeticiones o la técnica cambia, reduce el objetivo.'},
+        {t:'sec', h:'Tirón vertical', meta:'recorrido controlado'},
+        {t:'ex', id:'jalon-neutro', nm:'Jalón al pecho neutro', cue:'Carga moderada · recorrido cómodo · deja 2 reps limpias en reserva', sets:3, reps:'8–12', rest:150, kg:1},
+        {t:'tip', x:'<b>Objetivo:</b> acumular repeticiones limpias sin reproducir la molestia cervical o del trapecio. Elige un agarre cómodo y evita tirar con impulso.'},
 
         {t:'sec', h:'Empuje', meta:'más reps'},
-        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Más ligero que el día A · RIR 2', sets:4, reps:'8–12', rest:90, kg:1},
+        {t:'ex', id:'press-banca', nm:'Press de banca', cue:'Más ligero que el día A · RIR 2', sets:3, reps:'8–12', rest:120, kg:1},
 
         {t:'sec', h:'Espalda y hombro', meta:'volumen controlado'},
         {t:'ex', id:'remo', nm:'Remo horizontal', cue:'Misma variante · recorrido completo · pausa 1 s atrás', sets:3, reps:'8–12', rest:120, kg:1, pick:'remo'},
+        {t:'ex', id:'landmine', nm:'Landmine press', cue:'Empuja arriba y adelante · costillas estables · RIR 2', sets:2, reps:'10–12/lado', rest:90, kg:1},
         {t:'ss', tag:'Hombro lateral + posterior · desc 60–75 s', items:[
           {t:'ex', id:'elev-laterales', nm:'Elevaciones laterales', cue:'Sin balanceo · rango cómodo', sets:3, reps:'12–15', rest:0, skipRest:1, kg:1},
-          {t:'ex', id:'pajaros', nm:'Pájaros o reverse pec deck', cue:'Peso ligero · hombros lejos de las orejas', sets:2, reps:'12–15', rest:75, kg:1}
+          {t:'ex', id:'pajaros', nm:'Pájaros o reverse pec deck', cue:'Peso ligero · cuello cómodo · sin impulso', sets:3, reps:'12–15', rest:75, kg:1}
         ]},
 
         {t:'sec', h:'Brazos', meta:'superserie · 3 rondas'},
@@ -650,23 +711,16 @@ const P = {
           {t:'ex', id:'curl-martillo', nm:'Curl martillo', cue:'Agarre neutro · sin balanceo', sets:3, reps:'10–15', rest:0, skipRest:1, kg:1},
           {t:'ex', id:'triceps-polea', nm:'Extensión de tríceps en polea', cue:'Codos quietos · extensión completa sin forzar', sets:3, reps:'10–15', rest:75, kg:1}
         ]},
-        {t:'ss', tag:'Core · desc 60 s', items:[
-          {t:'ex', id:'core-anti', nm:'Core anti-extensión', cue:'Elige opción abajo', sets:2, reps:'8–10', rest:60}
-        ]},
-        {t:'alt', label:'Opciones de core', opts:[
-          '<b>Plancha con desplazamiento de manos</b> — 8–10 reps con lumbar neutra.',
-          '<b>Hollow body hold</b> — 20–30 s, piernas a 30–40°.'
-        ]},
-        {t:'tip', x:'<b>Dominada:</b> empieza bajando los hombros, lleva el pecho hacia la barra y termina antes de perder el recorrido. Si no llegas a 5 repeticiones limpias con 1–2 en reserva, usa goma o máquina asistida.'},
-        {t:'tip', x:'<b>Volumen semanal de espalda:</b> quedan 15 series entre dominadas y remos. Es suficiente para progresar; prioriza recorrido, carga y recuperación antes de añadir más.'}
+        {t:'tip', x:'<b>Hombros en pareja:</b> laterales → pájaros → descanso. Completa tres rondas con 1–2 repeticiones en reserva. Los abdominales quedan en Upper A y Pierna.'},
+        {t:'tip', x:'<b>Volumen semanal de espalda:</b> 13 series entre jalones y remos. Prioriza técnica y recuperación antes de añadir más. Las dominadas siguen disponibles como alternativa cuando las toleres.'}
       ]
     },
 
     /* ---------------- JUEVES · CROSSFIT ---------------- */
     {
-      id:'crossfit', dow:4, day:'Jueves', name:'CrossFit', sub:'Técnica · AMRAP o intervalos',
+      id:'crossfit', dow:0, optional:true, day:'Opcional', name:'CrossFit', sub:'Día extra · acondicionamiento a tu ritmo',
       color:'--c-cf', icon:'waves', mins:65,
-      principle:'<b>Segunda dosis breve de pierna y acondicionamiento.</b> Haz primero la fuerza con margen; después elige capacidad de trabajo o fondo para el fútbol.',
+      principle:'<b>Tu +1 opcional.</b> Los tres días de fuerza completan el plan. Añade esta sesión si tienes tiempo y te recuperas bien. Hip thrust y step-up son opcionales: sáltalos si las piernas están cansadas o tienes fútbol cerca.',
       blocks:[
         {t:'warmup'},
         {t:'sec', h:'Fuerza preventiva', meta:'10–15 min'},
@@ -845,8 +899,9 @@ const P = {
   ],
 
   /* Ejercicios cuyo progreso se sigue en la pestaña Historial */
-  keyLifts: ['press-banca','dominada-lastrada','sentadilla','bulgara','remo','hip-thrust'],
+  keyLifts: ['press-banca','jalon-neutro','landmine','dominada-lastrada','sentadilla','bulgara','remo','hip-thrust'],
   shortNames: {
+    'jalon-neutro':'Jalón al pecho',
     'press-banca':'Press banca', 'dominada-lastrada':'Dominada +kg', 'sentadilla':'Sentadilla',
     'bulgara':'Búlgara', 'remo':'Remo', 'hip-thrust':'Hip thrust', 'step-up':'Step-up', 'landmine':'Landmine',
     'curl-biceps':'Curl bíceps', 'curl-martillo':'Martillo', 'triceps-polea':'Tríceps', 'triceps-overhead':'Tríceps alto',
@@ -884,6 +939,10 @@ const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 /* Guía breve común: ejecución y cambios equivalentes sin alterar la intención */
 const EX_GUIDE = {
+  'jalon-neutro': {
+    how:'Siéntate con los muslos sujetos y un agarre neutro o medio cómodo. Lleva los codos hacia los costados y el agarre hacia la parte alta del pecho sin balancearte. Deja subir los omóplatos de forma natural al extender los brazos. Detente si reproduce la molestia del cuello o trapecio.',
+    alts:'Jalón con agarre medio; dominadas asistidas, libres o lastradas cuando las toleres. Al cambiar a dominadas, ajusta asistencia o lastre para mantener dos repeticiones en reserva.'
+  },
   'press-banca': {
     how:'Pies firmes, omóplatos apoyados y muñecas sobre los codos. Baja con control hacia la parte media-baja del pecho y empuja sin despegar los hombros del banco.',
     alts:'Press con mancuernas con agarre neutro; press en máquina convergente; press en el suelo si el hombro tolera mejor un recorrido corto.'
@@ -979,6 +1038,7 @@ const WOD_GUIDE = [
 /* Alternativas equivalentes. El hueco de la rutina conserva su identidad; el id elegido
    es el que se usa para historial, pesos y récords. */
 const ALT_GROUPS = {
+  'jalon-neutro':[['jalon-neutro','Jalón al pecho neutro'],['jalon-medio','Jalón al pecho agarre medio'],['dominadas-asistidas','Dominadas asistidas'],['dominadas-bw','Dominadas'],['dominada-lastrada','Dominadas lastradas']],
   'press-banca':[['press-banca','Press de banca'],['press-mancuernas','Press con mancuernas'],['chest-press','Chest press en máquina'],['floor-press','Floor press']],
   'dominada-lastrada':[['dominada-lastrada','Dominadas lastradas'],['dominadas-bw','Dominadas'],['dominadas-asistidas','Dominadas asistidas'],['jalon-neutro','Jalón al pecho neutro']],
   'dominadas-bw':[['dominadas-bw','Dominadas'],['dominadas-asistidas','Dominadas asistidas'],['jalon-neutro','Jalón al pecho neutro'],['dominada-lastrada','Dominadas lastradas']],
@@ -991,7 +1051,7 @@ const ALT_GROUPS = {
   sentadilla:[['sentadilla','Sentadilla con barra'],['safety-squat','Sentadilla con safety bar'],['hack-squat','Hack squat'],['prensa','Prensa inclinada']],
   bulgara:[['bulgara','Sentadilla búlgara'],['split-squat','Split squat'],['zancada-atras','Zancada atrás'],['prensa-unilateral','Prensa unilateral']],
   nordico:[['nordico','Curl nórdico'],['curl-femoral-sentado','Curl femoral sentado'],['curl-femoral-tumbado','Curl femoral tumbado'],['curl-deslizante','Curl femoral deslizante']],
-  gemelo:[['gemelo','Gemelo de pie'],['gemelo-sentado','Gemelo sentado'],['gemelo-unilateral','Gemelo unilateral']],
+  gemelo:[['gemelo','Elevación de gemelos en cajón'],['gemelo-sentado','Gemelo sentado'],['gemelo-unilateral','Gemelo unilateral']],
   pallof:[['pallof','Pallof press'],['plancha-lat','Plancha lateral'],['suitcase-carry','Suitcase carry']],
   rueda:[['rueda','Rueda abdominal'],['dead-bug','Dead Bug'],['body-saw','Body saw']],
   'core-anti':[['core-anti','Core anti-extensión'],['dead-bug','Dead Bug'],['hollow-hold','Hollow hold'],['rueda','Rueda abdominal']],
@@ -1010,6 +1070,7 @@ const ALT_GROUPS = {
   torsiones:[['torsiones','Torsiones de goma'],['prono-supinacion','Pronación y supinación con martillo'],['rodillo-muneca','Rodillo de muñeca']]
 };
 const SLOT_LABELS={
+  'jalon-neutro':'Tirón vertical',
   'press-banca':'Empuje horizontal','dominada-lastrada':'Tirón vertical','dominadas-bw':'Tirón vertical',landmine:'Empuje diagonal',remo:'Remo horizontal',
   'curl-biceps':'Bíceps','curl-martillo':'Bíceps y antebrazo','triceps-overhead':'Tríceps','triceps-polea':'Tríceps',sentadilla:'Sentadilla de fuerza',bulgara:'Pierna unilateral',
   nordico:'Isquiotibiales',gemelo:'Pantorrilla',pallof:'Core antirrotación',rueda:'Core anti-extensión','core-anti':'Core anti-extensión','elev-laterales':'Hombro lateral',
@@ -1134,7 +1195,7 @@ function flatEx(day){
   const out = [];
   const walk = bs => bs.forEach(b => {
     if (b.t === 'ex') out.push(b);
-    else if (b.t === 'ss') b.items.forEach(x => out.push(x));
+    else if (b.t === 'ss') b.items.forEach((x,i) => out.push({...x,pair:b.items.length>1?b.tag:null,pairPosition:i+1}));
     else if (b.t === 'switch') { const v = b.variants[S.picks[b.k]||0] || []; walk(v); }
   });
   walk(day.blocks);
@@ -1186,7 +1247,7 @@ function streakWeeks(){
   for (let i = 0; i < 60; i++) {
     const c = new Set();
     S.history.forEach(h => { if (weekStart(h.ts) === w && P.days.some(d => d.id === h.dayId)) c.add(h.dayId); });
-    if (c.size >= 3) n++;
+    if (P.days.filter(d=>!d.optional).every(d=>c.has(d.id))) n++;
     else if (i > 0) break;
     w -= 7*864e5;
   }
@@ -1231,6 +1292,7 @@ function go(view, dayId){
 window.addEventListener('popstate', e => {
   const st = e.state || {};
   VIEW = st.v || 'hoy'; DAYVIEW = st.d || null;
+  EXMENU=null;renderExMenu();
   render();
 });
 
@@ -1243,7 +1305,7 @@ function render(){
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
     <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'La semana':VIEW==='historial'?'Historial':'Ajustes'}${VIEW==='hoy'?'<span class="badge-v2">2.5.0</span>':''}</h1>
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'Tu plan':VIEW==='historial'?'Progreso':'Ajustes'}${VIEW==='hoy'?`<span class="badge-v2">${P.version}</span>`:''}</h1>
     <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
@@ -1292,7 +1354,7 @@ function normalizePlanning(s){
 function planDate(){ const d = new Date(weekStart(Date.now())); d.setDate(d.getDate()+7*planWeekOffset); return d; }
 function planFor(ts){
   const key = dateKey(new Date(weekStart(ts)));
-  return S.plans[key] || Object.fromEntries(P.days.map(d => [d.id, (d.dow+6)%7]));
+  return S.plans[key] || Object.fromEntries(P.days.map(d => [d.id, d.optional?-1:(d.dow+6)%7]));
 }
 function scheduleLabel(d, ts=Date.now()){
   if (!P.days.some(x => x.id === d.id)) return d.day;
@@ -1326,7 +1388,7 @@ function warmRecord(){
   return S.warmups[key] || {checks:{}, done:false};
 }
 function warmCard(){
-  return `<div class="herocard" style="--accent:var(--c-mob);margin-bottom:14px"><div class="kick">Bloque 1 · preparación</div><h2>Calentamiento</h2><p>${warmRecord().done?'Completado hoy':'10 min · explicado paso a paso'}</p><button class="go" data-act="open" data-id="calentamiento">${svg('flame')} ${warmRecord().done?'Revisar':'Abrir calentamiento'}</button></div>`;
+  return `<button class="warm-entry" data-act="open" data-id="calentamiento"><span class="warm-icon">${svg(warmRecord().done?'check':'flame')}</span><span><small>01 · Prepara el cuerpo</small><b>Calentamiento</b><span>${warmRecord().done?'Completado hoy':'10 min · paso a paso'}</span></span><span class="warm-arrow">${svg('arrow')}</span></button>`;
 }
 function renderWarmSession(){
   const record = warmRecord();
@@ -1381,26 +1443,30 @@ function renderHoy(){
     </div>`;
   }
 
-  const pct = Math.min(1, done.size/4), R = 26, C = 2*Math.PI*R;
+  const coreDone=P.days.filter(x=>!x.optional&&done.has(x.id)).length;
+  const pct = coreDone/3, R = 26, C = 2*Math.PI*R;
   return `
+  <div class="home-intro"><span>TU PLAN · 3 + 1</span><h2>Entrena.<br>Avanza a tu ritmo.</h2><p>Tres sesiones de fuerza. Una extra cuando puedas.</p></div>
   <div class="hero">${warmCard()}${hero}</div>
   <button class="btn" style="width:100%;padding:12px" data-act="tab" data-v="semana">Planificar mis días</button>
   ${renderReadiness()}
   <div class="stats">
     <div class="stat">
-      <svg class="ring" width="62" height="62" viewBox="0 0 64 64" role="img" aria-label="${done.size} de 4 sesiones esta semana">
+      <svg class="ring" width="62" height="62" viewBox="0 0 64 64" role="img" aria-label="${coreDone} de 3 sesiones esenciales esta semana">
         <circle class="bgc" cx="32" cy="32" r="${R}"/>
         ${pct > 0 ? `<circle class="fg" cx="32" cy="32" r="${R}" stroke-dasharray="${(C*pct).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/>` : ''}
-        <text x="32" y="37" text-anchor="middle">${done.size}/4</text>
+        <text x="32" y="37" text-anchor="middle">${coreDone}/3</text>
       </svg>
-      <div class="l" style="margin-top:6px">Esta semana</div>
+      <div class="l" style="margin-top:6px">Esenciales${done.has('crossfit')?' · +1 hecho':''}</div>
     </div>
     <div class="stat"><div class="v">${streakWeeks()}</div><div class="l">Racha (semanas)</div></div>
     <div class="stat"><div class="v">${S.history.length}</div><div class="l">Sesiones</div></div>
   </div>
 
-  <div class="sec"><h2>La semana</h2><span class="meta">toca para abrir</span></div>
-  <div class="cards">${P.days.map(x => dayCard(x, done.has(x.id))).join('')}</div>
+  <div class="sec"><h2>Tus tres sesiones</h2><span class="meta">fuerza · 3/semana</span></div>
+  <div class="cards">${P.days.filter(x=>!x.optional).map(x => dayCard(x, done.has(x.id))).join('')}</div>
+  <div class="sec"><h2>Si tienes un día más</h2><span class="meta">opcional</span></div>
+  <div class="cards">${P.days.filter(x=>x.optional).map(x => dayCard(x, done.has(x.id))).join('')}</div>
   <div class="sec"><h2>Extras</h2><span class="meta">cuando quieras</span></div>
   <div class="cards">${P.extras.map(x => dayCard(x, false)).join('')}</div>
   <footer>ENTRENO ${P.version}</footer>`;
@@ -1424,7 +1490,7 @@ function progressionGuide(){
 function dayCard(d, done, ts=Date.now()){
   return `<button class="dcard${done?' done':''}" style="--dc:var(${d.color})" data-act="open" data-id="${d.id}">
     <div class="ic">${svg(d.icon)}</div>
-    <div class="lab"><span class="day">${esc(scheduleLabel(d, ts))}</span><span class="tt">${esc(d.name)}</span><span class="st">${esc(d.sub)}</span></div>
+    <div class="lab"><span class="day">${d.optional?'+1 opcional · ':''}${esc(scheduleLabel(d, ts))}</span><span class="tt">${esc(d.name)}</span><span class="st">${esc(d.sub)}</span><span class="card-duration">${d.mins} min${P.days.includes(d)?' · '+(d.optional?'extra':'fuerza'):''}</span></div>
     <div class="flag">${done?svg('check',3):svg('arrow',2.4)}</div>
   </button>`;
 }
@@ -1439,8 +1505,9 @@ function renderSemana(){
   <div class="sec"><h2>${planWeekOffset===0?'Semana actual':'Semana elegida'}</h2><span class="meta">${esc(rango)}</span></div>
   ${renderPlanner()}
   <details class="card review-card" style="margin:16px 0"><summary>Revisión del plan · recomposición corporal</summary>
-    <p><b>Pierna:</b> cinco series principales de sentadilla y búlgara, dos de nórdico y cuatro series breves de hip thrust y step-up en el acondicionamiento. La intención es fuerza, mantenimiento y tolerancia al deporte.</p>
-    <p><b>Tren superior:</b> 15 series de tracción y 11 de empuje. Cada Upper termina con una superserie de bíceps y tríceps; son seis series directas semanales para cada uno, además de dominadas y presses.</p>
+    <p><b>Pierna:</b> dos vueltas ligeras de goblet y tobillo antes de la fuerza; tres series de sentadilla, dos de búlgara y dos de nórdico. Gemelos después. La preparación no cuenta como trabajo efectivo. Volumen contenido para mantener fuerza; no garantiza ausencia de crecimiento.</p>
+    <p><b>Tren superior:</b> 13 series de tracción y 11 de empuje. Landmine ambos días, seis series directas semanales para bíceps y tríceps. Laterales + pájaros en Upper B; abdominales en Upper A y Pierna.</p>
+    <p><b>Jalón al pecho:</b> predeterminado en ambos Upper mientras las dominadas molesten. Puedes elegir dominadas desde ⋯ cuando las toleres; los registros siguen separados.</p>
     <p><b>Superseries:</b> alterna bíceps y tríceps y descansa 60–75 segundos al terminar la pareja. Si pierdes más de dos repeticiones respecto a la primera ronda, descansa 90 segundos.</p>
     <p><b>Semanas cortas:</b> con tres días, prioriza Upper A, Pierna y Upper B. Con dos días conviene usar dos sesiones de cuerpo completo; no amontones las sesiones perdidas.</p>
     <p><b>Cómo medir:</b> anota repeticiones reales y margen en las notas, compara cargas con el mismo recorrido y sigue cintura y media semanal del peso.</p>
@@ -1500,7 +1567,7 @@ function renderDay(day){
     </div>
     <div class="pbar"><i style="width:${(pr.pct*100).toFixed(1)}%"></i></div>`;
 
-  h += live ? renderLiveExercises(day) + day.blocks.filter(b=>b.t==='wod').map(b=>renderBlock(b,day)).join('') : day.blocks.map(b => renderBlock(b, day)).join('');
+  h += live ? day.blocks.filter(b=>b.t==='prep').map(b=>renderBlock(b,day)).join('') + renderLiveExercises(day) + renderConditioning(day.blocks,day) : day.blocks.map(b => renderBlock(b, day)).join('');
 
   if (live) {
     h += `<div class="sec"><h2>Notas de la sesión</h2><span class="meta">opcional</span></div>
@@ -1519,13 +1586,19 @@ function renderDay(day){
 function renderLiveExercises(day){
   const xs=ensureSessionExercises(day);
   const body=xs.map(e=>`<div class="ex${exFull(e)?' full':''}${e.skipped?' skipped':''}">${exBody(e,day)}
+    ${e.pair?`<div class="pair-label">Superserie · ${e.pairPosition===1?'1 → completa después su pareja':'2 → descansa al terminar'}<span>${esc(e.pair.split('·')[0])}</span></div>`:''}
     ${e.skipped?'<div class="skip-note">Saltado · recupéralo en el botón de edición</div>':exTrack(e,day)}</div>`).join('');
   const opts=catalog().map(x=>`<option value="${esc(x.id)}">${esc(x.nm)}</option>`).join('');
   return `<div class="sec"><h2>Ejercicios de hoy</h2><span class="meta">cambia · ordena · salta</span></div>${body}<div class="add-ex"><select data-act="add-ex"><option value="">＋ Añadir ejercicio</option>${opts}</select></div>`;
 }
 
+function renderConditioning(blocks,day){
+  return blocks.map(b=>b.t==='wod'?renderBlock(b,day):b.t==='switch'?renderConditioning(b.variants[S.picks[b.k]||0]||[],day):'').join('');
+}
+
 function renderBlock(b, day){
   switch (b.t) {
+    case 'prep': return `<details class="prep-card" open><summary>${esc(b.h)} <span>2 vueltas · ligero</span></summary><p>${esc(b.x)}</p></details>`;
     case 'sec': return `<div class="sec"><h2>${esc(b.h)}</h2>${b.meta?`<span class="meta">${esc(b.meta)}</span>`:''}</div>`;
     case 'ex':  return `<div class="ex${exFull(b)?' full':''}">${exBody(b, day)}${exTrack(b, day)}</div>`;
     case 'ss':  return `<div class="ss"><div class="tag">${esc(b.tag)}</div>${b.items.map(x =>
@@ -1584,7 +1657,7 @@ function exBody(e, day){
       ${e.cue?`<div class="cue">${e.cue}</div>`:''}
       ${last?`<div class="last">Última vez: <b>${esc(lastText(actual.id))}</b> · ${esc(dstr(last.ts||Date.now()))}</div>`:''}
     </div>
-    <div class="dose">${esc(e.reps||'')}${e.rest?`<span class="u">desc ${e.rest}s</span>`:''}</div>
+    <div class="dose">${esc(e.reps||'')}${e.rest?`<span class="u">desc ${mmss(restFor(e))}</span>`:''}</div>
     <button class="ex-edit" data-act="ex-menu" data-slot="${esc(slotKey(e))}" aria-label="Editar ${esc(actual.nm)}">⋯</button>
   </div>${renderExerciseGuide(e)}`;
 }
@@ -1622,7 +1695,8 @@ function renderExMenu(){
   el.classList.add('on');
 }
 function renderExerciseGuide(e){
-  const g = EX_GUIDE[e.id] || EX_GUIDE[e.baseId];
+  const day=DAYVIEW&&dayById(DAYVIEW), id=day?chosenId(day,e):e.id;
+  const g = EX_GUIDE[id] || EX_GUIDE[e.id] || EX_GUIDE[e.baseId];
   if (!g) return '';
   return `<details class="exguide"><summary>Cómo hacerlo y alternativas</summary><p>${esc(g.how)}</p><p><b>Alternativas:</b> ${esc(g.alts)}</p></details>`;
 }
@@ -1774,7 +1848,7 @@ function startSession(dayId){
 }
 function cancelSession(){
   if (!confirm('¿Descartar la sesión en curso? No se guardará nada.')) return;
-  S.active = null; save(); render(); wake(false); toast('Sesión descartada.');
+  S.active = null; skipRest(); save(); render(); wake(false); toast('Sesión descartada.');
 }
 function finishSession(){
   const a = S.active; if (!a) return;
@@ -1807,7 +1881,7 @@ function finishSession(){
     if (!e.kg) return;
     if (!S.prs[e.id] || e.kg > S.prs[e.id].kg) { S.prs[e.id] = { kg:e.kg, nm:e.nm, ts:ses.ts }; newPr.push(e.nm); }
   });
-  S.history.unshift(ses); S.active = null; save(); wake(false);
+  S.history.unshift(ses); S.active = null; skipRest(); save(); wake(false);
   const min = Math.round(ses.dur/60000);
   const setsN = entries.reduce((s,e) => s + e.sets, 0);
   render(); go('hoy');
@@ -1838,8 +1912,14 @@ function syncSession(){
 
 /* ---------------- descanso / cronómetro ---------------- */
 const R2 = 34, C2 = 2*Math.PI*R2;
-let RT = { mode:'down',end:0,total:0,int:null,done:false,running:false,started:0,elapsed:0,paused:0 };
+let RT = { mode:'down',end:0,total:0,int:null,done:false,running:false,started:0,elapsed:0,paused:0,minimized:false };
+function syncTimerDock(){
+  const dock=$('#timer-dock');
+  dock.classList.toggle('on',RT.minimized&&!RT.done);
+  dock.textContent=(RT.mode==='up'?'Cronómetro':'Descanso')+' · '+$('#sh-t').textContent+(RT.running?'':' · pausado')+' ↗';
+}
 function startRest(sec, nm, sub){
+  RT.minimized=false;syncTimerDock();
   sec = +sec || S.settings.rest;
   RT.mode='down';RT.total = sec; RT.end = Date.now() + sec*1000; RT.done = false;RT.running=true;RT.paused=0;
   $('#sh-nm').textContent = nm || 'Descanso';
@@ -1852,7 +1932,7 @@ function tickRest(){
   const pause=$('[data-act="timer-pause"]');if(pause)pause.textContent=RT.running?'Pausar':'Reanudar';
   if(RT.mode==='up'){
     const seconds=(RT.elapsed+(RT.running?Date.now()-RT.started:0))/1000;
-    $('#sh-t').textContent=mmss(seconds);$('#sh-fg').setAttribute('stroke-dasharray',`${C2.toFixed(1)} ${C2.toFixed(1)}`);return;
+    $('#sh-t').textContent=mmss(seconds);$('#sh-fg').setAttribute('stroke-dasharray',`${C2.toFixed(1)} ${C2.toFixed(1)}`);syncTimerDock();return;
   }
   const left = RT.running ? Math.max(0, (RT.end - Date.now())/1000) : RT.paused;
   $('#sh-t').textContent = mmss(left);
@@ -1864,6 +1944,7 @@ function tickRest(){
     $('#sh-t').textContent = '¡Ya!'; beep(true); haptic([130,90,130]);
     setTimeout(() => { if (RT.done) $('#sheet').classList.remove('on'); }, 2500);
   }
+  syncTimerDock();
 }
 function addRest(s){
   if(RT.mode!=='down')return;
@@ -1885,7 +1966,7 @@ function pauseTimer(){
   tickRest();
 }
 function resetTimer(){if(RT.mode==='up'){RT.elapsed=0;RT.started=Date.now();}else{RT.paused=RT.total;RT.end=Date.now()+RT.total*1000;}RT.running=true;clearInterval(RT.int);RT.int=setInterval(tickRest,200);tickRest();}
-function skipRest(){ clearInterval(RT.int); RT.done = true;RT.running=false; $('#sheet').classList.remove('on'); }
+function skipRest(){ clearInterval(RT.int); RT.done = true;RT.running=false;RT.minimized=false; $('#sheet').classList.remove('on');syncTimerDock(); }
 function wodSecs(clk){ const m = String(clk).match(/(\d+)[:\s]*(\d+)?/); if (!m) return 600; return m[2] != null ? (+m[1])*60 + (+m[2]) : (+m[1])*60; }
 function wodKey(b){ return 'wod|'+b.hd+'|'+b.clk; }
 
@@ -1951,7 +2032,9 @@ document.addEventListener('click', e => {
   else if (a === 'skip-ex') { const x=S.active&&S.active.exercises.find(e=>e._uid===t.dataset.u); if(x){x.skipped=!x.skipped;save();renderHere();} }
   else if (a === 'move-ex') { const xs=S.active&&S.active.exercises,i=xs?xs.findIndex(e=>e._uid===t.dataset.u):-1,j=i+(+t.dataset.d); if(i>=0&&j>=0&&j<xs.length){[xs[i],xs[j]]=[xs[j],xs[i]];save();renderHere();} }
   else if (a === 'fav') { S.favorites[t.dataset.id]=!S.favorites[t.dataset.id];save();renderHere(); }
-  else if (a === 'manual-timer') { startRest(S.settings.restStandard,'Temporizador manual','Cuenta atrás'); }
+  else if (a === 'manual-timer') { if(!RT.done&&(RT.running||RT.paused||RT.elapsed)){RT.minimized=false;$('#sheet').classList.add('on');syncTimerDock();}else startRest(S.settings.restStandard,'Temporizador manual','Cuenta atrás'); }
+  else if (a === 'timer-minimize') { RT.minimized=true;$('#sheet').classList.remove('on');syncTimerDock(); }
+  else if (a === 'timer-expand') { RT.minimized=false;$('#sheet').classList.add('on');syncTimerDock(); }
   else if (a === 'rnd')    { if (!S.active) { const d = dayById(DAYVIEW); if (!d) return; startSession(d.id); }
                              const r = S.active.rounds = S.active.rounds || {};
                              r[t.dataset.k] = Math.max(0, Math.min(99, (r[t.dataset.k]||0) + (+t.dataset.d)));

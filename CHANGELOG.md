@@ -1,5 +1,17 @@
 # Cambios
 
+## 2.6.0 — 2026-09-14
+
+- Plan 3+1 con objetivo de tres sesiones esenciales y CrossFit opcional, sin alterar calendarios guardados.
+- Jalón al pecho en ambos Upper, con alternativas de dominada e historial independiente.
+- Landmine ambos días, superseries de brazos y laterales + pájaros en Upper B; abdominales en Upper A y Pierna.
+- Preparación ligera de goblet + tobillo separada de las series efectivas, gemelos después de la fuerza.
+- Nueva jerarquía visual móvil: tarjetas, tipografía, contraste y controles de edición.
+- Temporizador minimizable que conserva su tiempo al navegar y reabrirse.
+- Bloques de acondicionamiento visibles durante la sesión, con registro de rondas.
+- Progreso de jalón y landmine disponible junto a los ejercicios anteriores.
+- Verificación de historial, calendario, superseries, preparación, temporizador y diseño móvil.
+
 ## 2.5.0 — 2026-09-08
 
 - La fila de ejercicio en sesión pasa de 11 controles a 6 o 7: la guía, los puntos de serie, el peso y el botón de edición.
