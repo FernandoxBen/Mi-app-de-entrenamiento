@@ -59,11 +59,11 @@ const server = http.createServer((req,res) => {
         upperA:{landmine:get('upper-a','landmine').sets,curl:get('upper-a','curl-biceps').sets,triceps:get('upper-a','triceps-overhead').sets},
         leg:{squat:[get('pierna','sentadilla').sets,get('pierna','sentadilla').reps],bulgarian:[get('pierna','bulgara').sets,get('pierna','bulgara').reps],nordic:get('pierna','nordico').sets},
         upperB:{pulldown:!!get('upper-b','jalon'),hammer:get('upper-b','curl-martillo').sets,triceps:get('upper-b','triceps-polea').sets},
-        conditioning:{hip:get('crossfit','hip-thrust').sets,step:get('crossfit','step-up').sets},
+        conditioning:{deadbug:get('crossfit','dead-bug').sets,pallof:get('crossfit','pallof').sets},
         guide:Object.keys(EX_GUIDE).length
       };
     });
-    assert.deepEqual(program,{upperA:{landmine:2,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{hip:2,step:2},guide:22});
+    assert.deepEqual(program,{upperA:{landmine:2,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{deadbug:2,pallof:2},guide:28});
     const warmup=await page.evaluate(()=>P.warmup.groups.flatMap(g=>g.items.map(x=>x.n)));
     assert.deepEqual(warmup,['Cat-Cow',"World’s Greatest Stretch",'Quadruped Thoracic Rotation','Scapular Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Dorsiflexion']);
     assert.equal(warmup.some(x=>/bici|band|banda|pasos laterales/i.test(x)),false);
@@ -302,7 +302,7 @@ const server = http.createServer((req,res) => {
         uppers:sessions.filter(d=>d.id.startsWith('upper')).map(d=>({landmine:d.ex.find(e=>e.id==='landmine').sets,jalon:d.ex.find(e=>e.id==='jalon-neutro').sets,core:d.ex.some(e=>e.id==='core-anti')})),
         legEffective:sessions.find(d=>d.id==='pierna').ex.reduce((s,e)=>s+e.sets,0)};
     });
-    assert.deepEqual(plan26,{fresh:{'upper-a':0,pierna:2,'upper-b':4,crossfit:-1},plansUnchanged:true,uppers:[{landmine:2,jalon:4,core:true},{landmine:2,jalon:3,core:false}],legEffective:14});
+    assert.deepEqual(plan26,{fresh:{'upper-a':0,pierna:1,'upper-b':3,crossfit:2},plansUnchanged:true,uppers:[{landmine:2,jalon:4,core:true},{landmine:2,jalon:3,core:false}],legEffective:14});
     await page.evaluate(()=>{
       S.history.push({id:'old-pullup',dayId:'upper-a',ts:1,entries:[{id:'dominada-lastrada',nm:'Dominadas lastradas',sets:4,reps:'5',kg:15}]});
       S.drafts={};save();go('day','upper-a');startSession('upper-a');
@@ -344,8 +344,21 @@ const server = http.createServer((req,res) => {
     assert.equal(await page.locator('.prep-card [data-act="set"]').count(),0);
     // Conditioning remains visible after starting either variant, and rounds reach history.
     for(const variant of [0,1]){
-      await page.evaluate(v=>{S.active=null;S.picks.jueves=v;save();go('day','crossfit');startSession('crossfit')},variant);
-      assert.ok(await page.locator('[data-act="wod"]').count()>=1);
+      await page.evaluate(v=>{S.active=null;S.picks['motor-mode']=v;save();go('day','crossfit');startSession('crossfit')},variant);
+      assert.equal(await page.locator('[data-act="wod"]').count(),1);
+      assert.match(await page.locator('#app').textContent(),/Cierre · 3 min/);
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),variant===0?'720':'480');
+      await page.locator('[data-act="set"][data-k^="dead-bug|"]').first().click();
+      await page.evaluate(()=>skipRest());
+      await page.locator('[data-act="pick"][data-k="motor-mode"]').nth(1-variant).click();
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),variant===0?'480':'720');
+      await page.locator('[data-act="pick"][data-k="motor-mode"]').nth(variant).click();
+      await page.locator('[data-act="wod"]').click();
+      assert.equal(await page.evaluate(()=>RT.running),true);
+      await page.locator('[data-act="timer-minimize"]').click();
+      await page.reload();
+      assert.equal(await page.evaluate(()=>Object.entries(S.active.sets).some(([k,v])=>k.startsWith('dead-bug|')&&v[0])),true);
+      await page.evaluate(()=>skipRest());
       await page.locator('[data-act="rnd"][data-d="1"]').first().click();
       await page.locator('[data-act="finish"]').click();
       assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.reps==='rondas'&&e.sets===1)),true);
@@ -379,21 +392,22 @@ const server = http.createServer((req,res) => {
     assert.match(await nordic.textContent(),/Curl femoral sentado/);
     await page.screenshot({path:path.join(root,'tests','nordic-guide-preview.png'),fullPage:true});
     await page.evaluate(()=>go('day','crossfit'));
-    const step=page.locator('.ex').filter({hasText:'Step-up al cajón'}).first();
-    await step.locator('summary').click();
-    assert.match(await step.textContent(),/todo el pie/);
-    assert.match(await step.textContent(),/zancada atrás/);
-    await page.screenshot({path:path.join(root,'tests','step-up-guide-preview.png'),fullPage:true});
+    const stretch=page.locator('.ex').filter({hasText:'World’s Greatest Stretch'}).first();
+    await stretch.locator('summary').click();
+    assert.match(await stretch.textContent(),/rodilla trasera/);
+    assert.match(await stretch.textContent(),/banco estable/);
+    assert.equal(await page.evaluate(()=>flatEx(dayById('crossfit')).some(e=>['hip-thrust','step-up'].includes(e.id))),false);
+    await page.screenshot({path:path.join(root,'tests','mobility-guide-preview.png'),fullPage:true});
     // The installed shell opens the new program offline without touching the user's browser.
     const offlineContext=await browser.newContext({serviceWorkers:'allow'});
     const offlinePage=await offlineContext.newPage();
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.3');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.0');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.6.3');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.0');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);

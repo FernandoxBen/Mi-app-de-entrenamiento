@@ -1,5 +1,13 @@
 # Cambios
 
+## 2.7.0 — 2026-09-23
+
+- Cuarto día renovado: movilidad, control del tronco y circuito moderado, con opción de recuperación.
+- Semana base lunes Upper A, martes Pierna, miércoles Movilidad + motor y jueves Upper B; calendarios guardados intactos.
+- Instrucciones y alternativas por ejercicio, límites por síntomas y progresión conservadora.
+- Selector de circuito y consejos visibles también durante una sesión.
+- Historial, identificadores y datos guardados conservados.
+
 ## 2.6.3 — 2026-09-14
 
 - Eliminadas las transparencias que producían bordes blancos en algunos móviles.

@@ -1,4 +1,12 @@
-# Entreno 2.6.3
+# Entreno 2.7.0
+
+## Novedades 2.7.0
+
+Semana nueva: Upper A lunes, Pierna martes, Movilidad + motor miércoles y Upper B jueves. Los calendarios ya guardados no se sobrescriben y puedes mover cualquier sesión. El cuarto día sigue siendo opcional.
+
+El miércoles integra movilidad guiada, Dead Bug y Pallof ligeros, circuito moderado de 12 minutos y vuelta a la calma. Incluye recuperación suave de 8 minutos. Sin swings, burpees, cleans ni fuerza adicional de pierna. Los ejercicios y circuitos anteriores permanecen en el historial; se conserva el identificador de sesión `crossfit`. No hace falta repetir el calentamiento común ese día.
+
+El circuito usa una cuenta atrás total: no hay avisos automáticos por estación. Las rondas del circuito nuevo tienen claves distintas de las antiguas.
 
 ## Novedades 2.6.3
 

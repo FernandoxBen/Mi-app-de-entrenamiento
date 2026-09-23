@@ -1,5 +1,5 @@
 {
-  "name": "Entreno 2.6.3",
+  "name": "Entreno 2.7.0",
   "short_name": "Entreno",
   "description": "Plan flexible para recomposición, fuerza, acondicionamiento y seguimiento. Funciona sin conexión.",
   "lang": "es",
@@ -81,9 +81,9 @@
       ]
     },
     {
-      "name": "Entreno · CrossFit",
-      "short_name": "CrossFit",
-      "description": "Tu día extra opcional · acondicionamiento",
+      "name": "Entreno · Movilidad + motor",
+      "short_name": "Movilidad",
+      "description": "Movilidad, control postural y circuito moderado",
       "url": "./index.html?d=crossfit",
       "icons": [
         {

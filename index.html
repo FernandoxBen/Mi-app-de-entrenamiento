@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.6.3 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.6.3</title>
+<meta name="description" content="Entreno 2.7.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.7.0</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -577,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.6.3',
+  version: '2.7.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -657,7 +657,7 @@ const P = {
 
     /* ---------------- MARTES · PIERNA ---------------- */
     {
-      id:'pierna', dow:3, day:'Miércoles', name:'Pierna', sub:'Fuerza y mantenimiento · volumen contenido',
+      id:'pierna', dow:2, day:'Martes', name:'Pierna', sub:'Fuerza y mantenimiento · volumen contenido',
       color:'--c-leg', icon:'bolt', mins:50,
       principle:'<b>Fuerza y mantenimiento de pierna.</b> Volumen contenido, descansos completos y técnica estable. El objetivo es conservar músculo, ganar algo de fuerza y tolerar bien el deporte.',
       blocks:[
@@ -687,9 +687,9 @@ const P = {
       ]
     },
 
-    /* ---------------- MIÉRCOLES · UPPER B ---------------- */
+    /* ---------------- JUEVES · UPPER B ---------------- */
     {
-      id:'upper-b', dow:5, day:'Viernes', name:'Upper B', sub:'Volumen · hombros y brazos',
+      id:'upper-b', dow:4, day:'Jueves', name:'Upper B', sub:'Volumen · hombros y brazos',
       color:'--c-upperb', icon:'repeat', mins:55,
       blocks:[
         {t:'warmup'},
@@ -718,69 +718,50 @@ const P = {
       ]
     },
 
-    /* ---------------- JUEVES · CROSSFIT ---------------- */
+    /* ---------------- MIÉRCOLES · MOVILIDAD Y MOTOR ---------------- */
     {
-      id:'crossfit', dow:0, optional:true, day:'Opcional', name:'CrossFit', sub:'Día extra · acondicionamiento a tu ritmo',
-      color:'--c-cf', icon:'waves', mins:65,
-      principle:'<b>Tu +1 opcional.</b> Los tres días de fuerza completan el plan. Añade esta sesión si tienes tiempo y te recuperas bien. Hip thrust y step-up son opcionales: sáltalos si las piernas están cansadas o tienes fútbol cerca.',
+      id:'crossfit', dow:3, optional:true, scheduled:true, day:'Miércoles', name:'Movilidad + motor', sub:'Movilidad · control postural · circuito moderado',
+      color:'--c-cf', icon:'waves', mins:35,
+      principle:'<b>Tu miércoles entre Pierna y Upper.</b> Unos 35 minutos: movilidad 10, control 8, circuito 12 y cierre 3, más transiciones. Sigue este orden; no necesitas repetir el calentamiento común. Es tu cuarto día opcional: si solo puedes tres, conserva la fuerza. Esfuerzo máximo 6/10, sin buscar el fallo. El objetivo es ganar capacidad y moverte con comodidad, no garantizar una postura perfecta ni evitar todas las lesiones. Si el cuello u hombro empeoran, detén ese movimiento; si persiste, consulta a un fisioterapeuta. Hormigueo, debilidad o dolor que baja por el brazo requieren valoración.',
       blocks:[
-        {t:'warmup'},
-        {t:'sec', h:'Fuerza preventiva', meta:'10–15 min'},
-        {t:'ex', id:'hip-thrust', nm:'Hip thrust', cue:'Glúteo · pausa 1 s arriba · deja 2 reps en reserva', sets:2, reps:'6–8', rest:120, kg:1},
-        {t:'ex', id:'step-up', nm:'Step-up al cajón', cue:'Altura moderada · controla la bajada · pelvis estable', sets:2, reps:'6/pierna', rest:90, kg:1},
-        {t:'tip', x:'<b>Dosis pequeña:</b> estas cuatro series completan la semana de pierna sin convertirla en un bloque de hipertrofia. Si tienes fútbol al día siguiente, usa cargas ligeras o sáltalas.'},
-        {t:'sec', h:'Técnica ligera', meta:'5–6 min · sin fatiga'},
-        {t:'pick', k:'tecnica', hint:'Practica el patrón, no busques peso', opts:[
-          {nm:'Kettlebell clean', cue:'Recepción con codo bajo · sin exigir rotación externa al hombro', dose:'3×5', u:'/lado',
-           how:'Desde el suelo entre los pies, tirón explosivo de cadera y la kettlebell "rueda" alrededor del antebrazo hasta descansar pegada al pecho, con el codo abajo. <b>No la levantes con el brazo</b>: sube por el impulso de la cadera. Si te golpea el antebrazo, la estás lanzando en vez de acompañarla.'},
-          {nm:'High pull con mancuerna o KB', cue:'El más seguro · tirón sin recepción', dose:'3×8',
-           how:'Bisagra de cadera y tirón explosivo llevando el codo alto, sin pasar la mano de la altura del pecho. No hay recepción, así que no hay posición comprometida para el hombro.'},
-          {nm:'Clean con barra vacía', cue:'Solo si el hombro va fino ese día', dose:'3×5',
-           how:'Barra vacía, sin añadir disco. El punto delicado es la recepción en rack frontal con los codos altos: exige rotación externa. <b>Para en cuanto notes el hombro</b> y cambia a la versión con kettlebell.'}
-        ]},
-
-        {t:'sec', h:'Bloque principal', meta:'elige enfoque'},
-        {t:'switch', k:'jueves', hint:'Toca para cambiar el bloque de abajo',
+        {t:'sec', h:'1 · Movilidad', meta:'10 min · sin forzar'},
+        {t:'ex', id:'cat-cow', nm:'Cat-Cow', cue:'Mueve la columna despacio · acompaña con la respiración · cuello cómodo', sets:1, reps:'8 ciclos', rest:20},
+        {t:'ex', id:'world-stretch', nm:'World’s Greatest Stretch', cue:'Zancada con rotación · no busques llegar al suelo · 2 segundos por posición', sets:1, reps:'4/lado', rest:20},
+        {t:'ex', id:'thoracic-rotation', nm:'Quadruped Thoracic Rotation', cue:'Gira desde la espalda alta sin arrastrar la pelvis ni forzar el cuello', sets:1, reps:'6/lado', rest:20},
+        {t:'ex', id:'wall-slide', nm:'Scapular Wall Slide', cue:'Desliza los brazos sin arquear la espalda · solo recorrido sin molestias', sets:2, reps:'8', rest:30},
+        {t:'ex', id:'ankle-wall', nm:'Knee-to-Wall Ankle Dorsiflexion', cue:'Talón apoyado · rodilla hacia el segundo dedo · sin rebotes', sets:1, reps:'8/lado', rest:20},
+        {t:'sec', h:'2 · Control del tronco', meta:'8 min · calidad'},
+        {t:'ex', id:'dead-bug', nm:'Dead Bug', cue:'Exhala 3 segundos al extender · acorta el recorrido si se arquea la espalda', sets:2, reps:'6/lado', rest:40},
+        {t:'ex', id:'pallof', nm:'Pallof press', cue:'Resistencia ligera · pausa 2 segundos con brazos extendidos · no gires el tronco', sets:2, reps:'8/lado', rest:40},
+        {t:'sec', h:'3 · Acondicionamiento', meta:'elige según recuperación'},
+        {t:'switch', k:'motor-mode', hint:'Elige antes de empezar; durante la sesión puedes cambiar el modo.',
           opts:[
-            {nm:'CrossFit puro', cue:'AMRAP largo · capacidad de trabajo', dose:'20', u:'min'},
-            {nm:'Fondo para el fútbol', cue:'Intervalos + AMRAP corto · recuperación entre esfuerzos', dose:'25', u:'min'}
+            {nm:'Circuito moderado', cue:'Formato por minutos · 4 rondas · esfuerzo 5–6/10', dose:'12', u:'min'},
+            {nm:'Recuperación suave', cue:'Si vienes cargado · esfuerzo 3–4/10', dose:'8', u:'min'}
           ],
           variants:[
             [
-              {t:'wod', hd:'AMRAP', clk:'20:00', steps:[
-                {n:'12', nm:'Cal remo o bici', cue:'Ritmo sostenible — es fondo, no sprint'},
-                {n:'12', nm:'KB swings · 20–24 kg', cue:'Impulso de cadera, no de hombro'},
-                {n:'40m', nm:'Farmer carry · 22–24 kg/mano'},
-                {n:'8', nm:'Burpees', cue:'Escalado: baja apoyando primero una rodilla y sin flexión si el hombro avisa'},
-                {n:'12', nm:'Dead bug', cue:'6/lado · lumbar pegada, exhala al estirar'}
+              {t:'wod', hd:'Circuito por minutos · 4 rondas', clk:'12:00', steps:[
+                {n:'1 min', nm:'Marcha rápida', cue:'40 s vivos + 20 s suaves. Camina por una zona despejada o marcha en el sitio. Brazos relajados, sin carga y sin correr.'},
+                {n:'1 min', nm:'Pasos laterales sin banda', cue:'40 s de pasos cortos de lado a lado + 20 s suaves. Sin saltos ni sentadillas profundas. Alternativa: otros 40 s de marcha rápida.'},
+                {n:'1 min', nm:'Recuperación caminando', cue:'60 s suaves. Esto completa una ronda de 3 min: registra una ronda y repite hasta cuatro. Debes poder hablar en frases; baja el ritmo si no puedes.'}
               ]},
-              {t:'tip', x:'<b>Ritmo de 20 minutos:</b> deberías terminar cansado pero capaz de otra ronda. Si a los 8 minutos estás reventado, saliste demasiado fuerte. Anota rondas para comparar.'}
+              {t:'tip', x:'<b>Reloj:</b> es una cuenta atrás total de 12 minutos, sin señales entre estaciones. Cambia al cumplirse cada minuto; los primeros dos son 40 s vivos + 20 s suaves. <b>Progresión:</b> mantén cuatro rondas durante dos semanas; si te recuperas bien y el jueves rindes igual, aumenta un poco el ritmo sin pasar de 6/10. No añadas peso ni busques récord de rondas.'}
             ],
             [
-              {t:'wod', hd:'Intervalos', clk:'12 min', steps:[
-                {n:'12×', nm:'30 s fuerte / 30 s suave', cue:'Remo o bici las primeras semanas · luego carrera progresiva'},
-                {n:'8/10', nm:'Intensidad del tramo fuerte', cue:'Duro pero repetible: los 12 deben salirte parecidos'}
+              {t:'wod', hd:'Recuperación suave', clk:'8:00', steps:[
+                {n:'8 min', nm:'Paseo cómodo', cue:'Ritmo continuo de conversación, sin pendientes exigentes. Alternativa: marcha suave en el sitio. Registra una ronda al terminar los ocho minutos.'}
               ]},
-              {t:'tip', x:'<b>Objetivo del bloque:</b> practicar esfuerzos cortos repetidos con recuperación incompleta, una demanda habitual del fútbol. Mantén una intensidad que puedas repetir de forma estable.'},
-              {t:'ex', id:'descanso', nm:'Descanso completo', cue:'Antes del bloque final', sets:1, reps:'3 min', rest:180},
-              {t:'wod', hd:'AMRAP', clk:'10:00', steps:[
-                {n:'12', nm:'KB swings · 20–24 kg'},
-                {n:'40m', nm:'Farmer carry'},
-                {n:'10', nm:'Cal remo'}
-              ]},
-              {t:'note', x:'<b>Progresión de carrera:</b> semanas 1–3 en remo o bici. Luego mete carrera en la mitad de los intervalos, y si el talón aguanta, en todos. <b>Nunca saltes directo a 12 intervalos corriendo.</b>'}
+              {t:'tip', x:'<b>Hoy recuperar también cuenta:</b> si hay agujetas fuertes o el cuello está más sensible, elige esta opción y reduce los ejercicios anteriores a una serie cómoda. Si aun así molesta, termina la sesión.'}
             ]
           ]
         },
-
-        {t:'sec', h:'Cierre', meta:'core · 3 min'},
-        {t:'ex', id:'pallof', nm:'Pallof press', cue:'Antirrotación · clave para cambios de dirección', sets:2, reps:'10/lado', rest:60},
-        {t:'ex', id:'plancha-lat', nm:'Plancha lateral', cue:'Cadera alta, cuerpo alineado', sets:2, reps:'30 s/lado', rest:60},
-
-        {t:'mini', h:'Días imposibles', meta:'mínima · 15 min', groups:[{items:[
-          {n:'Calentamiento corto', d:'5 min'},
-          {n:'8× 30 s fuerte / 30 s suave', d:'8 min'},
-          {n:'Pallof press', d:'2×10/lado'}
+        {t:'note', x:'<b>4 · Cierre · 3 min:</b> camina despacio 2 minutos y respira cómodamente 1 minuto. No mantengas la barbilla retraída ni los hombros hacia atrás todo el día: alterna posiciones. Si al día siguiente estás peor, reduce la próxima sesión y revisa la causa de las molestias.'},
+        {t:'mini', h:'Si solo tienes 20 minutos', meta:'versión corta', groups:[{items:[
+          {n:'Movilidad inicial', d:'1 serie de cada · 7 min'},
+          {n:'Dead Bug + Pallof', d:'1 serie de cada · 3 min'},
+          {n:'Recuperación suave', d:'8 min'},
+          {n:'Caminar despacio', d:'2 min'}
         ]}]}
       ]
     }
@@ -941,6 +922,12 @@ const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 /* Guía breve común: ejecución y cambios equivalentes sin alterar la intención */
 const EX_GUIDE = {
+  'cat-cow': {how:'A cuatro apoyos, alterna suavemente redondear y extender la espalda, respirando. No lleves el cuello a sus extremos.', alts:'Movimientos pequeños sentado, con manos sobre los muslos.'},
+  'world-stretch': {how:'Da una zancada y apoya las manos dentro del pie delantero. Acerca el codo interior sin forzar y rota el brazo hacia arriba; la mirada solo acompaña si resulta cómoda. Puedes apoyar la rodilla trasera.', alts:'Zancada con manos sobre un banco estable, sin rotación si molesta.'},
+  'thoracic-rotation': {how:'A cuatro apoyos, lleva una mano detrás de la cabeza y gira el codo hacia arriba sin mover la pelvis. Haz un recorrido pequeño si lo necesitas.', alts:'Open Book tumbado de lado, rodillas juntas y cabeza apoyada.'},
+  'wall-slide': {how:'Apoya suavemente espalda y antebrazos en la pared si es cómodo. Desliza los brazos arriba sin sacar las costillas. No fuerces a tocar la pared con la cabeza o las manos.', alts:'Deslizamiento de manos sobre una mesa, sentado, sin dolor.'},
+  'ankle-wall': {how:'Frente a la pared, adelanta la rodilla sobre el pie sin despegar el talón. Reduce la distancia hasta conseguirlo sin molestias.', alts:'Balanceo suave de tobillo sentado, sin cargar el peso del cuerpo.'},
+  'dead-bug': {how:'Boca arriba, piernas a 90 grados. Extiende brazo y pierna contrarios al exhalar durante tres segundos; vuelve y cambia. Acorta la palanca si la lumbar pierde control. Seis por lado son doce movimientos lentos.', alts:'Marcha supina: baja un pie cada vez manteniendo los brazos apoyados.'},
   'jalon-neutro': {
     how:'Siéntate con los muslos sujetos y un agarre neutro o medio cómodo. Lleva los codos hacia los costados y el agarre hacia la parte alta del pecho sin balancearte. Deja subir los omóplatos de forma natural al extender los brazos. Detente si reproduce la molestia del cuello o trapecio.',
     alts:'Jalón con agarre medio; dominadas asistidas, libres o lastradas cuando las toleres. Al cambiar a dominadas, ajusta asistencia o lastre para mantener dos repeticiones en reserva.'
@@ -1264,7 +1251,7 @@ const ENTRIES = [
   { id:'upper-a',   nm:'Upper A',   sub:'Fuerza',                day:'upper-a' },
   { id:'pierna',    nm:'Pierna',    sub:'Fuerza de pierna',       day:'pierna' },
   { id:'upper-b',   nm:'Upper B',   sub:'Volumen',               day:'upper-b' },
-  { id:'crossfit',  nm:'CrossFit',  sub:'Acondicionamiento',     day:'crossfit' },
+  { id:'crossfit',  nm:'Movilidad + motor',  sub:'Movilidad y circuito',     day:'crossfit' },
   { id:'movilidad', nm:'Movilidad', sub:'Circuito 17–20 min',     day:'movilidad' },
   { id:'agarre',    nm:'Agarre',    sub:'Extra opcional',         day:'agarre' },
   { id:'historial', nm:'Historial', sub:'Progreso y récords',     view:'historial' }
@@ -1356,7 +1343,7 @@ function normalizePlanning(s){
 function planDate(){ const d = new Date(weekStart(Date.now())); d.setDate(d.getDate()+7*planWeekOffset); return d; }
 function planFor(ts){
   const key = dateKey(new Date(weekStart(ts)));
-  return S.plans[key] || Object.fromEntries(P.days.map(d => [d.id, d.optional?-1:(d.dow+6)%7]));
+  return S.plans[key] || Object.fromEntries(P.days.map(d => [d.id, d.optional&&!d.scheduled?-1:(d.dow+6)%7]));
 }
 function scheduleLabel(d, ts=Date.now()){
   if (!P.days.some(x => x.id === d.id)) return d.day;
@@ -1378,7 +1365,7 @@ function renderPlanner(){
   const a = plan['upper-a'], b = plan['upper-b'], l = plan.pierna, c = plan.crossfit;
   const warnings = [];
   if (a>=0 && b>=0 && Math.abs(a-b)<2) warnings.push('Los dos Upper están consecutivos. Deja un día entre ellos cuando puedas.');
-  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y acondicionamiento están consecutivos. Separa ambas sesiones o reduce la fuerza preventiva.');
+  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y movilidad + motor están consecutivos: usa el circuito moderado y elige recuperación suave si hay fatiga.');
   return `<div class="sec"><h2>Organiza tu semana</h2></div>
     <div class="week-switch"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span>Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
     ${P.days.map(d => `<div class="set planner-row"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
@@ -1595,7 +1582,7 @@ function renderLiveExercises(day){
 }
 
 function renderConditioning(blocks,day){
-  return blocks.map(b=>b.t==='wod'?renderBlock(b,day):b.t==='switch'?renderConditioning(b.variants[S.picks[b.k]||0]||[],day):'').join('');
+  return blocks.map(b=>['wod','tip','note'].includes(b.t)?renderBlock(b,day):b.t==='switch'?renderPick({k:b.k,hint:b.hint,opts:b.opts}) + renderConditioning(b.variants[S.picks[b.k]||0]||[],day):'').join('');
 }
 
 function renderBlock(b, day){

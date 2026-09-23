@@ -28,3 +28,12 @@ El plan aplica estos criterios:
 ## Límite
 
 La aplicación no conoce el historial clínico, la técnica ni la recuperación real de cada persona. El contenido es una guía general y debe adaptarse si existe dolor, lesión o una indicación médica.
+
+
+
+## Miércoles · movilidad y acondicionamiento (2.7.0)
+
+La distribución y las dosis son una propuesta práctica conservadora para este plan, no un protocolo clínico validado ni una garantía de corrección postural o prevención de lesiones. El circuito por minutos es moderado, inspirado en el formato de entrenamiento funcional; no se presenta como HIIT ni CrossFit de competición. Se evita añadir fuerza de pierna tras el martes y trabajo explosivo de hombros antes del jueves.
+
+- ACSM, High-Intensity Interval Training: For Fitness, for Health or Both? (2019): https://acsm.org/high-intensity-interval-training-fitness/ — beneficios del acondicionamiento y necesidad de controlar el incremento de intensidad y volumen. No es necesario convertir este cuarto día en un esfuerzo máximo.
+- NHS Inform, Exercises for neck problems: https://www.nhsinform.scot/illnesses-and-conditions/muscle-bone-and-joints/neck-and-back-problems-and-conditions/exercises-for-neck-problems/ — introducir ejercicio gradualmente y evitar que empeoren los síntomas globales. La app aconseja valoración si persisten o hay síntomas neurológicos.
