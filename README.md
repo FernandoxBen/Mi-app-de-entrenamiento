@@ -1,4 +1,10 @@
-# Entreno 2.7.0
+# Entreno 2.7.1
+
+## Novedades 2.7.1
+
+Miércoles: 10 min de calentamiento específico, 15 min de movilidad/control y UNA de tres variantes de 20 min: AMRAP, EMOM o intervalos 3+1. Esfuerzo objetivo 7–8/10 tras una primera sesión más suave. Movimientos: remo, swings rusos o peso muerto con kettlebell, burpees escalables, cajón y sentadillas. Incluye técnica, alternativas, descansos y criterios para reducir la carga si aparecen molestias.
+
+Se mantienen calendarios e historiales. El selector nuevo no reutiliza las preferencias de las versiones moderadas. Cada WOD tiene una clave independiente de registro. El reloj es una cuenta atrás total; todavía no hay avisos de estación o intervalo. Cierre opcional de 3 min aparte de los 45 min, más transiciones.
 
 ## Novedades 2.7.0
 

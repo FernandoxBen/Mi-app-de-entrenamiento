@@ -1,5 +1,5 @@
 {
-  "name": "Entreno 2.7.0",
+  "name": "Entreno 2.7.1",
   "short_name": "Entreno",
   "description": "Plan flexible para recomposición, fuerza, acondicionamiento y seguimiento. Funciona sin conexión.",
   "lang": "es",
@@ -81,9 +81,9 @@
       ]
     },
     {
-      "name": "Entreno · Movilidad + motor",
+      "name": "Entreno · Movilidad + CrossFit",
       "short_name": "Movilidad",
-      "description": "Movilidad, control postural y circuito moderado",
+      "description": "10 min preparar, 15 movilidad y tres WOD de 20 min",
       "url": "./index.html?d=crossfit",
       "icons": [
         {

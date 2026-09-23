@@ -37,3 +37,12 @@ La distribución y las dosis son una propuesta práctica conservadora para este 
 
 - ACSM, High-Intensity Interval Training: For Fitness, for Health or Both? (2019): https://acsm.org/high-intensity-interval-training-fitness/ — beneficios del acondicionamiento y necesidad de controlar el incremento de intensidad y volumen. No es necesario convertir este cuarto día en un esfuerzo máximo.
 - NHS Inform, Exercises for neck problems: https://www.nhsinform.scot/illnesses-and-conditions/muscle-bone-and-joints/neck-and-back-problems-and-conditions/exercises-for-neck-problems/ — introducir ejercicio gradualmente y evitar que empeoren los síntomas globales. La app aconseja valoración si persisten o hay síntomas neurológicos.
+
+
+
+## Miércoles · tres WOD (2.7.1)
+
+A petición del usuario, la versión moderada de 2.7.0 se sustituye por un bloque exigente de 20 minutos. El esquema 10+15+20, los ejercicios, dosis y escalados son decisiones prácticas de programación, no un protocolo clínico ni una receta avalada individualmente por las fuentes. Se comienza a 6–7/10 y se propone 7–8/10 si se tolera. Se considera también la fatiga del martes y el Upper del jueves; tener días posteriores sin pierna no garantiza recuperación completa. El bloque de movilidad/control no garantiza prevenir lesiones.
+
+- ACSM: https://acsm.org/high-intensity-interval-training-fitness/ — controlar incrementos de intensidad y volumen; la intensidad alta no es indispensable para beneficios de salud.
+- NHS Inform: https://www.nhsinform.scot/illnesses-and-conditions/muscle-bone-and-joints/neck-and-back-problems-and-conditions/exercises-for-neck-problems — el ejercicio no debe empeorar globalmente el dolor cervical. Ante empeoramiento, adaptar y valorar con un profesional.

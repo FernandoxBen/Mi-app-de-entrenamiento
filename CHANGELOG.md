@@ -1,5 +1,12 @@
 # Cambios
 
+## 2.7.1 — 2026-09-23
+
+- Miércoles 10+15+20: calentamiento específico, movilidad/control y acondicionamiento intenso adaptable.
+- Tres WOD independientes: AMRAP 20, EMOM 20 e intervalos 3 min/1 min durante 20 min.
+- Técnica, alternativas, descansos y progresión sin cargas fijas ni fallo.
+- Conservados los entrenamientos previos, el calendario y las rondas antiguas.
+
 ## 2.7.0 — 2026-09-23
 
 - Cuarto día renovado: movilidad, control del tronco y circuito moderado, con opción de recuperación.

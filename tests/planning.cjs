@@ -343,16 +343,20 @@ const server = http.createServer((req,res) => {
     assert.match(await page.locator('.prep-card').textContent(),/Goblet Squat/);
     assert.equal(await page.locator('.prep-card [data-act="set"]').count(),0);
     // Conditioning remains visible after starting either variant, and rounds reach history.
-    for(const variant of [0,1]){
-      await page.evaluate(v=>{S.active=null;S.picks['motor-mode']=v;save();go('day','crossfit');startSession('crossfit')},variant);
+    for(const variant of [0,1,2]){
+      await page.evaluate(v=>{S.active=null;S.picks['cf-mode']=v;save();go('day','crossfit');startSession('crossfit')},variant);
       assert.equal(await page.locator('[data-act="wod"]').count(),1);
       assert.match(await page.locator('#app').textContent(),/Cierre · 3 min/);
-      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),variant===0?'720':'480');
+      assert.match(await page.locator('.prep-card').textContent(),/10 min · sin fatiga/);
+      assert.equal(await page.locator('.prep-card p').count(),3);
+      assert.doesNotMatch(await page.locator('.prep-card').textContent(),/<b>|<br>/);
+      assert.equal(await page.locator('[data-act="pick"][data-k="cf-mode"]').count(),3);
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
       await page.locator('[data-act="set"][data-k^="dead-bug|"]').first().click();
       await page.evaluate(()=>skipRest());
-      await page.locator('[data-act="pick"][data-k="motor-mode"]').nth(1-variant).click();
-      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),variant===0?'480':'720');
-      await page.locator('[data-act="pick"][data-k="motor-mode"]').nth(variant).click();
+      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth((variant+1)%3).click();
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
+      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth(variant).click();
       await page.locator('[data-act="wod"]').click();
       assert.equal(await page.evaluate(()=>RT.running),true);
       await page.locator('[data-act="timer-minimize"]').click();
@@ -404,10 +408,10 @@ const server = http.createServer((req,res) => {
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.0');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.1');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.0');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.1');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);

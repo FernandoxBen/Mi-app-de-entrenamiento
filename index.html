@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.7.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.7.0</title>
+<meta name="description" content="Entreno 2.7.1 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.7.1</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -577,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.7.0',
+  version: '2.7.1',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -720,49 +720,61 @@ const P = {
 
     /* ---------------- MIÉRCOLES · MOVILIDAD Y MOTOR ---------------- */
     {
-      id:'crossfit', dow:3, optional:true, scheduled:true, day:'Miércoles', name:'Movilidad + motor', sub:'Movilidad · control postural · circuito moderado',
-      color:'--c-cf', icon:'waves', mins:35,
-      principle:'<b>Tu miércoles entre Pierna y Upper.</b> Unos 35 minutos: movilidad 10, control 8, circuito 12 y cierre 3, más transiciones. Sigue este orden; no necesitas repetir el calentamiento común. Es tu cuarto día opcional: si solo puedes tres, conserva la fuerza. Esfuerzo máximo 6/10, sin buscar el fallo. El objetivo es ganar capacidad y moverte con comodidad, no garantizar una postura perfecta ni evitar todas las lesiones. Si el cuello u hombro empeoran, detén ese movimiento; si persiste, consulta a un fisioterapeuta. Hormigueo, debilidad o dolor que baja por el brazo requieren valoración.',
+      id:'crossfit', dow:3, optional:true, scheduled:true, day:'Miércoles', name:'Movilidad + CrossFit', sub:'10 min preparar · 15 movilidad · 20 WOD',
+      color:'--c-cf', icon:'waves', mins:45,
+      principle:'<b>Miércoles · 45 minutos + transiciones.</b> Haz 10 min de preparación, 15 de movilidad y control, y UNA de las tres variantes de 20 min. No repitas el calentamiento común. Primera sesión a 6–7/10; después 7–8/10 si recuperas bien. Las piernas también trabajan hoy: aunque después descansen varios días, valora la fatiga del martes y tu rendimiento del jueves. La movilidad no garantiza prevenir lesiones. Si aparece dolor de cuello u hombro, cambia el movimiento; si persiste, para y consulta. Hormigueo o debilidad requieren valoración.',
       blocks:[
-        {t:'sec', h:'1 · Movilidad', meta:'10 min · sin forzar'},
+        {t:'prep', h:'1 · Calentamiento específico', meta:'10 min · sin fatiga', parts:["0–3 min: Row fácil, aumentando el ritmo. Alternativa: caminata viva si el remo molesta.","3–7 min: dos vueltas tranquilas de 6 Air Squats, 8 Hip Hinges sin peso, 6 Scapular Push-ups apoyado en banco y 4 World’s Greatest Stretch por lado. Reduce repeticiones si necesitas más tiempo.","7–10 min: ensaya con poca carga los movimientos del WOD elegido: 5 KB Deadlifts antes del swing, 4 Step-ups por lado y 3 Burpees a banco sin salto. Debes llegar preparado, no cansado. No hay bici ni pasos con banda."]},
+        {t:'sec', h:'2 · Movilidad y control', meta:'15 min en total · sin dolor'},
         {t:'ex', id:'cat-cow', nm:'Cat-Cow', cue:'Mueve la columna despacio · acompaña con la respiración · cuello cómodo', sets:1, reps:'8 ciclos', rest:20},
         {t:'ex', id:'world-stretch', nm:'World’s Greatest Stretch', cue:'Zancada con rotación · no busques llegar al suelo · 2 segundos por posición', sets:1, reps:'4/lado', rest:20},
         {t:'ex', id:'thoracic-rotation', nm:'Quadruped Thoracic Rotation', cue:'Gira desde la espalda alta sin arrastrar la pelvis ni forzar el cuello', sets:1, reps:'6/lado', rest:20},
         {t:'ex', id:'wall-slide', nm:'Scapular Wall Slide', cue:'Desliza los brazos sin arquear la espalda · solo recorrido sin molestias', sets:2, reps:'8', rest:30},
         {t:'ex', id:'ankle-wall', nm:'Knee-to-Wall Ankle Dorsiflexion', cue:'Talón apoyado · rodilla hacia el segundo dedo · sin rebotes', sets:1, reps:'8/lado', rest:20},
-        {t:'sec', h:'2 · Control del tronco', meta:'8 min · calidad'},
+        {t:'sec', h:'Completa el bloque de 15 min', meta:'tronco · calidad'},
         {t:'ex', id:'dead-bug', nm:'Dead Bug', cue:'Exhala 3 segundos al extender · acorta el recorrido si se arquea la espalda', sets:2, reps:'6/lado', rest:40},
         {t:'ex', id:'pallof', nm:'Pallof press', cue:'Resistencia ligera · pausa 2 segundos con brazos extendidos · no gires el tronco', sets:2, reps:'8/lado', rest:40},
-        {t:'sec', h:'3 · Acondicionamiento', meta:'elige según recuperación'},
-        {t:'switch', k:'motor-mode', hint:'Elige antes de empezar; durante la sesión puedes cambiar el modo.',
+        {t:'sec', h:'3 · CrossFit adaptado', meta:'20 min · elige UNO'},
+        {t:'switch', k:'cf-mode', hint:'Tres alternativas, no tres bloques seguidos. Mantén una variante dos semanas para comparar con la misma carga y técnica.',
           opts:[
-            {nm:'Circuito moderado', cue:'Formato por minutos · 4 rondas · esfuerzo 5–6/10', dose:'12', u:'min'},
-            {nm:'Recuperación suave', cue:'Si vienes cargado · esfuerzo 3–4/10', dose:'8', u:'min'}
+            {nm:'A · AMRAP 20', cue:'Rondas continuas · ritmo exigente sostenible', dose:'20', u:'min'},
+            {nm:'B · EMOM 20', cue:'Una estación por minuto · descanso programado', dose:'20', u:'min'},
+            {nm:'C · Intervalos 3 + 1', cue:'3 min de trabajo + 1 de descanso · cinco bloques', dose:'20', u:'min'}
           ],
           variants:[
             [
-              {t:'wod', hd:'Circuito por minutos · 4 rondas', clk:'12:00', steps:[
-                {n:'1 min', nm:'Marcha rápida', cue:'40 s vivos + 20 s suaves. Camina por una zona despejada o marcha en el sitio. Brazos relajados, sin carga y sin correr.'},
-                {n:'1 min', nm:'Pasos laterales sin banda', cue:'40 s de pasos cortos de lado a lado + 20 s suaves. Sin saltos ni sentadillas profundas. Alternativa: otros 40 s de marcha rápida.'},
-                {n:'1 min', nm:'Recuperación caminando', cue:'60 s suaves. Esto completa una ronda de 3 min: registra una ronda y repite hasta cuatro. Debes poder hablar en frases; baja el ritmo si no puedes.'}
+              {t:'wod', hd:'A · AMRAP CrossFit', clk:'20:00', steps:[
+                {n:'200m', nm:'Remo ergómetro', cue:'Piernas → tronco → brazos; vuelve brazos → tronco → piernas. No tires con el cuello. Alternativa: 60 s de caminata rápida en pendiente cómoda.'},
+                {n:'10', nm:'KB swings rusos', cue:'Bisagra de cadera, pesa como máximo al pecho y cuello neutro. Solo si dominas la técnica. Alternativa: 10 KB Deadlifts.'},
+                {n:'6', nm:'Burpees', cue:'Ritmo controlado, sin obligación de flexión ni salto. Alternativa: manos en banco estable y un pie atrás cada vez; si molesta el hombro, 40 s de marcha rápida.'},
+                {n:'10', nm:'Box step-overs', cue:'Sin carga, cajón bajo y estable. Sube y pasa al otro lado; 10 pasos completos alternando la pierna inicial. Baja caminando, sin saltar. Alternativa: 10 Air Squats.'}
               ]},
-              {t:'tip', x:'<b>Reloj:</b> es una cuenta atrás total de 12 minutos, sin señales entre estaciones. Cambia al cumplirse cada minuto; los primeros dos son 40 s vivos + 20 s suaves. <b>Progresión:</b> mantén cuatro rondas durante dos semanas; si te recuperas bien y el jueves rindes igual, aumenta un poco el ritmo sin pasar de 6/10. No añadas peso ni busques récord de rondas.'}
+              {t:'tip', x:'<b>AMRAP:</b> repite el circuito durante 20 min. Anota solo rondas completas; escribe el avance de la última en las notas. Puedes parar para recuperar aire. No sacrifiques técnica por otra ronda.'}
             ],
             [
-              {t:'wod', hd:'Recuperación suave', clk:'8:00', steps:[
-                {n:'8 min', nm:'Paseo cómodo', cue:'Ritmo continuo de conversación, sin pendientes exigentes. Alternativa: marcha suave en el sitio. Registra una ronda al terminar los ocho minutos.'}
+              {t:'wod', hd:'B · EMOM CrossFit · 4 rondas', clk:'20:00', steps:[
+                {n:'Min 1', nm:'Remo ergómetro · 40 s', cue:'Esfuerzo 7–8/10 y 20 s para recuperar. Alternativa: 40 s de marcha rápida en pendiente cómoda.'},
+                {n:'Min 2', nm:'10 KB swings rusos', cue:'Pesa hasta el pecho. Alternativa: 10 KB Deadlifts. Acaba antes de 40 s y descansa el resto del minuto.'},
+                {n:'Min 3', nm:'8 Goblet Squats', cue:'Carga ligera o moderada, sin fallo. Pie completo apoyado, baja hasta donde controles. Alternativa: 10 Air Squats. Acaba antes de 40 s.'},
+                {n:'Min 4', nm:'6 Burpees', cue:'Puedes hacerlos sin salto y con manos en banco. Si no acabas en 40 s, haz 4. Si molesta el hombro, cambia por 40 s de marcha rápida.'},
+                {n:'Min 5', nm:'Descanso completo', cue:'Respira y prepara la siguiente vuelta. Repite cuatro veces los cinco minutos: 20 min. Registra una ronda por vuelta de cinco minutos.'}
               ]},
-              {t:'tip', x:'<b>Hoy recuperar también cuenta:</b> si hay agujetas fuertes o el cuello está más sensible, elige esta opción y reduce los ejercicios anteriores a una serie cómoda. Si aun así molesta, termina la sesión.'}
+              {t:'tip', x:'<b>EMOM:</b> empieza cada estación al inicio del minuto. Si necesitas más de 40 s, reduce carga o repeticiones para conservar al menos 20 s de recuperación. No conviertas el minuto de descanso en trabajo extra.'}
+            ],
+            [
+              {t:'wod', hd:'C · Intervalos CrossFit · 5 bloques', clk:'20:00', steps:[
+                {n:'3 min', nm:'Circuito de trabajo', cue:'Repite 150 m de remo → 8 KB Deadlifts → 10 Air Squats hasta cumplir 3 min. Alternativa al remo: 45 s de marcha rápida en pendiente cómoda. Retoma desde el remo en cada bloque.'},
+                {n:'8', nm:'KB Deadlifts · dentro del circuito', cue:'Pesa entre los pies, cadera atrás y espalda estable. Sube empujando el suelo, sin encoger hombros. Usa una carga que permita varias repeticiones más; no busques un peso máximo.'},
+                {n:'10', nm:'Air Squats · dentro del circuito', cue:'Sentadilla sin peso, talones apoyados y rango cómodo. Alternativa: sentarse y levantarse de un banco estable.'},
+                {n:'1 min', nm:'Descanso entre bloques', cue:'Tras cada 3 min de trabajo, descansa 1 min, también en el quinto bloque. Son cinco bloques de 4 min. Registra una ronda por bloque, no por vuelta del circuito.'}
+              ]},
+              {t:'tip', x:'<b>Intervalos:</b> repite los cinco bloques a un ritmo parecido, sin sprint inicial. Anota en las notas las vueltas y repeticiones de cada bloque para comparar tu capacidad de repetir esfuerzos.'}
             ]
           ]
         },
-        {t:'note', x:'<b>4 · Cierre · 3 min:</b> camina despacio 2 minutos y respira cómodamente 1 minuto. No mantengas la barbilla retraída ni los hombros hacia atrás todo el día: alterna posiciones. Si al día siguiente estás peor, reduce la próxima sesión y revisa la causa de las molestias.'},
-        {t:'mini', h:'Si solo tienes 20 minutos', meta:'versión corta', groups:[{items:[
-          {n:'Movilidad inicial', d:'1 serie de cada · 7 min'},
-          {n:'Dead Bug + Pallof', d:'1 serie de cada · 3 min'},
-          {n:'Recuperación suave', d:'8 min'},
-          {n:'Caminar despacio', d:'2 min'}
-        ]}]}
+        {t:'tip', x:'<b>Cargas y progresión:</b> elige pesos que puedas mover sin cambiar la técnica y dejando unas 3 repeticiones en reserva. Empieza por la versión sin salto y con poco peso. Tras dos sesiones bien toleradas, mejora un poco el ritmo O la carga mínima, nunca ambos a la vez. Si las agujetas cambian tu movimiento, reduce repeticiones/carga o termina antes. No añadas kipping, snatch ni empujes explosivos sobre la cabeza mientras molesten cuello u hombro.'},
+        {t:'note', x:'<b>Reloj:</b> cuenta atrás total de 20 min, sin avisos automáticos por minuto o intervalo. En EMOM cambia cada minuto mirando el reloj; en intervalos descansa cuando queden 17, 13, 9, 5 y 1 min, y reinicia el trabajo a 16, 12, 8 y 4. Elige variante antes de arrancar. Si necesitas cambiar a mitad, conserva el reloj en marcha y su tiempo restante como límite; no pulses de nuevo el reloj del WOD ni añadas otros 20 min.'},
+        {t:'note', x:'<b>4 · Cierre · 3 min adicionales:</b> camina despacio y deja bajar la respiración. El total previsto es 45 min más transiciones y este cierre. Si el jueves rindes peor de forma repetida o las molestias duran hasta el día siguiente, reduce el WOD. Esto es acondicionamiento intenso, no rehabilitación cervical.'}
       ]
     }
   ],
@@ -1251,7 +1263,7 @@ const ENTRIES = [
   { id:'upper-a',   nm:'Upper A',   sub:'Fuerza',                day:'upper-a' },
   { id:'pierna',    nm:'Pierna',    sub:'Fuerza de pierna',       day:'pierna' },
   { id:'upper-b',   nm:'Upper B',   sub:'Volumen',               day:'upper-b' },
-  { id:'crossfit',  nm:'Movilidad + motor',  sub:'Movilidad y circuito',     day:'crossfit' },
+  { id:'crossfit',  nm:'Movilidad + CrossFit',  sub:'Tres WOD de 20 min',     day:'crossfit' },
   { id:'movilidad', nm:'Movilidad', sub:'Circuito 17–20 min',     day:'movilidad' },
   { id:'agarre',    nm:'Agarre',    sub:'Extra opcional',         day:'agarre' },
   { id:'historial', nm:'Historial', sub:'Progreso y récords',     view:'historial' }
@@ -1365,7 +1377,7 @@ function renderPlanner(){
   const a = plan['upper-a'], b = plan['upper-b'], l = plan.pierna, c = plan.crossfit;
   const warnings = [];
   if (a>=0 && b>=0 && Math.abs(a-b)<2) warnings.push('Los dos Upper están consecutivos. Deja un día entre ellos cuando puedas.');
-  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y movilidad + motor están consecutivos: usa el circuito moderado y elige recuperación suave si hay fatiga.');
+  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y CrossFit están consecutivos: ajusta cargas y repeticiones según la fatiga del martes y revisa cómo llegas al Upper del jueves.');
   return `<div class="sec"><h2>Organiza tu semana</h2></div>
     <div class="week-switch"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span>Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
     ${P.days.map(d => `<div class="set planner-row"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
@@ -1587,7 +1599,7 @@ function renderConditioning(blocks,day){
 
 function renderBlock(b, day){
   switch (b.t) {
-    case 'prep': return `<details class="prep-card" open><summary>${esc(b.h)} <span>2 vueltas · ligero</span></summary><p>${esc(b.x)}</p></details>`;
+    case 'prep': return `<details class="prep-card" open><summary>${esc(b.h)} <span>${esc(b.meta||'2 vueltas · ligero')}</span></summary>${(b.parts||[b.x]).map(x=>'<p>'+esc(x)+'</p>').join('')}</details>`;
     case 'sec': return `<div class="sec"><h2>${esc(b.h)}</h2>${b.meta?`<span class="meta">${esc(b.meta)}</span>`:''}</div>`;
     case 'ex':  return `<div class="ex${exFull(b)?' full':''}">${exBody(b, day)}${exTrack(b, day)}</div>`;
     case 'ss':  return `<div class="ss"><div class="tag">${esc(b.tag)}</div>${b.items.map(x =>
