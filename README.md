@@ -1,4 +1,10 @@
-# Entreno 2.7.1
+# Entreno 2.7.2
+
+## Novedades 2.7.2
+
+Cuarta variante de CrossFit: AMRAP Full kettlebell de 20 minutos, con swing, goblet squat, remo apoyado, floor press y suitcase march. No sustituye las variantes A/B/C ni comparte sus claves de rondas.
+
+Nuevo extra Casa · Cardio + core: 3 min de preparación, 15 min de circuito (tres vueltas de cinco estaciones, hasta 40 s de trabajo y al menos 20 s de transición) y 2 min de cierre. Asume mancuernas de 15 kg con opciones de una pesa y sin carga. Se registra por rondas y notas, no como series/pesos individuales del WOD. No se añade automáticamente al calendario ni cuenta como una sesión esencial. Aparece en Hoy y Semana, dentro de Extras, y admite el acceso ?d=casa-20.
 
 ## Novedades 2.7.1
 

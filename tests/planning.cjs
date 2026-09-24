@@ -343,18 +343,18 @@ const server = http.createServer((req,res) => {
     assert.match(await page.locator('.prep-card').textContent(),/Goblet Squat/);
     assert.equal(await page.locator('.prep-card [data-act="set"]').count(),0);
     // Conditioning remains visible after starting either variant, and rounds reach history.
-    for(const variant of [0,1,2]){
+    for(const variant of [0,1,2,3]){
       await page.evaluate(v=>{S.active=null;S.picks['cf-mode']=v;save();go('day','crossfit');startSession('crossfit')},variant);
       assert.equal(await page.locator('[data-act="wod"]').count(),1);
       assert.match(await page.locator('#app').textContent(),/Cierre · 3 min/);
       assert.match(await page.locator('.prep-card').textContent(),/10 min · sin fatiga/);
       assert.equal(await page.locator('.prep-card p').count(),3);
       assert.doesNotMatch(await page.locator('.prep-card').textContent(),/<b>|<br>/);
-      assert.equal(await page.locator('[data-act="pick"][data-k="cf-mode"]').count(),3);
+      assert.equal(await page.locator('[data-act="pick"][data-k="cf-mode"]').count(),4);
       assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
       await page.locator('[data-act="set"][data-k^="dead-bug|"]').first().click();
       await page.evaluate(()=>skipRest());
-      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth((variant+1)%3).click();
+      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth((variant+1)%4).click();
       assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
       await page.locator('[data-act="pick"][data-k="cf-mode"]').nth(variant).click();
       await page.locator('[data-act="wod"]').click();
@@ -367,6 +367,28 @@ const server = http.createServer((req,res) => {
       await page.locator('[data-act="finish"]').click();
       assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.reps==='rondas'&&e.sets===1)),true);
     }
+    // Home circuit remains optional, preserves schedules and stores its own rounds.
+    const beforeHome=await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size}));
+    await page.evaluate(()=>{go('day','casa-20');startSession('casa-20')});
+    assert.match(await page.locator('.session-head').textContent(),/Registro por rondas/);
+    assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'900');
+    await page.locator('[data-act="wod"]').click();
+    assert.equal(await page.evaluate(()=>RT.running),true);
+    await page.locator('[data-act="timer-minimize"]').click();
+    await page.locator('[data-act="rnd"][data-d="1"]').click();
+    await page.locator('#snote').fill('15 kg · RPE 6 · una ronda de prueba');
+    await page.locator('#snote').blur();
+    await page.reload();
+    assert.equal(await page.evaluate(()=>Object.values(S.active.rounds)[0]),1);
+    await page.evaluate(()=>skipRest());
+    await page.locator('[data-act="finish"]').click();
+    await page.reload();
+    assert.deepEqual(await page.evaluate(()=>({day:S.history[0].dayId,rounds:S.history[0].entries[0].sets,note:S.history[0].note})),{day:'casa-20',rounds:1,note:'15 kg · RPE 6 · una ronda de prueba'});
+    assert.deepEqual(await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size})),beforeHome);
+    assert.equal(await page.evaluate(()=>new Set(S.history.filter(h=>h.dayId==='crossfit').flatMap(h=>h.entries.filter(e=>e.reps==='rondas').map(e=>e.id))).size>=4),true);
+    for(const width of [320,390,768])await checkLayout(width,'day','casa-20');
+    await page.setViewportSize({width:390,height:844});
+    await page.screenshot({path:path.join(root,'tests','home-circuit-preview.png'),fullPage:true});
     assert.equal(await page.locator('#navtimer').isVisible(),false);
     await page.waitForTimeout(2800);
     for(const width of [320,390]){
@@ -408,10 +430,10 @@ const server = http.createServer((req,res) => {
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.1');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.2');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.1');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.2');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);

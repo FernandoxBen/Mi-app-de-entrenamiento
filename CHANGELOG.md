@@ -1,5 +1,12 @@
 # Cambios
 
+## 2.7.2 — 2026-09-24
+
+- AMRAP de 20 minutos Full kettlebell añadido como cuarta variante.
+- Extra para casa de 20 minutos: cardio, core y cuerpo completo con opciones para mancuernas de 15 kg.
+- Instrucciones, alternativas, criterios de recuperación y registro independiente de rondas.
+- Cabecera de sesiones sin series adaptada al registro por rondas.
+
 ## 2.7.1 — 2026-09-23
 
 - Miércoles 10+15+20: calentamiento específico, movilidad/control y acondicionamiento intenso adaptable.

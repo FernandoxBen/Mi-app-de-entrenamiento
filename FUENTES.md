@@ -27,6 +27,8 @@ El plan aplica estos criterios:
 
 ## Límite
 
+Actualización 2.7.2: las dosis del AMRAP kettlebell y del circuito casero son propuestas de programación, no protocolos clínicos validados. El extra casero se propone una vez por semana a esfuerzo moderado, ajustándolo al rendimiento posterior y sin asumir que 15 kg sean adecuados para todos los movimientos. Se mantienen los principios de progresión y recuperación de ACSM: https://acsm.org/high-intensity-interval-training-fitness/ . Las alternativas sin carga priorizan tolerancia; no equivalen necesariamente al mismo estímulo de fuerza.
+
 La aplicación no conoce el historial clínico, la técnica ni la recuperación real de cada persona. El contenido es una guía general y debe adaptarse si existe dolor, lesión o una indicación médica.
 
 

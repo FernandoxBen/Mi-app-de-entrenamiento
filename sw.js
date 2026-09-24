@@ -1,5 +1,5 @@
-/* Entreno 2.7.1 · service worker */
-const V = 'entreno-v2.7.1';
+/* Entreno 2.7.2 · service worker */
+const V = 'entreno-v2.7.2';
 const SHELL = V + '-shell';
 const CORE = [
   './',

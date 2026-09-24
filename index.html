@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.7.1 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.7.1</title>
+<meta name="description" content="Entreno 2.7.2 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.7.2</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -577,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.7.1',
+  version: '2.7.2',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -735,11 +735,12 @@ const P = {
         {t:'ex', id:'dead-bug', nm:'Dead Bug', cue:'Exhala 3 segundos al extender · acorta el recorrido si se arquea la espalda', sets:2, reps:'6/lado', rest:40},
         {t:'ex', id:'pallof', nm:'Pallof press', cue:'Resistencia ligera · pausa 2 segundos con brazos extendidos · no gires el tronco', sets:2, reps:'8/lado', rest:40},
         {t:'sec', h:'3 · CrossFit adaptado', meta:'20 min · elige UNO'},
-        {t:'switch', k:'cf-mode', hint:'Tres alternativas, no tres bloques seguidos. Mantén una variante dos semanas para comparar con la misma carga y técnica.',
+        {t:'switch', k:'cf-mode', hint:'Elige UNA de las cuatro alternativas. D es solo kettlebell. Mantén una variante dos semanas para comparar con la misma carga y técnica.',
           opts:[
             {nm:'A · AMRAP 20', cue:'Rondas continuas · ritmo exigente sostenible', dose:'20', u:'min'},
             {nm:'B · EMOM 20', cue:'Una estación por minuto · descanso programado', dose:'20', u:'min'},
-            {nm:'C · Intervalos 3 + 1', cue:'3 min de trabajo + 1 de descanso · cinco bloques', dose:'20', u:'min'}
+            {nm:'C · Intervalos 3 + 1', cue:'3 min de trabajo + 1 de descanso · cinco bloques', dose:'20', u:'min'},
+            {nm:'D · Full kettlebell AMRAP', cue:'Una kettlebell · cuerpo completo · sin máquinas', dose:'20', u:'min'}
           ],
           variants:[
             [
@@ -769,6 +770,16 @@ const P = {
                 {n:'1 min', nm:'Descanso entre bloques', cue:'Tras cada 3 min de trabajo, descansa 1 min, también en el quinto bloque. Son cinco bloques de 4 min. Registra una ronda por bloque, no por vuelta del circuito.'}
               ]},
               {t:'tip', x:'<b>Intervalos:</b> repite los cinco bloques a un ritmo parecido, sin sprint inicial. Anota en las notas las vueltas y repeticiones de cada bloque para comparar tu capacidad de repetir esfuerzos.'}
+            ],
+            [
+              {t:'wod', hd:'D · AMRAP Full kettlebell', clk:'20:00', steps:[
+                {n:'10', nm:'KB swings rusos', cue:'Una kettlebell, bisagra de cadera y pesa como máximo al pecho. No tires con hombros o cuello. Si no dominas el swing, haz 10 KB Deadlifts. No uses mancuernas ajustables para swings.'},
+                {n:'6', nm:'KB Goblet Squat', cue:'Sujeta la kettlebell cerca del pecho con ambas manos; pie completo apoyado y rango cómodo. Alternativa: 6 sentadillas sin peso si la carga o el agarre molestan.'},
+                {n:'6/lado', nm:'KB Row con apoyo', cue:'Una mano apoyada en muslo o banco estable, cadera atrás y espalda quieta. Lleva la pesa hacia la cadera sin encoger hombros. Cambia de lado tras seis repeticiones. Alternativa: kettlebell más ligera.'},
+                {n:'6/lado', nm:'KB Floor Press', cue:'Tumbado, rodillas flexionadas y muñeca recta. Antebrazo vertical y codo a unos 30–45 grados del tronco; apoya suavemente el brazo en el suelo y empuja. Coloca y retira la pesa ayudándote con ambas manos. Alternativa: pesa más ligera o flexiones en pared si molesta.'},
+                {n:'20s/l', nm:'KB Suitcase March', cue:'Marcha en el sitio 20 s con la pesa a un lado y 20 s al otro. Tronco estable, sin inclinarte ni elevar el hombro. Alternativa: marcha sin carga si tira del cuello.'}
+              ]},
+              {t:'tip', x:'<b>Full kettlebell:</b> repite las cinco estaciones durante 20 min, con pausas cuando lo necesites. No tienes que mantener la pesa en la mano entre ejercicios. Escoge la carga por el remo y el press, no por el swing; puedes usar otra kettlebell más ligera. Primera vez 6–7/10, después 7–8/10 si recuperas bien, sin fallo. Registra rondas completas y apunta carga, cambios y ronda parcial en las notas. Se compara solo con esta variante, no con A, B o C.'}
             ]
           ]
         },
@@ -781,6 +792,27 @@ const P = {
 
   /* ---------------- EXTRAS (sin día fijo) ---------------- */
   extras: [
+    {
+      id:'casa-20', day:'Extra', name:'Casa · Cardio + core', sub:'20 min · cuerpo completo · mancuernas de 15 kg',
+      color:'--c-extra', icon:'flame', mins:20,
+      principle:'<b>Complemento opcional de 20 min.</b> 3 min de preparación + 15 de circuito + 2 de vuelta a la calma. Asumimos dos mancuernas de 15 kg; no es obligatorio usar ambas ni ese peso en todos los movimientos. Busca 5–6/10, hasta 7/10 si estás recuperado, dejando al menos 3 repeticiones en reserva. No sustituye tus Upper ni Pierna. Puedes hacerlo el sábado si te has recuperado del jueves; empieza una vez por semana. Si se acumula fatiga, úsalo en lugar del WOD del miércoles, no además. Sin saltos ni movimientos explosivos sobre la cabeza. Si reaparece dolor cervical o de hombro, detén ese ejercicio; si persiste, consulta.',
+      blocks:[
+        {t:'prep', h:'1 · Preparar', meta:'3 min · sin peso', parts:[
+          'Minuto 1: marcha suave en el sitio, subiendo el ritmo poco a poco.',
+          'Minuto 2: 6 sentadillas sin peso y 6 bisagras de cadera lentas; descansa lo que sobre.',
+          'Minuto 3: 6 flexiones en pared y 4 Dead Bugs por lado, con recorrido corto. Prepara el espacio y las pesas; comprueba cierres si son ajustables.'
+        ]},
+        {t:'wod', hd:'Casa · Cardio y core · 3 rondas', clk:'15:00', steps:[
+          {n:'Min 1', nm:'Marcha rápida + flexiones en pared', cue:'25 s de marcha rápida sin saltos y hasta 5 flexiones en pared durante los siguientes 15 s. Descansa 20 s. Cabeza alineada y codos cómodos. Si el hombro molesta, continúa la marcha sin flexiones.'},
+          {n:'Min 2', nm:'Goblet Squat · 6–8 reps', cue:'Una mancuerna de 15 kg sujetada de forma segura junto al pecho, o sentadilla sin peso si cuesta. Talones apoyados, sin rebotes. Termina antes de 40 s y descansa el resto. No llenes el tiempo con más repeticiones.'},
+          {n:'Min 3', nm:'Remo con mancuerna · 4–6/lado', cue:'Una mano apoyada en el muslo o soporte firme, tronco quieto y tira hacia la cadera. Cambia de mano apoyando antes la pesa en el suelo. Termina ambos lados antes de 40 s; si 15 kg exige balanceo, sustituye por 40 s de Wall Slides sin peso.'},
+          {n:'Min 4', nm:'Dead Bug · 40 s', cue:'Sin peso: boca arriba, extiende brazo y pierna contrarios al exhalar. Movimiento lento, sin arquear la lumbar; no busques velocidad. Descansa 20 s. Alternativa: desliza un talón cada vez por el suelo.'},
+          {n:'Min 5', nm:'Suitcase March · 20 s/lado', cue:'Marcha en el sitio con una mancuerna de 15 kg, 20 s por lado, abdomen estable y hombro sin encoger; pausa para cambiar de mano dentro de esos 40 s. Descansa 20 s. Si pesa demasiado, marcha sin carga. Opcional: las dos mancuernas a los lados durante 30 s solo si mantienes 5–6/10 y ninguna molestia; no es una progresión obligatoria.'}
+        ]},
+        {t:'tip', x:'<b>Tres vueltas de cinco minutos:</b> empieza una estación cada minuto. El trabajo dura como máximo 40 s y quedan al menos 20 s para descansar y cambiar de posición. Marca una ronda al terminar el minuto 5, 10 y 15. El reloj cuenta los 15 min totales y no avisa al cambiar de estación. No repitas el calentamiento general de la app.'},
+        {t:'note', x:'<b>2 · Cierre · 2 min:</b> camina suave y recupera la respiración. Guarda en las notas qué carga usaste, qué alternativas hiciste y el esfuerzo. Si el siguiente entrenamiento de fuerza empeora o aumentan las molestias, baja a dos rondas (10 min de circuito) o descansa ese día. Para progresar, mejora el control o el ritmo de la marcha antes de subir peso; los 15 kg no son una obligación.'}
+      ]
+    },
     {
       id:'movilidad', day:'Extra', name:'Movilidad', sub:'17–20 min · elige tus variantes',
       color:'--c-mob', icon:'stretch', mins:19,
@@ -1263,7 +1295,8 @@ const ENTRIES = [
   { id:'upper-a',   nm:'Upper A',   sub:'Fuerza',                day:'upper-a' },
   { id:'pierna',    nm:'Pierna',    sub:'Fuerza de pierna',       day:'pierna' },
   { id:'upper-b',   nm:'Upper B',   sub:'Volumen',               day:'upper-b' },
-  { id:'crossfit',  nm:'Movilidad + CrossFit',  sub:'Tres WOD de 20 min',     day:'crossfit' },
+  { id:'crossfit',  nm:'Movilidad + CrossFit',  sub:'Cuatro WOD de 20 min',     day:'crossfit' },
+  { id:'casa-20', nm:'Casa · Cardio + core', sub:'20 min · mancuernas', day:'casa-20' },
   { id:'movilidad', nm:'Movilidad', sub:'Circuito 17–20 min',     day:'movilidad' },
   { id:'agarre',    nm:'Agarre',    sub:'Extra opcional',         day:'agarre' },
   { id:'historial', nm:'Historial', sub:'Progreso y récords',     view:'historial' }
@@ -1559,7 +1592,7 @@ function renderDay(day){
   h += `<div class="card session-head" style="margin:14px 0 4px;display:flex;align-items:center;gap:14px">
       <div style="flex:1;min-width:0">
         <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)">${live?'Sesión en curso':'Sesión'}</div>
-        <div style="font-family:var(--f-disp);font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin-top:3px">${pr.done}/${pr.total} series</div>
+        <div style="font-family:var(--f-disp);font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin-top:3px">${pr.total?pr.done+'/'+pr.total+' series':'Registro por rondas'}</div>
         ${live?`<div style="font-family:var(--f-mono);font-size:10.5px;color:var(--t3);margin-top:3px" id="elapsed">—</div>`:''}
       </div>
       ${live
