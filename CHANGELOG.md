@@ -1,5 +1,11 @@
 # Cambios
 
+## 2.8.1 — 2026-09-27
+
+- Opción A elegida: plank pull-through 2×4–6/lado y woodchop ligero 2×6–8/lado antes del circuito metabólico.
+- Guías, alternativas sin apoyo unilateral y selección recordada con historial independiente.
+- Sin cambios en WOD, sesiones de casa, fuerza ni calendarios.
+
 ## 2.8.0 — 2026-09-27
 
 - Metabólico + core: calentamiento habitual, dos ejercicios elegibles y seis circuitos de 20 minutos.

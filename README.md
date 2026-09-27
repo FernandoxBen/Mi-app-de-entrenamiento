@@ -1,4 +1,8 @@
-# Entreno 2.8.0
+# Entreno 2.8.1
+
+## Novedades 2.8.1
+
+La pareja predeterminada del día metabólico es la opción A elegida: plank pull-through 2×4–6/lado y woodchop ligero 2×6–8/lado, con 60 s de descanso estándar configurable. Se hacen despacio antes del circuito, no dentro de un AMRAP. El selector conserva alternativas y cada ejercicio su propio historial. Las sesiones ya iniciadas mantienen su selección. No se presupone que las pesas de 15 kg sean adecuadas: empezar ligero o sin carga.
 
 ## Novedades 2.8.0
 

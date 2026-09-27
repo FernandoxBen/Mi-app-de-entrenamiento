@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.8.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.8.0</title>
+<meta name="description" content="Entreno 2.8.1 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.8.1</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -577,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.8.0',
+  version: '2.8.1',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -737,53 +737,35 @@ const P = {
     },
     {
       "t": "sec",
-      "h": "2 · Preparación elegible",
-      "meta": "2 ejercicios · 2 series suaves"
+      "h": "2 · Opción A · abdomen y control",
+      "meta": "2 ejercicios elegibles · sin buscar fatiga"
     },
     {
       "t": "ex",
-      "id": "rot-ext",
-      "nm": "Rotación externa con goma",
-      "cue": "Elige con ⋯: manguito o control escapular. Revisa cómo hacerlo al cambiar. Carga ligera y sin dolor.",
+      "id": "plank-pull-through",
+      "nm": "Plank pull-through",
+      "cue": "Opción A · abdomen antirrotación. Arrastra una pesa ligera sin girar la pelvis. Si molesta el hombro, elige Pallof o Dead Bug con ⋯.",
       "sets": 2,
-      "reps": "8 por lado si procede",
-      "rest": 45,
+      "reps": "4–6/lado",
+      "rest": 60,
       "alternatives": [
-        [
-          "rot-ext",
-          "Rotación externa con goma"
-        ],
-        [
-          "wall-slide",
-          "Scapular Wall Slide"
-        ],
-        [
-          "scap-push",
-          "Scapular Push-up en pared"
-        ]
+        ["plank-pull-through", "Plank pull-through"],
+        ["pallof", "Pallof press"],
+        ["dead-bug", "Dead Bug"]
       ]
     },
     {
       "t": "ex",
-      "id": "dead-bug",
-      "nm": "Dead Bug",
-      "cue": "Elige con ⋯: control del tronco. Ocho movimientos por lado, lentos y cómodos. Consulta la guía de la variante.",
+      "id": "woodchop-kb",
+      "nm": "Woodchop ligero",
+      "cue": "Opción A · diagonal controlada. Carga ligera, sin impulso ni giro forzado de la lumbar; deja que pies y cadera acompañen. Consulta la guía.",
       "sets": 2,
-      "reps": "8/lado",
-      "rest": 45,
+      "reps": "6–8/lado",
+      "rest": 60,
       "alternatives": [
-        [
-          "dead-bug",
-          "Dead Bug"
-        ],
-        [
-          "pallof",
-          "Pallof press"
-        ],
-        [
-          "bird-dog",
-          "Bird Dog"
-        ]
+        ["woodchop-kb", "Woodchop ligero"],
+        ["bird-dog", "Bird Dog"],
+        ["rot-ext", "Rotación externa con goma"]
       ]
     },
     {
@@ -1446,6 +1428,9 @@ const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 /* Guía breve común: ejecución y cambios equivalentes sin alterar la intención */
 const EX_GUIDE = {
+  'plank-pull-through': {how:'Coloca una kettlebell ligera junto a una mano. En plancha alta, manos bajo hombros y pies separados, pasa la mano contraria por debajo del pecho y arrastra la pesa al otro lado, sin levantarla ni girar la pelvis. Apoya de nuevo la mano y alterna. Cada arrastre cuenta una repetición del lado que tira. Empieza con rodillas apoyadas si hace falta y detente si molesta el hombro o se hunde la lumbar. Usa una superficie despejada que permita deslizar; no una mancuerna que pueda rodar bajo el apoyo. Los 15 kg no son la carga inicial por defecto.',alts:'Pallof press o Dead Bug si el apoyo unilateral molesta. Practica despacio, fuera del AMRAP, y deja margen antes de perder el control.'},
+  'woodchop-kb': {how:'De pie, sujeta una kettlebell ligera con ambas manos. Desplázala desde el lateral de una cadera hacia el lado contrario a la altura del pecho, sin llevarla sobre la cabeza. Deja que cadera y pies pivoten juntos; no retuerzas la zona lumbar con los pies clavados. Vuelve despacio y repite; completa un lado antes de cambiar. Codos ligeramente flexionados, pesa cerca del cuerpo y respiración continua. Ensaya primero sin carga. Si 15 kg no permite controlar todo el recorrido con comodidad, usa una pesa más ligera en el gimnasio.',alts:'Bird Dog sin carga; rotación externa con goma si prefieres volver al trabajo de hombro. Reduce el recorrido o cambia si aparece dolor.'},
+
   'rot-ext': {how:'Codo junto al costado, doblado a 90 grados. Con banda ligera anclada de forma firme, gira el antebrazo hacia fuera sin separar el codo ni rotar el tronco. Ocho por lado sin dolor.',alts:'Scapular Wall Slide; flexión escapular en pared.'},
   'scap-push': {how:'Manos en pared, cuerpo alineado y codos estirados. Acerca y aleja el pecho moviendo solo las escápulas, sin elevar hombros. Ocho repeticiones totales.',alts:'Wall Slide en rango cómodo.'},
   'bird-dog': {how:'A cuatro apoyos, alarga brazo y pierna contrarios sin girar la pelvis ni arquear la espalda. Pausa dos segundos; alterna ocho veces por lado. Acorta el alcance si cuesta.',alts:'Solo deslizar una pierna por el suelo; Dead Bug.'},
