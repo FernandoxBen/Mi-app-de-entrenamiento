@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.7.2 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.7.2</title>
+<meta name="description" content="Entreno 2.8.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 2.8.0</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -577,7 +577,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.7.2',
+  version: '2.8.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -718,80 +718,560 @@ const P = {
       ]
     },
 
-    /* ---------------- MIÉRCOLES · MOVILIDAD Y MOTOR ---------------- */
+    // Metabólico conserva el id crossfit para calendarios e historial.
     {
-      id:'crossfit', dow:3, optional:true, scheduled:true, day:'Miércoles', name:'Movilidad + CrossFit', sub:'10 min preparar · 15 movilidad · 20 WOD',
-      color:'--c-cf', icon:'waves', mins:45,
-      principle:'<b>Miércoles · 45 minutos + transiciones.</b> Haz 10 min de preparación, 15 de movilidad y control, y UNA de las tres variantes de 20 min. No repitas el calentamiento común. Primera sesión a 6–7/10; después 7–8/10 si recuperas bien. Las piernas también trabajan hoy: aunque después descansen varios días, valora la fatiga del martes y tu rendimiento del jueves. La movilidad no garantiza prevenir lesiones. Si aparece dolor de cuello u hombro, cambia el movimiento; si persiste, para y consulta. Hormigueo o debilidad requieren valoración.',
-      blocks:[
-        {t:'prep', h:'1 · Calentamiento específico', meta:'10 min · sin fatiga', parts:["0–3 min: Row fácil, aumentando el ritmo. Alternativa: caminata viva si el remo molesta.","3–7 min: dos vueltas tranquilas de 6 Air Squats, 8 Hip Hinges sin peso, 6 Scapular Push-ups apoyado en banco y 4 World’s Greatest Stretch por lado. Reduce repeticiones si necesitas más tiempo.","7–10 min: ensaya con poca carga los movimientos del WOD elegido: 5 KB Deadlifts antes del swing, 4 Step-ups por lado y 3 Burpees a banco sin salto. Debes llegar preparado, no cansado. No hay bici ni pasos con banda."]},
-        {t:'sec', h:'2 · Movilidad y control', meta:'15 min en total · sin dolor'},
-        {t:'ex', id:'cat-cow', nm:'Cat-Cow', cue:'Mueve la columna despacio · acompaña con la respiración · cuello cómodo', sets:1, reps:'8 ciclos', rest:20},
-        {t:'ex', id:'world-stretch', nm:'World’s Greatest Stretch', cue:'Zancada con rotación · no busques llegar al suelo · 2 segundos por posición', sets:1, reps:'4/lado', rest:20},
-        {t:'ex', id:'thoracic-rotation', nm:'Quadruped Thoracic Rotation', cue:'Gira desde la espalda alta sin arrastrar la pelvis ni forzar el cuello', sets:1, reps:'6/lado', rest:20},
-        {t:'ex', id:'wall-slide', nm:'Scapular Wall Slide', cue:'Desliza los brazos sin arquear la espalda · solo recorrido sin molestias', sets:2, reps:'8', rest:30},
-        {t:'ex', id:'ankle-wall', nm:'Knee-to-Wall Ankle Dorsiflexion', cue:'Talón apoyado · rodilla hacia el segundo dedo · sin rebotes', sets:1, reps:'8/lado', rest:20},
-        {t:'sec', h:'Completa el bloque de 15 min', meta:'tronco · calidad'},
-        {t:'ex', id:'dead-bug', nm:'Dead Bug', cue:'Exhala 3 segundos al extender · acorta el recorrido si se arquea la espalda', sets:2, reps:'6/lado', rest:40},
-        {t:'ex', id:'pallof', nm:'Pallof press', cue:'Resistencia ligera · pausa 2 segundos con brazos extendidos · no gires el tronco', sets:2, reps:'8/lado', rest:40},
-        {t:'sec', h:'3 · CrossFit adaptado', meta:'20 min · elige UNO'},
-        {t:'switch', k:'cf-mode', hint:'Elige UNA de las cuatro alternativas. D es solo kettlebell. Mantén una variante dos semanas para comparar con la misma carga y técnica.',
-          opts:[
-            {nm:'A · AMRAP 20', cue:'Rondas continuas · ritmo exigente sostenible', dose:'20', u:'min'},
-            {nm:'B · EMOM 20', cue:'Una estación por minuto · descanso programado', dose:'20', u:'min'},
-            {nm:'C · Intervalos 3 + 1', cue:'3 min de trabajo + 1 de descanso · cinco bloques', dose:'20', u:'min'},
-            {nm:'D · Full kettlebell AMRAP', cue:'Una kettlebell · cuerpo completo · sin máquinas', dose:'20', u:'min'}
-          ],
-          variants:[
-            [
-              {t:'wod', hd:'A · AMRAP CrossFit', clk:'20:00', steps:[
-                {n:'200m', nm:'Remo ergómetro', cue:'Piernas → tronco → brazos; vuelve brazos → tronco → piernas. No tires con el cuello. Alternativa: 60 s de caminata rápida en pendiente cómoda.'},
-                {n:'10', nm:'KB swings rusos', cue:'Bisagra de cadera, pesa como máximo al pecho y cuello neutro. Solo si dominas la técnica. Alternativa: 10 KB Deadlifts.'},
-                {n:'6', nm:'Burpees', cue:'Ritmo controlado, sin obligación de flexión ni salto. Alternativa: manos en banco estable y un pie atrás cada vez; si molesta el hombro, 40 s de marcha rápida.'},
-                {n:'10', nm:'Box step-overs', cue:'Sin carga, cajón bajo y estable. Sube y pasa al otro lado; 10 pasos completos alternando la pierna inicial. Baja caminando, sin saltar. Alternativa: 10 Air Squats.'}
-              ]},
-              {t:'tip', x:'<b>AMRAP:</b> repite el circuito durante 20 min. Anota solo rondas completas; escribe el avance de la última en las notas. Puedes parar para recuperar aire. No sacrifiques técnica por otra ronda.'}
-            ],
-            [
-              {t:'wod', hd:'B · EMOM CrossFit · 4 rondas', clk:'20:00', steps:[
-                {n:'Min 1', nm:'Remo ergómetro · 40 s', cue:'Esfuerzo 7–8/10 y 20 s para recuperar. Alternativa: 40 s de marcha rápida en pendiente cómoda.'},
-                {n:'Min 2', nm:'10 KB swings rusos', cue:'Pesa hasta el pecho. Alternativa: 10 KB Deadlifts. Acaba antes de 40 s y descansa el resto del minuto.'},
-                {n:'Min 3', nm:'8 Goblet Squats', cue:'Carga ligera o moderada, sin fallo. Pie completo apoyado, baja hasta donde controles. Alternativa: 10 Air Squats. Acaba antes de 40 s.'},
-                {n:'Min 4', nm:'6 Burpees', cue:'Puedes hacerlos sin salto y con manos en banco. Si no acabas en 40 s, haz 4. Si molesta el hombro, cambia por 40 s de marcha rápida.'},
-                {n:'Min 5', nm:'Descanso completo', cue:'Respira y prepara la siguiente vuelta. Repite cuatro veces los cinco minutos: 20 min. Registra una ronda por vuelta de cinco minutos.'}
-              ]},
-              {t:'tip', x:'<b>EMOM:</b> empieza cada estación al inicio del minuto. Si necesitas más de 40 s, reduce carga o repeticiones para conservar al menos 20 s de recuperación. No conviertas el minuto de descanso en trabajo extra.'}
-            ],
-            [
-              {t:'wod', hd:'C · Intervalos CrossFit · 5 bloques', clk:'20:00', steps:[
-                {n:'3 min', nm:'Circuito de trabajo', cue:'Repite 150 m de remo → 8 KB Deadlifts → 10 Air Squats hasta cumplir 3 min. Alternativa al remo: 45 s de marcha rápida en pendiente cómoda. Retoma desde el remo en cada bloque.'},
-                {n:'8', nm:'KB Deadlifts · dentro del circuito', cue:'Pesa entre los pies, cadera atrás y espalda estable. Sube empujando el suelo, sin encoger hombros. Usa una carga que permita varias repeticiones más; no busques un peso máximo.'},
-                {n:'10', nm:'Air Squats · dentro del circuito', cue:'Sentadilla sin peso, talones apoyados y rango cómodo. Alternativa: sentarse y levantarse de un banco estable.'},
-                {n:'1 min', nm:'Descanso entre bloques', cue:'Tras cada 3 min de trabajo, descansa 1 min, también en el quinto bloque. Son cinco bloques de 4 min. Registra una ronda por bloque, no por vuelta del circuito.'}
-              ]},
-              {t:'tip', x:'<b>Intervalos:</b> repite los cinco bloques a un ritmo parecido, sin sprint inicial. Anota en las notas las vueltas y repeticiones de cada bloque para comparar tu capacidad de repetir esfuerzos.'}
-            ],
-            [
-              {t:'wod', hd:'D · AMRAP Full kettlebell', clk:'20:00', steps:[
-                {n:'10', nm:'KB swings rusos', cue:'Una kettlebell, bisagra de cadera y pesa como máximo al pecho. No tires con hombros o cuello. Si no dominas el swing, haz 10 KB Deadlifts. No uses mancuernas ajustables para swings.'},
-                {n:'6', nm:'KB Goblet Squat', cue:'Sujeta la kettlebell cerca del pecho con ambas manos; pie completo apoyado y rango cómodo. Alternativa: 6 sentadillas sin peso si la carga o el agarre molestan.'},
-                {n:'6/lado', nm:'KB Row con apoyo', cue:'Una mano apoyada en muslo o banco estable, cadera atrás y espalda quieta. Lleva la pesa hacia la cadera sin encoger hombros. Cambia de lado tras seis repeticiones. Alternativa: kettlebell más ligera.'},
-                {n:'6/lado', nm:'KB Floor Press', cue:'Tumbado, rodillas flexionadas y muñeca recta. Antebrazo vertical y codo a unos 30–45 grados del tronco; apoya suavemente el brazo en el suelo y empuja. Coloca y retira la pesa ayudándote con ambas manos. Alternativa: pesa más ligera o flexiones en pared si molesta.'},
-                {n:'20s/l', nm:'KB Suitcase March', cue:'Marcha en el sitio 20 s con la pesa a un lado y 20 s al otro. Tronco estable, sin inclinarte ni elevar el hombro. Alternativa: marcha sin carga si tira del cuello.'}
-              ]},
-              {t:'tip', x:'<b>Full kettlebell:</b> repite las cinco estaciones durante 20 min, con pausas cuando lo necesites. No tienes que mantener la pesa en la mano entre ejercicios. Escoge la carga por el remo y el press, no por el swing; puedes usar otra kettlebell más ligera. Primera vez 6–7/10, después 7–8/10 si recuperas bien, sin fallo. Registra rondas completas y apunta carga, cambios y ronda parcial en las notas. Se compara solo con esta variante, no con A, B o C.'}
-            ]
-          ]
-        },
-        {t:'tip', x:'<b>Cargas y progresión:</b> elige pesos que puedas mover sin cambiar la técnica y dejando unas 3 repeticiones en reserva. Empieza por la versión sin salto y con poco peso. Tras dos sesiones bien toleradas, mejora un poco el ritmo O la carga mínima, nunca ambos a la vez. Si las agujetas cambian tu movimiento, reduce repeticiones/carga o termina antes. No añadas kipping, snatch ni empujes explosivos sobre la cabeza mientras molesten cuello u hombro.'},
-        {t:'note', x:'<b>Reloj:</b> cuenta atrás total de 20 min, sin avisos automáticos por minuto o intervalo. En EMOM cambia cada minuto mirando el reloj; en intervalos descansa cuando queden 17, 13, 9, 5 y 1 min, y reinicia el trabajo a 16, 12, 8 y 4. Elige variante antes de arrancar. Si necesitas cambiar a mitad, conserva el reloj en marcha y su tiempo restante como límite; no pulses de nuevo el reloj del WOD ni añadas otros 20 min.'},
-        {t:'note', x:'<b>4 · Cierre · 3 min adicionales:</b> camina despacio y deja bajar la respiración. El total previsto es 45 min más transiciones y este cierre. Si el jueves rindes peor de forma repetida o las molestias duran hasta el día siguiente, reduce el WOD. Esto es acondicionamiento intenso, no rehabilitación cervical.'}
+  "id": "crossfit",
+  "dow": 3,
+  "optional": true,
+  "scheduled": true,
+  "day": "Miércoles",
+  "name": "Metabólico + core",
+  "sub": "Calentamiento habitual · 2 ejercicios elegibles · 20 min",
+  "color": "--c-cf",
+  "icon": "waves",
+  "mins": 40,
+  "principle": "<b>Calentamiento habitual → dos ejercicios de preparación → un bloque de 20 min.</b> Unos 40 min con transiciones. Los dos ejercicios son trabajo de control y tolerancia, no garantizan prevenir lesiones. Elige con ⋯ antes o durante la sesión; se recuerda tu elección y cada ejercicio conserva su historial. Empieza el circuito a 6–7/10; sube a 7–8/10 solo si recuperas bien. No entrenes al fallo. Si molesta cuello u hombro, cambia el movimiento; si persiste, para y consulta. Hormigueo o debilidad requieren valoración.",
+  "blocks": [
+    {
+      "t": "common-warmup"
+    },
+    {
+      "t": "sec",
+      "h": "2 · Preparación elegible",
+      "meta": "2 ejercicios · 2 series suaves"
+    },
+    {
+      "t": "ex",
+      "id": "rot-ext",
+      "nm": "Rotación externa con goma",
+      "cue": "Elige con ⋯: manguito o control escapular. Revisa cómo hacerlo al cambiar. Carga ligera y sin dolor.",
+      "sets": 2,
+      "reps": "8 por lado si procede",
+      "rest": 45,
+      "alternatives": [
+        [
+          "rot-ext",
+          "Rotación externa con goma"
+        ],
+        [
+          "wall-slide",
+          "Scapular Wall Slide"
+        ],
+        [
+          "scap-push",
+          "Scapular Push-up en pared"
+        ]
       ]
+    },
+    {
+      "t": "ex",
+      "id": "dead-bug",
+      "nm": "Dead Bug",
+      "cue": "Elige con ⋯: control del tronco. Ocho movimientos por lado, lentos y cómodos. Consulta la guía de la variante.",
+      "sets": 2,
+      "reps": "8/lado",
+      "rest": 45,
+      "alternatives": [
+        [
+          "dead-bug",
+          "Dead Bug"
+        ],
+        [
+          "pallof",
+          "Pallof press"
+        ],
+        [
+          "bird-dog",
+          "Bird Dog"
+        ]
+      ]
+    },
+    {
+      "t": "sec",
+      "h": "3 · Metabólico y abdomen",
+      "meta": "20 min · una opción"
+    },
+    {
+      "t": "switch",
+      "k": "metabolic-family",
+      "hint": "Elige familia y después una variante. No se suman los bloques.",
+      "opts": [
+        {
+          "nm": "CrossFit adaptado",
+          "cue": "3 variantes · cardio + abdomen"
+        },
+        {
+          "nm": "Kettlebell + core",
+          "cue": "3 variantes · una kettlebell y suelo"
+        }
+      ],
+      "variants": [
+        [
+          {
+            "t": "switch",
+            "k": "metabolic-cross",
+            "hint": "Elige solo una sesión de 20 minutos.",
+            "opts": [
+              {
+                "nm": "AMRAP · motor y abdomen",
+                "dose": "20",
+                "u": "min"
+              },
+              {
+                "nm": "EMOM · motor y core",
+                "dose": "20",
+                "u": "min"
+              },
+              {
+                "nm": "Intervalos · abdomen",
+                "dose": "20",
+                "u": "min"
+              }
+            ],
+            "variants": [
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico CF · AMRAP motor y abdomen",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "200 m",
+                      "nm": "Remo ergómetro",
+                      "cue": "Piernas, tronco y brazos; cuello cómodo. Alternativa: 60 s de marcha rápida en pendiente cómoda."
+                    },
+                    {
+                      "n": "6",
+                      "nm": "Burpee sin salto",
+                      "cue": "Manos sobre banco firme y pies atrás uno a uno, sin flexión obligatoria. Si molesta el hombro: 40 s de marcha rápida."
+                    },
+                    {
+                      "n": "10",
+                      "nm": "Air Squats",
+                      "cue": "Sentadilla sin carga, pies apoyados y rango cómodo. Alternativa: sentarse y levantarse de un banco firme."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "Dead Bug",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>AMRAP:</b> repite durante 20 min con pausas necesarias. Registra rondas completas y anota carga, alternativas y ronda parcial. Compara solo la misma variante."
+                }
+              ],
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico CF · EMOM motor y core",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "Min 1",
+                      "nm": "Remo · 40 s",
+                      "cue": "Piernas, tronco y brazos; cuello cómodo. Alternativa: 60 s de marcha rápida en pendiente cómoda."
+                    },
+                    {
+                      "n": "Min 2",
+                      "nm": "6 Burpees",
+                      "cue": "Manos sobre banco firme y pies atrás uno a uno, sin flexión obligatoria. Si molesta el hombro: 40 s de marcha rápida."
+                    },
+                    {
+                      "n": "Min 3",
+                      "nm": "Dead Bug · 6/lado",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez. Reduce a cuatro por lado para acabar en 40 s."
+                    },
+                    {
+                      "n": "Min 4",
+                      "nm": "Box step-over · 8 pasos",
+                      "cue": "Cajón bajo y firme; pasa al otro lado sin saltos, alternando pierna. Alternativa: 8 Air Squats."
+                    },
+                    {
+                      "n": "Min 5",
+                      "nm": "Descanso completo",
+                      "cue": "Camina suave y prepara la siguiente vuelta."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>EMOM:</b> una estación cada minuto; acaba el trabajo en 40 s como máximo y descansa el resto. Cinco estaciones × cuatro vueltas = 20 min. Reduce repeticiones si no quedan 20 s de descanso. Marca una ronda por vuelta de cinco minutos."
+                }
+              ],
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico CF · Intervalos abdomen",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "3 min",
+                      "nm": "Circuito de trabajo",
+                      "cue": "Repite: 150 m de remo → 8 sentadillas sin peso → 6 Dead Bugs por lado. Empieza cada bloque desde el remo. Alternativa al remo: 45 s de marcha rápida."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "Dead Bug",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez."
+                    },
+                    {
+                      "n": "1 min",
+                      "nm": "Descanso",
+                      "cue": "Cinco bloques de 3 min de trabajo + 1 min de descanso, incluido el último. Registra bloques completos, no vueltas internas."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>3 + 1:</b> ritmo repetible, sin sprint inicial. En la cuenta atrás descansa a 17, 13, 9, 5 y 1 min restantes; retoma a 16, 12, 8 y 4. Anota en notas el avance de cada bloque."
+                }
+              ]
+            ]
+          }
+        ],
+        [
+          {
+            "t": "switch",
+            "k": "metabolic-kb",
+            "hint": "Elige solo una sesión de 20 minutos.",
+            "opts": [
+              {
+                "nm": "AMRAP · bisagra y core",
+                "dose": "20",
+                "u": "min"
+              },
+              {
+                "nm": "AMRAP · full body",
+                "dose": "20",
+                "u": "min"
+              },
+              {
+                "nm": "EMOM · cardio y abdomen",
+                "dose": "20",
+                "u": "min"
+              }
+            ],
+            "variants": [
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico KB · AMRAP bisagra y core",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "10",
+                      "nm": "KB swings rusos",
+                      "cue": "Bisagra de cadera; pesa hasta el pecho como máximo. Solo si dominas la técnica. Alternativa: 10 KB Deadlifts; no hagas swings con mancuernas ajustables."
+                    },
+                    {
+                      "n": "8",
+                      "nm": "KB Goblet Squat",
+                      "cue": "Pesa cerca del pecho, talones apoyados y rango controlado. Alternativa: sentadilla sin peso."
+                    },
+                    {
+                      "n": "20s/l",
+                      "nm": "KB Suitcase March",
+                      "cue": "Marcha con una pesa a un lado, tronco recto y hombros cómodos. Cambia apoyando primero la pesa. Alternativa: marcha sin carga."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "Dead Bug",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>AMRAP:</b> repite durante 20 min con pausas necesarias. Registra rondas completas y anota carga, alternativas y ronda parcial. Compara solo la misma variante."
+                }
+              ],
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico KB · AMRAP full body",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "8",
+                      "nm": "KB Deadlift",
+                      "cue": "Pesa entre los pies, cadera atrás y espalda estable. Sube sin encoger hombros; carga que deje tres repeticiones en reserva."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "KB Row apoyado",
+                      "cue": "Mano libre sobre muslo o banco firme. Tira hacia la cadera sin balanceo. Usa una pesa más ligera si cambia la técnica."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "KB Floor Press",
+                      "cue": "Tumbado, rodillas flexionadas, muñeca recta y codo a 30–45 grados del tronco. Coloca y retira la pesa con ambas manos. Alternativa: flexiones en pared si molesta."
+                    },
+                    {
+                      "n": "20s/l",
+                      "nm": "KB Suitcase March",
+                      "cue": "Marcha con una pesa a un lado, tronco recto y hombros cómodos. Cambia apoyando primero la pesa. Alternativa: marcha sin carga."
+                    },
+                    {
+                      "n": "6/lado",
+                      "nm": "Dead Bug",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>AMRAP:</b> repite durante 20 min con pausas necesarias. Registra rondas completas y anota carga, alternativas y ronda parcial. Compara solo la misma variante. No mantengas la pesa en la mano entre estaciones. Elige el peso por el press y el remo, no por el peso muerto."
+                }
+              ],
+              [
+                {
+                  "t": "wod",
+                  "hd": "Metabólico KB · EMOM cardio y abdomen",
+                  "clk": "20:00",
+                  "steps": [
+                    {
+                      "n": "Min 1",
+                      "nm": "10 KB swings rusos",
+                      "cue": "Bisagra de cadera; pesa hasta el pecho como máximo. Solo si dominas la técnica. Alternativa: 10 KB Deadlifts; no hagas swings con mancuernas ajustables."
+                    },
+                    {
+                      "n": "Min 2",
+                      "nm": "Suitcase March · 15 s/lado",
+                      "cue": "Marcha con una pesa a un lado, tronco recto y hombros cómodos. Cambia apoyando primero la pesa. Alternativa: marcha sin carga. Cambia con calma dentro de 40 s."
+                    },
+                    {
+                      "n": "Min 3",
+                      "nm": "8 Goblet Squats",
+                      "cue": "Pesa cerca del pecho, talones apoyados y rango controlado. Alternativa: sentadilla sin peso."
+                    },
+                    {
+                      "n": "Min 4",
+                      "nm": "Dead Bug · 6/lado",
+                      "cue": "Exhala al extender brazo y pierna contrarios, sin arquear la lumbar. Alternativa: deslizar un talón cada vez. Acaba en 40 s; reduce repeticiones si hace falta."
+                    },
+                    {
+                      "n": "Min 5",
+                      "nm": "Descanso completo",
+                      "cue": "Respira y prepara la siguiente vuelta."
+                    }
+                  ]
+                },
+                {
+                  "t": "tip",
+                  "x": "<b>EMOM:</b> una estación cada minuto; acaba el trabajo en 40 s como máximo y descansa el resto. Cinco estaciones × cuatro vueltas = 20 min. Reduce repeticiones si no quedan 20 s de descanso. Marca una ronda por vuelta de cinco minutos."
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "t": "tip",
+      "x": "<b>Progresión:</b> repite una variante dos semanas antes de comparar. Mejora el ritmo O la carga mínima, nunca ambos a la vez. Deja al menos tres repeticiones en reserva con peso. Si el Upper siguiente empeora o hay agujetas que cambian tu movimiento, reduce carga o duración. Sin kipping ni movimientos explosivos sobre la cabeza mientras molesten cuello u hombro."
+    },
+    {
+      "t": "note",
+      "x": "<b>Reloj:</b> cuenta atrás total, sin avisos de estación. Elige antes de iniciar. Cambiar de variante no reinicia el reloj; no pulses otro bloque para añadir 20 min. Anota pesos, alternativas y repeticiones parciales en las notas; el circuito se registra por rondas, no como series individuales."
+    },
+    {
+      "t": "note",
+      "x": "<b>Cierre · 2 min:</b> camina suave y deja bajar la respiración. No hagas después otra variante de 20 min."
     }
+  ]
+}
   ],
 
   /* ---------------- EXTRAS (sin día fijo) ---------------- */
   extras: [
+{
+  "id": "casa-libre-cardio",
+  "day": "Extra",
+  "name": "Casa sin pesas · Cardio + abs",
+  "sub": "20 min · sin material",
+  "color": "--c-extra",
+  "icon": "flame",
+  "mins": 20,
+  "principle": "<b>Complemento en días sin gimnasio.</b> 3 min preparar + 15 min circuito + 2 min cierre. Esfuerzo 5–6/10, sin fallo ni saltos. Empieza con UNA sesión extra semanal, no todas; por ejemplo sábado si recuperaste del jueves. Si tienes fuerza al día siguiente o fatiga acumulada, usa la opción suave o descansa. Metabólico también fatiga: no tiene que convertirse en otro WOD intenso. No compensa sesiones de fuerza perdidas. Para ante dolor de cuello u hombro; si persiste, consulta.",
+  "blocks": [
+    {
+      "t": "prep",
+      "h": "Preparación",
+      "meta": "3 min · suave",
+      "parts": [
+        "1 min de marcha cómoda.",
+        "1 min: 6 sentadillas sin peso y 6 bisagras de cadera, sin forzar.",
+        "1 min: movilidad cómoda de hombros y 4 Dead Bugs por lado. Despeja el suelo; con mancuernas ajustables, comprueba los cierres."
+      ]
+    },
+    {
+      "t": "wod",
+      "hd": "Casa sin pesas · Cardio + abs · 3 rondas",
+      "clk": "15:00",
+      "steps": [
+        {
+          "n": "Min 1",
+          "nm": "Step jacks sin salto",
+          "cue": "Abre y cierra un pie cada vez, brazos como máximo a altura cómoda del pecho. 40 s; alternativa: marcha rápida."
+        },
+        {
+          "n": "Min 2",
+          "nm": "Dead Bug · 6/lado",
+          "cue": "Exhala al extender, lumbar estable. Acaba antes de 40 s, reduciendo a cuatro por lado si hace falta."
+        },
+        {
+          "n": "Min 3",
+          "nm": "Marcha rápida · 40 s",
+          "cue": "Rodillas a altura cómoda, sin impacto, cuello relajado."
+        },
+        {
+          "n": "Min 4",
+          "nm": "Bird Dog · 4/lado",
+          "cue": "A cuatro apoyos, alarga brazo y pierna contrarios sin girar pelvis. Alternativa: deslizar solo una pierna."
+        },
+        {
+          "n": "Min 5",
+          "nm": "Air Squat · 6–8",
+          "cue": "Sentadilla sin peso, rango cómodo, talones apoyados. Descansa el tiempo sobrante. Alternativa: levantarte de una silla firme contra pared."
+        }
+      ]
+    },
+    {
+      "t": "tip",
+      "x": "Una estación por minuto: máximo 40 s de trabajo y al menos 20 s de descanso/transición. Cinco estaciones × tres vueltas = 15 min. Si acabas las repeticiones antes, descansa; no añadas más. Marca una ronda cada cinco minutos."
+    },
+    {
+      "t": "note",
+      "x": "<b>Cierre · 2 min:</b> camina suave. El reloj mide solo los 15 min de circuito y no avisa al cambiar de estación. Guarda carga, variantes y esfuerzo en notas. Si afecta al próximo entrenamiento, haz dos vueltas o 10 min y descansa más. Los 15 kg no son obligatorios; evita swings con mancuernas ajustables."
+    }
+  ]
+},
+{
+  "id": "casa-libre-suave",
+  "day": "Extra",
+  "name": "Casa sin pesas · Suave + core",
+  "sub": "20 min · sin material",
+  "color": "--c-extra",
+  "icon": "flame",
+  "mins": 20,
+  "principle": "<b>Complemento en días sin gimnasio.</b> 3 min preparar + 15 min circuito + 2 min cierre. Esfuerzo 5–6/10, sin fallo ni saltos. Empieza con UNA sesión extra semanal, no todas; por ejemplo sábado si recuperaste del jueves. Si tienes fuerza al día siguiente o fatiga acumulada, usa la opción suave o descansa. Metabólico también fatiga: no tiene que convertirse en otro WOD intenso. No compensa sesiones de fuerza perdidas. Para ante dolor de cuello u hombro; si persiste, consulta.",
+  "blocks": [
+    {
+      "t": "prep",
+      "h": "Preparación",
+      "meta": "3 min · suave",
+      "parts": [
+        "1 min de marcha cómoda.",
+        "1 min: 6 sentadillas sin peso y 6 bisagras de cadera, sin forzar.",
+        "1 min: movilidad cómoda de hombros y 4 Dead Bugs por lado. Despeja el suelo; con mancuernas ajustables, comprueba los cierres."
+      ]
+    },
+    {
+      "t": "wod",
+      "hd": "Casa sin pesas · Suave + core · AMRAP suave",
+      "clk": "15:00",
+      "steps": [
+        {
+          "n": "40 s",
+          "nm": "Marcha cómoda",
+          "cue": "Ritmo 4–5/10, puedes hablar. Esta es la opción para días con algo de cansancio, no para entrenar con dolor."
+        },
+        {
+          "n": "6/lado",
+          "nm": "Dead Bug con talones",
+          "cue": "Desliza un talón por el suelo al exhalar. Mantén el tronco estable."
+        },
+        {
+          "n": "8",
+          "nm": "Glute Bridge",
+          "cue": "Boca arriba, pies apoyados, eleva cadera sin arquear lumbar. Pausa un segundo."
+        },
+        {
+          "n": "6",
+          "nm": "Flexiones en pared",
+          "cue": "Manos a altura del pecho, cuerpo alineado. Si molesta el hombro, cambia por marcha."
+        },
+        {
+          "n": "40 s",
+          "nm": "Marcha con rodillas alternas",
+          "cue": "Sin peso ni saltos, abdomen estable. Respira normalmente."
+        }
+      ]
+    },
+    {
+      "t": "tip",
+      "x": "Repite las estaciones con pausas durante 15 min, sin competir por rondas. Anota solo rondas completas y el avance parcial en notas. Mantén conversación entre esfuerzos."
+    },
+    {
+      "t": "note",
+      "x": "<b>Cierre · 2 min:</b> camina suave. El reloj mide solo los 15 min de circuito y no avisa al cambiar de estación. Guarda carga, variantes y esfuerzo en notas. Si afecta al próximo entrenamiento, haz dos vueltas o 10 min y descansa más. Los 15 kg no son obligatorios; evita swings con mancuernas ajustables."
+    }
+  ]
+},
+{
+  "id": "casa-pesas-metabolico",
+  "day": "Extra",
+  "name": "Casa con pesas · Motor + abs",
+  "sub": "20 min · mancuernas de 15 kg",
+  "color": "--c-extra",
+  "icon": "flame",
+  "mins": 20,
+  "principle": "<b>Complemento en días sin gimnasio.</b> 3 min preparar + 15 min circuito + 2 min cierre. Esfuerzo 5–6/10, sin fallo ni saltos. Empieza con UNA sesión extra semanal, no todas; por ejemplo sábado si recuperaste del jueves. Si tienes fuerza al día siguiente o fatiga acumulada, usa la opción suave o descansa. Metabólico también fatiga: no tiene que convertirse en otro WOD intenso. No compensa sesiones de fuerza perdidas. Para ante dolor de cuello u hombro; si persiste, consulta.",
+  "blocks": [
+    {
+      "t": "prep",
+      "h": "Preparación",
+      "meta": "3 min · suave",
+      "parts": [
+        "1 min de marcha cómoda.",
+        "1 min: 6 sentadillas sin peso y 6 bisagras de cadera, sin forzar.",
+        "1 min: movilidad cómoda de hombros y 4 Dead Bugs por lado. Despeja el suelo; con mancuernas ajustables, comprueba los cierres."
+      ]
+    },
+    {
+      "t": "wod",
+      "hd": "Casa con pesas · Motor + abs · 3 rondas",
+      "clk": "15:00",
+      "steps": [
+        {
+          "n": "Min 1",
+          "nm": "Marcha rápida · 40 s",
+          "cue": "Sin carga ni saltos; usa el ritmo para elevar la respiración sin sprint."
+        },
+        {
+          "n": "Min 2",
+          "nm": "Peso muerto rumano · 6–8",
+          "cue": "Una o dos mancuernas de 15 kg solo si controlas: rodillas ligeramente flexionadas, cadera atrás, pesas cerca del cuerpo. Baja hasta mantener espalda estable. Alternativa: bisagra sin peso."
+        },
+        {
+          "n": "Min 3",
+          "nm": "Dead Bug · 6/lado",
+          "cue": "Sin carga; exhala al alargar, acorta el recorrido si se arquea lumbar. Termina antes de 40 s."
+        },
+        {
+          "n": "Min 4",
+          "nm": "Remo apoyado · 4/lado",
+          "cue": "Una mancuerna, mano libre sobre muslo o soporte firme. Tira hacia cadera sin encoger hombro. Si 15 kg obliga a balancear, haz Wall Slides sin peso; no es un estímulo de fuerza equivalente."
+        },
+        {
+          "n": "Min 5",
+          "nm": "Suitcase March · 15 s/lado",
+          "cue": "Una mancuerna o sin carga, postura cómoda sin inclinarte. Apóyala para cambiar de lado dentro de los 40 s. Si tira del cuello, marcha sin peso."
+        }
+      ]
+    },
+    {
+      "t": "tip",
+      "x": "Una estación por minuto: máximo 40 s de trabajo y al menos 20 s de descanso/transición. Cinco estaciones × tres vueltas = 15 min. Si acabas las repeticiones antes, descansa; no añadas más. Marca una ronda cada cinco minutos."
+    },
+    {
+      "t": "note",
+      "x": "<b>Cierre · 2 min:</b> camina suave. El reloj mide solo los 15 min de circuito y no avisa al cambiar de estación. Guarda carga, variantes y esfuerzo en notas. Si afecta al próximo entrenamiento, haz dos vueltas o 10 min y descansa más. Los 15 kg no son obligatorios; evita swings con mancuernas ajustables."
+    }
+  ]
+},
     {
       id:'casa-20', day:'Extra', name:'Casa · Cardio + core', sub:'20 min · cuerpo completo · mancuernas de 15 kg',
       color:'--c-extra', icon:'flame', mins:20,
@@ -966,6 +1446,9 @@ const svg = (k, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 /* Guía breve común: ejecución y cambios equivalentes sin alterar la intención */
 const EX_GUIDE = {
+  'rot-ext': {how:'Codo junto al costado, doblado a 90 grados. Con banda ligera anclada de forma firme, gira el antebrazo hacia fuera sin separar el codo ni rotar el tronco. Ocho por lado sin dolor.',alts:'Scapular Wall Slide; flexión escapular en pared.'},
+  'scap-push': {how:'Manos en pared, cuerpo alineado y codos estirados. Acerca y aleja el pecho moviendo solo las escápulas, sin elevar hombros. Ocho repeticiones totales.',alts:'Wall Slide en rango cómodo.'},
+  'bird-dog': {how:'A cuatro apoyos, alarga brazo y pierna contrarios sin girar la pelvis ni arquear la espalda. Pausa dos segundos; alterna ocho veces por lado. Acorta el alcance si cuesta.',alts:'Solo deslizar una pierna por el suelo; Dead Bug.'},
   'cat-cow': {how:'A cuatro apoyos, alterna suavemente redondear y extender la espalda, respirando. No lleves el cuello a sus extremos.', alts:'Movimientos pequeños sentado, con manos sobre los muslos.'},
   'world-stretch': {how:'Da una zancada y apoya las manos dentro del pie delantero. Acerca el codo interior sin forzar y rota el brazo hacia arriba; la mirada solo acompaña si resulta cómoda. Puedes apoyar la rodilla trasera.', alts:'Zancada con manos sobre un banco estable, sin rotación si molesta.'},
   'thoracic-rotation': {how:'A cuatro apoyos, lleva una mano detrás de la cabeza y gira el codo hacia arriba sin mover la pelvis. Haz un recorrido pequeño si lo necesitas.', alts:'Open Book tumbado de lado, rodillas juntas y cabeza apoyada.'},
@@ -1110,7 +1593,7 @@ const SLOT_LABELS={
   pajaros:'Hombro posterior','hip-thrust':'Extensión de cadera','step-up':'Pierna unilateral','plancha-lat':'Core lateral','rot-ext':'Manguito rotador','rot-int':'Manguito rotador',
   'pull-apart':'Control escapular','remo-banda-suave':'Remo suave','dead-hang':'Agarre',muneca:'Antebrazo',puno:'Agarre',torsiones:'Antebrazo'
 };
-function altList(e){ return (ALT_GROUPS[e.baseId||e.id] || [[e.id,e.nm]]).map(x=>({id:x[0],nm:x[1]})); }
+function altList(e){ return (e.alternatives || ALT_GROUPS[e.baseId||e.id] || [[e.id,e.nm]]).map(x=>({id:x[0],nm:x[1]})); }
 function catalog(){
   const map = new Map();
   P.days.concat(P.extras).forEach(d=>flatEx(d).forEach(e=>altList(e).forEach(x=>map.set(x.id,x))));
@@ -1295,7 +1778,7 @@ const ENTRIES = [
   { id:'upper-a',   nm:'Upper A',   sub:'Fuerza',                day:'upper-a' },
   { id:'pierna',    nm:'Pierna',    sub:'Fuerza de pierna',       day:'pierna' },
   { id:'upper-b',   nm:'Upper B',   sub:'Volumen',               day:'upper-b' },
-  { id:'crossfit',  nm:'Movilidad + CrossFit',  sub:'Cuatro WOD de 20 min',     day:'crossfit' },
+  { id:'crossfit',  nm:'Metabólico + core',  sub:'CrossFit o kettlebell · 20 min',     day:'crossfit' },
   { id:'casa-20', nm:'Casa · Cardio + core', sub:'20 min · mancuernas', day:'casa-20' },
   { id:'movilidad', nm:'Movilidad', sub:'Circuito 17–20 min',     day:'movilidad' },
   { id:'agarre',    nm:'Agarre',    sub:'Extra opcional',         day:'agarre' },
@@ -1410,7 +1893,7 @@ function renderPlanner(){
   const a = plan['upper-a'], b = plan['upper-b'], l = plan.pierna, c = plan.crossfit;
   const warnings = [];
   if (a>=0 && b>=0 && Math.abs(a-b)<2) warnings.push('Los dos Upper están consecutivos. Deja un día entre ellos cuando puedas.');
-  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y CrossFit están consecutivos: ajusta cargas y repeticiones según la fatiga del martes y revisa cómo llegas al Upper del jueves.');
+  if (l>=0 && c>=0 && Math.abs(l-c)<2) warnings.push('Pierna y Metabólico están consecutivos: ajusta cargas y repeticiones según la fatiga del martes y revisa cómo llegas al Upper del jueves.');
   return `<div class="sec"><h2>Organiza tu semana</h2></div>
     <div class="week-switch"><button class="btn" data-act="plan-week" data-n="-1" aria-label="Semana anterior">←</button><span>Semana del ${esc(dstr(date))}</span><button class="btn" data-act="plan-week" data-n="1" aria-label="Semana siguiente">→</button></div>
     ${P.days.map(d => `<div class="set planner-row"><label for="plan-${d.id}" class="l"><b>${esc(d.name)}</b></label><select id="plan-${d.id}" data-plan="${d.id}" style="max-width:55%;padding:12px;border-radius:10px;background:var(--bg);color:var(--t1);border:1px solid var(--gb2)">${[-1,0,1,2,3,4,5,6].map(n => `<option value="${n}" ${plan[d.id]===n?'selected':''}>${n<0?'Sin programar':names[n]}</option>`).join('')}</select></div>`).join('')}
@@ -1601,7 +2084,7 @@ function renderDay(day){
     </div>
     <div class="pbar"><i style="width:${(pr.pct*100).toFixed(1)}%"></i></div>`;
 
-  h += live ? day.blocks.filter(b=>b.t==='prep').map(b=>renderBlock(b,day)).join('') + renderLiveExercises(day) + renderConditioning(day.blocks,day) : day.blocks.map(b => renderBlock(b, day)).join('');
+  h += live ? day.blocks.filter(b=>['prep','common-warmup'].includes(b.t)).map(b=>renderBlock(b,day)).join('') + renderLiveExercises(day) + renderConditioning(day.blocks,day) : day.blocks.map(b => renderBlock(b, day)).join('');
 
   if (live) {
     h += `<div class="sec"><h2>Notas de la sesión</h2><span class="meta">opcional</span></div>
@@ -1632,6 +2115,7 @@ function renderConditioning(blocks,day){
 
 function renderBlock(b, day){
   switch (b.t) {
+    case 'common-warmup': return `<details class="card" open><summary style="min-height:48px;display:flex;align-items:center;cursor:pointer">1 · Calentamiento habitual · 10 min</summary><p>Hazlo una vez; si ya lo completaste hoy, no lo repitas.</p>${P.warmup.groups.map(g=>`<h3>${esc(g.g)}</h3>${g.items.map(i=>`<details class="exguide"><summary>${esc(i.n)} · ${esc(i.d)}</summary><p>${esc(i.how)}</p></details>`).join('')}`).join('')}</details>`;
     case 'prep': return `<details class="prep-card" open><summary>${esc(b.h)} <span>${esc(b.meta||'2 vueltas · ligero')}</span></summary>${(b.parts||[b.x]).map(x=>'<p>'+esc(x)+'</p>').join('')}</details>`;
     case 'sec': return `<div class="sec"><h2>${esc(b.h)}</h2>${b.meta?`<span class="meta">${esc(b.meta)}</span>`:''}</div>`;
     case 'ex':  return `<div class="ex${exFull(b)?' full':''}">${exBody(b, day)}${exTrack(b, day)}</div>`;
@@ -2111,6 +2595,7 @@ document.addEventListener('change', e => {
       if((S.active.sets[slot]||[]).some(Boolean)&&!confirm('Al cambiar se reinician las series de este hueco. ¿Continuar?')){render();return;}
       const opt=altList(x).find(v=>v.id===id); if(!opt)return;
       x.id=opt.id;x.nm=opt.nm;S.active.sets[slot]=[];S.active.repsLog[slot]='';const last=lastFor(id);S.active.kg[slot]=last&&last.kg!=null?last.kg:'';
+      if(x.alternatives){S.drafts[day.id]=S.drafts[day.id]||{};S.drafts[day.id][slot]=id;}
     }else if(day){S.drafts[day.id]=S.drafts[day.id]||{};S.drafts[day.id][slot]=id;}
     rememberExercise(id);save();renderHere();return;
   }

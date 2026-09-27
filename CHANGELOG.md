@@ -1,5 +1,13 @@
 # Cambios
 
+## 2.8.0 — 2026-09-27
+
+- Metabólico + core: calentamiento habitual, dos ejercicios elegibles y seis circuitos de 20 minutos.
+- Tres opciones CrossFit y tres kettlebell, con trabajo abdominal.
+- Cuatro sesiones complementarias para casa: dos sin material y dos con mancuernas.
+- Selecciones de preparación persistentes, historial por ejercicio real y claves independientes por circuito.
+- Verificación móvil, persistencia, calendario e historial de las nuevas sesiones.
+
 ## 2.7.2 — 2026-09-24
 
 - AMRAP de 20 minutos Full kettlebell añadido como cuarta variante.

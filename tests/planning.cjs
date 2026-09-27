@@ -59,11 +59,11 @@ const server = http.createServer((req,res) => {
         upperA:{landmine:get('upper-a','landmine').sets,curl:get('upper-a','curl-biceps').sets,triceps:get('upper-a','triceps-overhead').sets},
         leg:{squat:[get('pierna','sentadilla').sets,get('pierna','sentadilla').reps],bulgarian:[get('pierna','bulgara').sets,get('pierna','bulgara').reps],nordic:get('pierna','nordico').sets},
         upperB:{pulldown:!!get('upper-b','jalon'),hammer:get('upper-b','curl-martillo').sets,triceps:get('upper-b','triceps-polea').sets},
-        conditioning:{deadbug:get('crossfit','dead-bug').sets,pallof:get('crossfit','pallof').sets},
+        conditioning:{deadbug:get('crossfit','dead-bug').sets,shoulder:get('crossfit','rot-ext').sets},
         guide:Object.keys(EX_GUIDE).length
       };
     });
-    assert.deepEqual(program,{upperA:{landmine:2,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{deadbug:2,pallof:2},guide:28});
+    assert.deepEqual(program,{upperA:{landmine:2,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{deadbug:2,shoulder:2},guide:31});
     const warmup=await page.evaluate(()=>P.warmup.groups.flatMap(g=>g.items.map(x=>x.n)));
     assert.deepEqual(warmup,['Cat-Cow',"World’s Greatest Stretch",'Quadruped Thoracic Rotation','Scapular Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Dorsiflexion']);
     assert.equal(warmup.some(x=>/bici|band|banda|pasos laterales/i.test(x)),false);
@@ -342,31 +342,38 @@ const server = http.createServer((req,res) => {
     await page.evaluate(()=>{skipRest();S.active=null;save();go('day','pierna');startSession('pierna')});
     assert.match(await page.locator('.prep-card').textContent(),/Goblet Squat/);
     assert.equal(await page.locator('.prep-card [data-act="set"]').count(),0);
-    // Conditioning remains visible after starting either variant, and rounds reach history.
-    for(const variant of [0,1,2,3]){
-      await page.evaluate(v=>{S.active=null;S.picks['cf-mode']=v;save();go('day','crossfit');startSession('crossfit')},variant);
+    // All six metabolic variants: common warmup, two chosen exercises, timer and distinct history.
+    for(const family of [0,1])for(const variant of [0,1,2]){
+      const key=family?'metabolic-kb':'metabolic-cross';
+      await page.evaluate(({family,variant,key})=>{S.active=null;S.drafts.crossfit={};S.picks['metabolic-family']=family;S.picks[key]=variant;save();go('day','crossfit');startSession('crossfit')},{family,variant,key});
+      assert.equal(await page.evaluate(()=>S.active.exercises.length),2);
       assert.equal(await page.locator('[data-act="wod"]').count(),1);
-      assert.match(await page.locator('#app').textContent(),/Cierre · 3 min/);
-      assert.match(await page.locator('.prep-card').textContent(),/10 min · sin fatiga/);
-      assert.equal(await page.locator('.prep-card p').count(),3);
-      assert.doesNotMatch(await page.locator('.prep-card').textContent(),/<b>|<br>/);
-      assert.equal(await page.locator('[data-act="pick"][data-k="cf-mode"]').count(),4);
       assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
+      assert.match(await page.locator('#app').textContent(),/Calentamiento habitual/);
+      assert.match(await page.locator('#app').textContent(),/World’s Greatest Stretch/);
+      assert.equal(await page.locator('[data-act="pick"][data-k="'+key+'"]').count(),3);
+      await openExMenu(/Rotación externa con goma/);
+      await page.locator('#exsheet select').selectOption('wall-slide');
+      await closeExMenu();
+      await openExMenu(/Dead Bug/);
+      await page.locator('#exsheet select').selectOption('bird-dog');
+      await closeExMenu();
       await page.locator('[data-act="set"][data-k^="dead-bug|"]').first().click();
       await page.evaluate(()=>skipRest());
-      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth((variant+1)%4).click();
-      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
-      await page.locator('[data-act="pick"][data-k="cf-mode"]').nth(variant).click();
       await page.locator('[data-act="wod"]').click();
       assert.equal(await page.evaluate(()=>RT.running),true);
       await page.locator('[data-act="timer-minimize"]').click();
       await page.reload();
-      assert.equal(await page.evaluate(()=>Object.entries(S.active.sets).some(([k,v])=>k.startsWith('dead-bug|')&&v[0])),true);
+      assert.deepEqual(await page.evaluate(()=>S.active.exercises.map(e=>e.id)),['wall-slide','bird-dog']);
       await page.evaluate(()=>skipRest());
-      await page.locator('[data-act="rnd"][data-d="1"]').first().click();
+      await page.locator('[data-act="rnd"][data-d="1"]').click();
       await page.locator('[data-act="finish"]').click();
-      assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.reps==='rondas'&&e.sets===1)),true);
+      assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.id==='bird-dog')),true);
+      assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.id==='dead-bug')),false);
     }
+    await page.evaluate(()=>{go('day','crossfit');startSession('crossfit')});
+    assert.deepEqual(await page.evaluate(()=>S.active.exercises.map(e=>e.id)),['wall-slide','bird-dog']);
+    await page.evaluate(()=>{S.active=null;save()});
     // Home circuit remains optional, preserves schedules and stores its own rounds.
     const beforeHome=await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size}));
     await page.evaluate(()=>{go('day','casa-20');startSession('casa-20')});
@@ -385,7 +392,7 @@ const server = http.createServer((req,res) => {
     await page.reload();
     assert.deepEqual(await page.evaluate(()=>({day:S.history[0].dayId,rounds:S.history[0].entries[0].sets,note:S.history[0].note})),{day:'casa-20',rounds:1,note:'15 kg · RPE 6 · una ronda de prueba'});
     assert.deepEqual(await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size})),beforeHome);
-    assert.equal(await page.evaluate(()=>new Set(S.history.filter(h=>h.dayId==='crossfit').flatMap(h=>h.entries.filter(e=>e.reps==='rondas').map(e=>e.id))).size>=4),true);
+    assert.equal(await page.evaluate(()=>new Set(S.history.filter(h=>h.dayId==='crossfit').flatMap(h=>h.entries.filter(e=>e.reps==='rondas').map(e=>e.id))).size>=6),true);
     for(const width of [320,390,768])await checkLayout(width,'day','casa-20');
     await page.setViewportSize({width:390,height:844});
     await page.screenshot({path:path.join(root,'tests','home-circuit-preview.png'),fullPage:true});
@@ -418,22 +425,28 @@ const server = http.createServer((req,res) => {
     assert.match(await nordic.textContent(),/Curl femoral sentado/);
     await page.screenshot({path:path.join(root,'tests','nordic-guide-preview.png'),fullPage:true});
     await page.evaluate(()=>go('day','crossfit'));
-    const stretch=page.locator('.ex').filter({hasText:'World’s Greatest Stretch'}).first();
-    await stretch.locator('summary').click();
-    assert.match(await stretch.textContent(),/rodilla trasera/);
-    assert.match(await stretch.textContent(),/banco estable/);
-    assert.equal(await page.evaluate(()=>flatEx(dayById('crossfit')).some(e=>['hip-thrust','step-up'].includes(e.id))),false);
+    assert.match(await page.locator('#app').textContent(),/World’s Greatest Stretch/);
+    assert.equal(await page.evaluate(()=>flatEx(dayById('crossfit')).length),2);
     await page.screenshot({path:path.join(root,'tests','mobility-guide-preview.png'),fullPage:true});
+    for(const id of ['casa-libre-cardio','casa-libre-suave','casa-pesas-metabolico']){
+      for(const width of [320,390])await checkLayout(width,'day',id);
+      await page.evaluate(id=>{go('day',id);startSession(id)},id);
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'900');
+      await page.locator('[data-act="rnd"][data-d="1"]').click();
+      await page.locator('[data-act="finish"]').click();
+      await page.reload();
+      assert.equal(await page.evaluate(()=>S.history[0].dayId),id);
+    }
     // The installed shell opens the new program offline without touching the user's browser.
     const offlineContext=await browser.newContext({serviceWorkers:'allow'});
     const offlinePage=await offlineContext.newPage();
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.2');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.8.0');
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.7.2');
+    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.8.0');
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);

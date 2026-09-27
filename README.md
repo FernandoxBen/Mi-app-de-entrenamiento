@@ -1,4 +1,12 @@
-# Entreno 2.7.2
+# Entreno 2.8.0
+
+## Novedades 2.8.0
+
+Metabólico + core conserva el identificador crossfit y el calendario. Reutiliza el calentamiento habitual, sin duplicar sus datos, y añade dos huecos de preparación elegibles: hombro/escápula y control del tronco. El selector ⋯ funciona antes y durante la sesión, recuerda la elección y registra el ejercicio real. Las sesiones en curso conservan sus ejercicios anteriores.
+
+Seis circuitos nuevos de 20 min, agrupados en CrossFit y kettlebell (tres por familia), todos con abdomen. Las claves nuevas de rondas evitan comparar rutinas modificadas con las antiguas. Reloj total sin señales por estación; cargas y variantes en notas.
+
+Cuatro extras para casa: Cardio + core con mancuernas (conservado), Motor + abs con mancuernas, Cardio + abs sin material y Suave + core sin material. Cada sesión dura 20 min incluyendo preparación y cierre, con 15 min de circuito. Son opcionales y no cambian el calendario ni completan sesiones esenciales. Empezar con una extra semanal moderada y ajustar por recuperación.
 
 ## Novedades 2.7.2
 
