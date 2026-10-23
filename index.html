@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c1118">
-<meta name="description" content="Entreno 2.10.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
-<title>Entreno 2.10.0</title>
+<meta name="description" content="Entreno 3.0.0 · tu plan 3+1 con reloj manual, historial y entrenamiento sin conexión.">
+<title>Entreno 3.0.0</title>
 
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -567,6 +567,78 @@ body{background:var(--bg)}
 #timer-dock.on{display:block}body:has(#timer-dock.on) #app{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 86px)}
 @media(max-width:360px){.ex .hd{padding:12px;gap:8px}.ex .nm{font-size:16px}.dcard{padding:16px;gap:10px}.dcard .ic{display:none}.herocard{padding:20px}.home-intro h2{font-size:34px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* ---------------- reloj ---------------- */
+.ck-card{padding:18px 16px 16px;border-radius:var(--rl);background:rgba(255,255,255,.045);border:1px solid var(--gb);margin:14px 0}
+.ck-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.07)}
+.ck-row>span{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}
+.ck-step{display:grid;grid-template-columns:52px minmax(84px,auto) 52px;align-items:center;gap:8px}
+.ck-step button{height:52px;border-radius:14px;border:1px solid var(--gb);background:var(--gl);color:var(--t1);font-size:22px;font-weight:700}
+.ck-step button[disabled]{opacity:.3}
+.ck-step b{text-align:center;font-family:var(--f-mono);font-size:26px;font-weight:700;letter-spacing:-.02em}
+.ck-chips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:4px 0 6px}
+.ck-chips button{min-height:44px;border-radius:12px;border:1px solid var(--gb);background:rgba(255,255,255,.05);color:var(--t2);font-family:var(--f-mono);font-size:12px;font-weight:700}
+.ck-chips button.on{color:#07111f;background:var(--accent);border-color:var(--accent)}
+.ck-go{min-height:64px;font-size:22px}
+.ck-text{width:100%;min-height:46px;padding:0 12px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid var(--gb);color:var(--t1);font-size:15px}
+.ck-ref{font-size:12.5px;color:var(--t2);line-height:1.5;margin:2px 0 8px}
+.ck-ref b{color:var(--t1);font-family:var(--f-mono)}
+.ck-ref b.up{color:var(--c-leg)}
+.ck-stage{display:flex;flex-direction:column;align-items:stretch;text-align:center;padding:16px 0 8px;gap:10px}
+.ck-ex{font-family:var(--f-disp);font-weight:700;font-size:clamp(22px,6.5vw,30px);line-height:1.1;text-transform:uppercase;letter-spacing:.02em;overflow-wrap:break-word}
+.ck-k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
+.ck-big{display:flex;align-items:baseline;justify-content:center;gap:10px;line-height:1}
+.ck-big b{font-family:var(--f-mono);font-size:clamp(96px,30vw,140px);font-weight:700;letter-spacing:-.06em}
+.ck-big span{font-family:var(--f-mono);font-size:clamp(28px,8vw,40px);color:var(--t3);font-weight:700}
+.ck-dots{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
+.ck-dots i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.14)}
+.ck-dots i.on{background:var(--c-leg)}
+.ck-dots i.cur{background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 30%,transparent)}
+.ck-sw{font-family:var(--f-mono);font-size:12px;color:var(--t3)}
+.ck-sw span{color:var(--t2);font-weight:700}
+.ck-done{min-height:76px;border-radius:20px;border:0;background:var(--c-leg);color:#07140f;font-family:var(--f-disp);font-size:26px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:8px;transition:transform .12s}
+.ck-done:active{transform:scale(.98)}
+.ck-done.ghost{min-height:56px;font-size:16px;letter-spacing:.02em;background:var(--gl);color:var(--t1);border:1px solid var(--gb)}
+.ck-quiet{min-height:46px;background:transparent;color:var(--t3);border-color:transparent}
+.ck-num{width:100%;background:transparent;border:0;color:var(--t1);text-align:center;font-family:var(--f-mono);font-size:30px;font-weight:700;letter-spacing:-.02em;padding:0;min-height:48px}
+.ck-num::placeholder{color:var(--t3)}
+.ck-num::-webkit-outer-spin-button,.ck-num::-webkit-inner-spin-button,.ck-text::-webkit-outer-spin-button,.ck-text::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.ck-num,.ck-text[type=number]{-moz-appearance:textfield;appearance:textfield}
+.ck-ring{position:relative;width:min(76vw,300px);aspect-ratio:1;margin:2px auto}
+.ck-ring svg{width:100%;height:100%;display:block}
+.ck-ring .bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:12}
+.ck-ring .fg{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;transition:stroke-dasharray .25s linear}
+.ck-ring.paused .fg{stroke:var(--gold)}
+.ck-ring .t{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:clamp(56px,17vw,80px);font-weight:700;letter-spacing:-.04em}
+.ck-ring .t.low{color:var(--coral)}
+.ck-next{font-size:14px;color:var(--t2)}
+.ck-next b{color:var(--t1)}
+.ck-ctrl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ck-ctrl button{min-height:56px;border-radius:16px;border:1px solid var(--gb);background:var(--gl);color:var(--t1);font-family:var(--f-mono);font-size:14px;font-weight:700}
+.ck-ok{width:64px;height:64px;margin:4px auto;border-radius:50%;background:var(--c-leg);color:#07140f;display:flex;align-items:center;justify-content:center}
+.ck-ok svg{width:30px;height:30px}
+.ck-sum{font-family:var(--f-mono);font-size:15px;color:var(--t1);line-height:1.6}
+.ck-stage .setlog{padding:0;margin:0;text-align:center}
+body.ck-flash{animation:ckflash .9s ease-out}
+@keyframes ckflash{0%{box-shadow:inset 0 0 0 9999px color-mix(in srgb,var(--c-leg) 35%,transparent)}100%{box-shadow:inset 0 0 0 9999px transparent}}
+.manual summary{min-height:44px;display:flex;align-items:center;cursor:pointer;list-style:none;font-weight:700;font-size:15px;color:var(--accent)}
+.manual summary::-webkit-details-marker{display:none}
+.manual[open] summary{margin-bottom:10px}
+.mn-head,.mn-row{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(0,1fr) 44px;gap:8px;align-items:center}
+.mn-head{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin:4px 0 6px}
+.mn-row{margin-bottom:8px}
+.mn-row b{font-family:var(--f-mono);font-size:14px;color:var(--t3);text-align:center}
+.mn-row .ck-text{text-align:center;font-family:var(--f-mono);font-weight:700;min-height:46px}
+.mn-del{width:44px;height:44px;border-radius:12px;border:1px solid var(--gb);background:transparent;color:var(--t3)}
+.mn-del[disabled]{opacity:.3}
+.mn-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px}
+.mn-save:not([disabled]){color:#07111f;background:var(--accent);border-color:var(--accent)}
+.ck-banner{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;text-align:left;margin:14px 0 4px;padding:14px 16px;border-radius:var(--r);
+  background:color-mix(in srgb,var(--c-leg) 16%,rgba(255,255,255,.04));border:1px solid color-mix(in srgb,var(--c-leg) 45%,transparent);color:var(--t1)}
+.ck-banner .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--c-leg)}
+.ck-banner b{font-size:17px}.ck-banner span:last-child{font-size:12px;color:var(--t2)}
+.ck-save{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.05}
+.ck-save small{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:none;font-weight:700;opacity:.75}
 </style>
 </head>
 <body>
@@ -578,10 +650,9 @@ body{background:var(--bg)}
 
 <nav id="nav" aria-label="Navegación principal">
   <button data-v="hoy" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Hoy</button>
-  <button data-v="semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Semana</button>
-  <button data-v="historial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progreso</button>
+  <button data-v="reloj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.6 1.6M9.5 2.5h5M12 2.5v3.5M19 6l1.5-1.5"/></svg>Reloj</button>
+  <button data-v="historial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Registro</button>
   <button data-v="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H2a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.4-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1A1.7 1.7 0 0 0 9.2 3V2.9a2 2 0 1 1 4 0V3a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.2a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.1z"/></svg>Ajustes</button>
-  <button id="navtimer" data-act="manual-timer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Tiempo</button>
 </nav>
 
 <div class="sheet" id="sheet" role="dialog" aria-label="Descanso">
@@ -624,7 +695,7 @@ body{background:var(--bg)}
    PROGRAMA — todo el contenido vive aquí (fuente única)
    ========================================================= */
 const P = {
-  version: '2.10.0',
+  version: '3.0.0',
   reviewed: 'septiembre de 2026',
   progression: [
     {h:'Mantén el margen', x:'Trabaja normalmente con 2 repeticiones en reserva. Detén la serie si la técnica cambia o aparece dolor.'},
@@ -1642,7 +1713,7 @@ P.days.forEach(d => {
   d.day = 'Flexible';
   if (d.principle) d.principle = d.principle.replace(/Martes · |Jueves · /g, '').replace(/El acondicionamiento va el jueves\./g, 'Planifica el acondicionamiento según tu recuperación.');
 });
-const DEF = { settings:{ rest:60, restStrength:120, restStandard:60, sound:true, vibe:true, lift:'' }, picks:{}, readiness:{}, active:null, history:[], prs:{}, notes:{}, plans:{}, warmups:{}, favorites:{}, recents:[], drafts:{} };
+const DEF = { settings:{ rest:60, restStrength:120, restStandard:60, sound:true, vibe:true, lift:'' }, picks:{}, readiness:{}, active:null, history:[], prs:{}, notes:{}, plans:{}, warmups:{}, favorites:{}, recents:[], drafts:{}, clock:null, clockPrefs:{}, customEx:[] };
 let S = loadState();
 
 function loadState(){
@@ -1662,6 +1733,22 @@ function sanitizeState(s){
   if (!Array.isArray(s.history)) s.history = [];
   for (const k of ['picks','prs','readiness','notes','favorites','drafts']) if (!s[k] || typeof s[k] !== 'object' || Array.isArray(s[k])) s[k] = {};
   if (!Array.isArray(s.recents)) s.recents = [];
+  if (!s.clockPrefs || typeof s.clockPrefs !== 'object' || Array.isArray(s.clockPrefs)) s.clockPrefs = {};
+  s.customEx = Array.isArray(s.customEx) ? s.customEx.filter(x => x && typeof x === 'object' && x.id && x.nm).map(x => ({id:String(x.id), nm:String(x.nm).slice(0,40)})) : [];
+  if (s.clock && (typeof s.clock !== 'object' || Array.isArray(s.clock))) s.clock = null;
+  if (s.clock) {
+    const c = s.clock;
+    if (!['setup','work','log','rest','done'].includes(c.phase)) c.phase = 'setup';
+    c.sets = Math.max(1, Math.min(10, Math.round(+c.sets) || 4));
+    c.rest = Math.max(15, Math.min(600, Math.round(+c.rest) || 90));
+    c.i = Math.max(0, Math.min(c.sets - 1, Math.round(+c.i) || 0));
+    if (!Array.isArray(c.log)) c.log = [];
+    c.log = c.log.map(x => (x && typeof x === 'object') ? { kg:Number.isFinite(+x.kg) && x.kg !== null && x.kg !== '' ? +x.kg : null, reps:Number.isFinite(+x.reps) && +x.reps > 0 ? Math.round(+x.reps) : null } : null);
+    for (const k of ['t0','restEnd','restTotal','left','runId']) c[k] = Number.isFinite(+c[k]) ? +c[k] : 0;
+    c.exId = typeof c.exId === 'string' ? c.exId : ''; c.exNm = typeof c.exNm === 'string' ? c.exNm : '';
+    c.custom = typeof c.custom === 'string' ? c.custom : ''; c.typing = !!c.typing; c.paused = !!c.paused;
+    if (['work','log','rest'].includes(c.phase) && (!c.exId || !c.runId)) c.phase = 'setup';
+  }
   normalizePlanning(s);
   s.settings.rest = [60,90,120,180].includes(+s.settings.rest) ? +s.settings.rest : 90;
   s.settings.restStrength = Math.max(30,Math.min(300,+s.settings.restStrength||120));
@@ -1882,20 +1969,20 @@ function render(){
     <button class="iconbtn" data-act="back" aria-label="Volver">${svg('back',2.4)}</button>
     <div><h1>${esc(day.name)}</h1><div class="sub">${esc(scheduleLabel(day))} · ${esc(day.sub)}</div></div>` : `
     <img class="brandmark" src="./icon-192.png" alt="" width="42" height="42">
-    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'Tu plan':VIEW==='historial'?'Progreso':'Ajustes'}${VIEW==='hoy'?`<span class="badge-v2">${P.version}</span>`:''}</h1>
-    <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='historial'?S.history.length+' sesiones':P.version}</div></div>`;
+    <div><h1>${VIEW==='hoy'?'Entreno':VIEW==='semana'?'Tu plan':VIEW==='reloj'?'Reloj':VIEW==='historial'?'Registro':'Ajustes'}${VIEW==='hoy'?`<span class="badge-v2">${P.version}</span>`:''}</h1>
+    <div class="sub">${VIEW==='hoy'?todayLabel():VIEW==='semana'?'Tu calendario flexible':VIEW==='reloj'?clockSub():VIEW==='historial'?S.history.length+(S.history.length===1?' sesión':' sesiones'):P.version}</div></div>`;
 
   $$('#nav button').forEach(b => {
-    const on = b.dataset.v === VIEW && !day;
+    const on = !day && (b.dataset.v === VIEW || (b.dataset.v === 'hoy' && VIEW === 'semana'));
     b.classList.toggle('on', on);
     if (on) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
   });
-  $('#navtimer').hidden=!S.active;
 
   const app = $('#app');
   if (day) app.innerHTML = `<div class="wrap">${renderDay(day)}</div>`;
   else if (VIEW === 'hoy') app.innerHTML = `<div class="wrap">${renderHoy()}</div>`;
   else if (VIEW === 'semana') app.innerHTML = `<div class="wrap">${renderSemana()}</div>`;
+  else if (VIEW === 'reloj') app.innerHTML = `<div class="wrap">${renderReloj()}</div>`;
   else if (VIEW === 'historial') app.innerHTML = `<div class="wrap">${renderHist()}</div>`;
   else app.innerHTML = `<div class="wrap">${renderSet()}</div>`;
   syncSession();
@@ -2022,7 +2109,11 @@ function renderHoy(){
 
   const coreDone=P.days.filter(x=>!x.optional&&done.has(x.id)).length;
   const pct = coreDone/3, R = 26, C = 2*Math.PI*R;
+  const ck = clockActive() ? clk() : null;
+  const clockBanner = ck ? `<button class="ck-banner" data-act="tab" data-v="reloj"><span class="k">${ck.phase === 'rest' ? 'Descansando' : 'Reloj en marcha'}</span>
+      <b>${esc(ck.exNm)}</b><span>Serie ${ck.i + 1} de ${ck.sets} · volver al reloj</span></button>` : '';
   return `
+  ${clockBanner}
   <div class="home-intro"><span>TU PLAN · 3 + 1</span><h2>Entrena.<br>Avanza a tu ritmo.</h2><p>Tres sesiones de fuerza. Una extra cuando puedas.</p></div>
   <div class="hero">${warmCard()}${hero}</div>
   <button class="btn plan-action" data-act="tab" data-v="semana">Planificar mis días</button>
@@ -2422,9 +2513,66 @@ function weeklyVolume(){
     <span>${new Date(w).getDate()}/${new Date(w).getMonth()+1}</span></div>`).join('')}</div>
     <div class="wvol-foot"><span>Volumen por semana</span><span>${vol[vol.length-1]?vol[vol.length-1]+' kg esta semana':'sin registro esta semana'}</span></div>`;
 }
+/* Registro a mano: para anotar un entreno hecho sin la app o fuera del reloj. */
+let MANUAL = null;
+function manualState(){
+  if (!MANUAL) MANUAL = { open:false, exId:'', date:dateKey(), rows:[{kg:null,reps:null},{kg:null,reps:null},{kg:null,reps:null}] };
+  return MANUAL;
+}
+function manualPick(id){
+  const m = manualState(); m.exId = id;
+  const last = lastFor(id);
+  const sd = last && last.setData && last.setData.length ? last.setData : null;
+  const n = sd ? sd.length : ((clockDefaults(id) || {}).sets || 3);
+  m.rows = Array.from({length:Math.max(1, Math.min(10, n))}, (_, i) => {
+    const r = sd && (sd[i] || sd[sd.length-1]);
+    return { kg: r && r.kg != null ? r.kg : (last && last.kg != null ? last.kg : null), reps: r && r.reps ? r.reps : null };
+  });
+}
+function manualForm(){
+  const m = manualState();
+  const {rec, all} = clockExercises();
+  const opt = x => `<option value="${esc(x.id)}" ${x.id === m.exId ? 'selected' : ''}>${esc(x.nm)}</option>`;
+  const valid = m.exId && m.rows.some(r => r.reps > 0);
+  return `<details class="ck-card manual"${m.open ? ' open' : ''}><summary data-act="mn-toggle">＋ Anotar a mano</summary>
+    <label class="exm-field"><span>Ejercicio</span>
+      <select class="ex-select" data-act="mn-ex" aria-label="Ejercicio">
+        <option value="" ${!m.exId ? 'selected' : ''} disabled>Elige un ejercicio</option>
+        ${rec.length ? `<optgroup label="Recientes">${rec.map(opt).join('')}</optgroup>` : ''}
+        <optgroup label="Todos">${all.map(opt).join('')}</optgroup>
+      </select></label>
+    <label class="exm-field"><span>Fecha</span><input class="ck-text" type="date" data-act="mn-date" value="${esc(m.date)}" max="${dateKey()}"></label>
+    <div class="mn-head"><span>Serie</span><span>kg</span><span>reps</span><span></span></div>
+    ${m.rows.map((r, i) => `<div class="mn-row"><b>${i + 1}</b>
+      <input class="ck-text" type="number" inputmode="decimal" step="0.5" min="0" max="1000" data-act="mn-kg" data-i="${i}" value="${r.kg != null ? r.kg : ''}" placeholder="—" aria-label="Peso de la serie ${i + 1}">
+      <input class="ck-text" type="number" inputmode="numeric" step="1" min="1" max="100" data-act="mn-reps" data-i="${i}" value="${r.reps || ''}" placeholder="—" aria-label="Repeticiones de la serie ${i + 1}">
+      <button class="mn-del" data-act="mn-del" data-i="${i}" aria-label="Quitar serie ${i + 1}"${m.rows.length <= 1 ? ' disabled' : ''}>✕</button></div>`).join('')}
+    <div class="mn-actions"><button class="btn" data-act="mn-add"${m.rows.length >= 10 ? ' disabled' : ''}>＋ Serie</button>
+      <button class="btn mn-save" data-act="mn-save"${valid ? '' : ' disabled'}>Guardar</button></div>
+  </details>`;
+}
+function manualSave(){
+  const m = manualState();
+  const sets = m.rows.filter(r => r.reps > 0).map(r => ({ kg:(r.kg != null && Number.isFinite(+r.kg)) ? +r.kg : null, reps:Math.round(+r.reps) }));
+  if (!m.exId || !sets.length) return;
+  const nm = clockName(m.exId);
+  const [y, mo, d] = m.date.split('-').map(Number);
+  let ts = new Date(y, (mo||1) - 1, d||1, 12, 0, 0).getTime();
+  if (!Number.isFinite(ts) || ts > Date.now()) ts = Date.now();
+  const best = sets.reduce((a, x) => (x.kg != null && (a == null || x.kg > a)) ? x.kg : a, null);
+  const vol = Math.round(sets.reduce((a, x) => a + (x.kg||0) * x.reps, 0));
+  S.history.push({ id:'m' + Date.now(), dayId:'manual', ts, dur:0, vol, note:'', entries:[{ id:m.exId, baseId:m.exId, nm, sets:sets.length,
+    reps:sets.map(x => x.reps).join(' / '), kg:best, setData:sets, ts }] });
+  S.history.sort((a, b) => b.ts - a.ts);
+  if (best != null && (!S.prs[m.exId] || best > S.prs[m.exId].kg)) S.prs[m.exId] = { kg:best, nm, ts };
+  rememberExercise(m.exId);
+  LIFT = m.exId; S.settings.lift = m.exId;
+  MANUAL = null; save(); renderHere();
+  toast(`<b>Guardado</b><br>${esc(nm)} · ${sets.map(x => esc(setLabel(x))).join(' · ')}`);
+}
 function renderHist(){
-  if (!S.history.length) return `<div class="empty"><b>Aún sin sesiones</b>Cuando termines tu primer entreno aparecerá aquí: pesos de cada serie, récords y progreso por ejercicio.
-    <div class="btnrow" style="max-width:260px;margin:20px auto 0"><button class="btn" data-act="tab" data-v="hoy">${svg('play',0)} Ir a la sesión de hoy</button></div></div>`;
+  if (!S.history.length) return `${manualForm()}<div class="empty"><b>Aún sin registros</b>Lo que hagas con el Reloj, en una sesión del plan o anotado a mano aparecerá aquí: pesos de cada serie, récords y progreso por ejercicio.
+    <div class="btnrow" style="max-width:260px;margin:20px auto 0"><button class="btn" data-act="tab" data-v="reloj">${svg('play',0)} Ir al reloj</button></div></div>`;
   const lifts = trackedLifts();
   if (!LIFT) LIFT = S.settings.lift || P.keyLifts[0];
   if (lifts.length && !lifts.some(l => l.id === LIFT)) LIFT = lifts[0].id;
@@ -2432,6 +2580,7 @@ function renderHist(){
   const best = rows.reduce((m,r) => (r.top && (!m || +r.top.kg > +m.top.kg)) ? r : m, null);
   const vol = totalVol();
   return `
+  ${manualForm()}
   <div class="sec"><h2>Progreso</h2><span class="meta">por ejercicio</span></div>
   ${lifts.length ? `<label class="exm-field"><span>Ejercicio</span>
     <select class="ex-select" data-act="lift-sel" aria-label="Elegir ejercicio">${lifts.map(l =>
@@ -2471,12 +2620,18 @@ function prRows(){
     `<div class="prow"><span class="n">${esc(S.prs[k].nm||k)}</span>
       <span class="v">${S.prs[k].kg} <small>KG · ${esc(dstr(S.prs[k].ts))}</small></span></div>`).join('');
 }
+function sessionName(h, day){
+  if (day) return day.name;
+  if (h.dayId === 'reloj') return 'Reloj';
+  if (h.dayId === 'manual') return 'Registro a mano';
+  return h.dayId;
+}
 function histRow(h, day){
-  const c = day ? day.color : '--c-upper';
+  const c = day ? day.color : (h.dayId === 'reloj' ? '--c-leg' : '--c-upper');
   const dd = new Date(h.ts);
   return `<button class="hitem" style="--dc:var(${c})" data-act="hdet" data-id="${esc(h.id)}">
       <span class="pill"><b>${dd.getDate()}</b><span>${dd.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}</span></span>
-      <span class="m"><b>${esc(day?day.name:h.dayId)}</b>
+      <span class="m"><b>${esc(sessionName(h, day))}</b>
         <span>${h.dur?Math.round(h.dur/60000)+' min · ':''}${(h.entries||[]).reduce((a,e)=>a+(e.sets||0),0)} series${h.note?' · nota':''}</span></span>
       ${h.vol?`<span class="kg">${h.vol>=1000?(h.vol/1000).toFixed(1)+' t':h.vol+' kg'}</span>`:''}
     </button>
@@ -2742,7 +2897,11 @@ async function wake(on){
     else if (!on && WL) { await WL.release(); WL = null; }
   } catch(e){}
 }
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.active) wake(true); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (S.active || clockActive()) wake(true);
+  if (clockActive()) { clockTick(); if (VIEW === 'reloj') renderHere(); }
+});
 
 /* ---------------- datos ---------------- */
 function exportData(){
@@ -2782,6 +2941,8 @@ document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const a = t.dataset.act;
   if (a === 'open')   { go('day', t.dataset.id); }
+  else if (a.startsWith('ck-')) { clockAction(a, t); }
+  else if (a.startsWith('mn-')) { manualAction(a, t); }
   else if (a === 'plan-week') { planWeekOffset += Number(t.dataset.n); render(); }
   else if (a === 'warm-check') { const w = warmRecord(); w.checks[t.dataset.i] = !w.checks[t.dataset.i]; w.done = false; S.warmups[dateKey()] = w; save(); render(); }
   else if (a === 'warm-done') { const w = warmRecord(); w.done = true; S.warmups[dateKey()] = w; save(); go('hoy'); }
@@ -2831,7 +2992,51 @@ document.addEventListener('click', e => {
   else if (a === 'skip')   { skipRest(); }
   else if (a === 'update') { location.reload(); }
 });
+function manualAction(a, t){
+  const m = manualState();
+  if (a === 'mn-toggle') { m.open = !t.parentElement.open; return; }
+  if (a === 'mn-add') { const last = m.rows[m.rows.length-1] || {}; m.rows.push({kg:last.kg ?? null, reps:last.reps ?? null}); }
+  else if (a === 'mn-del') { if (m.rows.length > 1) m.rows.splice(+t.dataset.i, 1); }
+  else if (a === 'mn-save') { manualSave(); return; }
+  m.open = true; renderHere();
+}
+function clockAction(a, t){
+  const c = clk();
+  if (a === 'ck-sets') { c.sets = Math.max(1, Math.min(10, c.sets + (+t.dataset.d))); haptic(10); save(); renderHere(); }
+  else if (a === 'ck-rest') { c.rest = Math.max(15, Math.min(600, c.rest + (+t.dataset.d))); haptic(10); save(); renderHere(); }
+  else if (a === 'ck-restset') { c.rest = +t.dataset.s; haptic(10); save(); renderHere(); }
+  else if (a === 'ck-start') clockStart();
+  else if (a === 'ck-setdone') clockSetDone();
+  else if (a === 'ck-adj') {
+    const d = c.draft = c.draft || clockDefaultSet(c, c.i), f = t.dataset.f, step = +t.dataset.d;
+    if (f === 'kg') d.kg = Math.max(0, Math.min(1000, Math.round(((d.kg != null && d.kg !== '' ? +d.kg : 0) + step) * 2) / 2));
+    else d.reps = Math.max(1, Math.min(100, (+d.reps || 0) + step));
+    haptic(10); save();
+    const inp = $(f === 'kg' ? '[data-act="ck-kg"]' : '[data-act="ck-reps"]'); if (inp) inp.value = f === 'kg' ? d.kg : d.reps;
+  }
+  else if (a === 'ck-save') clockSave(true);
+  else if (a === 'ck-nolog') clockSave(false);
+  else if (a === 'ck-radj') clockAdjust(+t.dataset.d);
+  else if (a === 'ck-pause') clockPause();
+  else if (a === 'ck-skiprest') { haptic(20); clockEndRest(false); }
+  else if (a === 'ck-finish') clockFinish();
+  else if (a === 'ck-new') clockNew();
+  else if (a === 'ck-more') clockMore();
+}
 document.addEventListener('change', e => {
+  if (e.target.dataset.act === 'mn-ex') { manualPick(e.target.value); manualState().open = true; renderHere(); return; }
+  if (e.target.dataset.act === 'mn-date') { manualState().date = e.target.value || dateKey(); return; }
+  if (e.target.dataset.act === 'ck-ex') {
+    const c = clk(), v = e.target.value;
+    if (v === '__new') { c.exId = ''; c.exNm = ''; c.typing = true; }
+    else {
+      c.exId = v; c.exNm = clockName(v); c.typing = false; c.custom = '';
+      const d = clockDefaults(v); if (d) { c.sets = Math.max(1, Math.min(10, +d.sets || 4)); c.rest = Math.max(15, Math.min(600, +d.rest || 90)); }
+    }
+    save(); renderHere();
+    if (c.typing) { const i = $('[data-act="ck-custom"]'); if (i) i.focus(); }
+    return;
+  }
   if (e.target.dataset.act === 'swap-ex') {
     const id=e.target.value,slot=e.target.dataset.slot,day=dayById(DAYVIEW);
     if(S.active&&S.active.dayId===DAYVIEW){
@@ -2856,6 +3061,21 @@ document.addEventListener('change', e => {
   if (e.target.id === 'fimp' && e.target.files[0]) importData(e.target.files[0]);
 });
 document.addEventListener('input', e => {
+  const ca = e.target.dataset && e.target.dataset.act;
+  if (ca === 'ck-custom') { const c = clk(); c.custom = e.target.value; save(); const b = $('[data-act="ck-start"]'); if (b) b.disabled = !c.custom.trim(); return; }
+  if (ca === 'mn-kg' || ca === 'mn-reps') {
+    const m = manualState(), r = m.rows[+e.target.dataset.i]; if (!r) return;
+    const v = e.target.value === '' ? null : +e.target.value;
+    if (ca === 'mn-kg') r.kg = (v != null && Number.isFinite(v) && v >= 0) ? v : null; else r.reps = (v != null && v > 0) ? Math.round(v) : null;
+    const b = $('[data-act="mn-save"]'); if (b) b.disabled = !(m.exId && m.rows.some(x => x.reps > 0));
+    return;
+  }
+  if (ca === 'ck-kg' || ca === 'ck-reps') {
+    const c = clk(); const d = c.draft = c.draft || clockDefaultSet(c, c.i);
+    const v = e.target.value === '' ? null : +e.target.value;
+    if (ca === 'ck-kg') d.kg = (v != null && Number.isFinite(v) && v >= 0) ? v : null; else d.reps = (v != null && v > 0) ? Math.round(v) : null;
+    save(); return;
+  }
   if (e.target.id === 'snote' && S.active) { S.active.note = e.target.value; save(); }
   if (e.target.dataset.act === 'lift-sel') { LIFT = e.target.value; S.settings.lift = LIFT; save(); renderHere(); return; }
   if (e.target.dataset.act === 'repslog' && S.active) { S.active.repsLog[e.target.dataset.k]=e.target.value;save(); }
@@ -2868,19 +3088,316 @@ document.addEventListener('keydown', e => {
 $$('#nav button[data-v]').forEach(b => b.addEventListener('click', () => go(b.dataset.v)));
 window.addEventListener('scroll', () => $('#top').classList.toggle('stuck', window.scrollY > 6), {passive:true});
 
+/* =========================================================
+   RELOJ — eliges ejercicio, series y descanso, y te guía serie a serie:
+   serie → anotar peso y repeticiones → cuenta atrás → siguiente serie.
+   Todo el estado vive en S.clock con horas absolutas, así que sobrevive a
+   bloquear el móvil, cambiar de pestaña o recargar la app.
+   ========================================================= */
+const CLOCK_DEF = { phase:'setup', exId:'', exNm:'', typing:false, custom:'', sets:4, rest:90, i:0, log:[], t0:0,
+  restEnd:0, restTotal:0, paused:false, left:0, runId:0, ref:null, draft:null, lastBeep:null };
+function clk(){
+  if (!S.clock || typeof S.clock !== 'object' || Array.isArray(S.clock)) S.clock = JSON.parse(JSON.stringify(CLOCK_DEF));
+  return S.clock;
+}
+function clockActive(){ const c = S.clock; return !!(c && ['work','log','rest'].includes(c.phase)); }
+function slugify(t){ return String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'ejercicio'; }
+function clockExercises(){
+  const all = new Map();
+  catalog().forEach(x => all.set(x.id, x.nm));
+  (S.customEx||[]).forEach(x => all.set(x.id, x.nm));
+  const rec = (S.recents||[]).filter(id => all.has(id)).slice(0, 6).map(id => ({id, nm:all.get(id)}));
+  return { rec, all:[...all].map(([id,nm]) => ({id, nm})).sort((a,b) => a.nm.localeCompare(b.nm,'es')) };
+}
+function clockName(id){ const x = clockExercises().all.find(e => e.id === id); return x ? x.nm : id; }
+/* Series y descanso con que se abre un ejercicio: lo último que usaste con él;
+   si nunca lo has hecho con el reloj, lo que marca tu plan. */
+function clockDefaults(id){
+  const pref = (S.clockPrefs||{})[id];
+  if (pref) return pref;
+  for (const d of P.days.concat(P.extras)) for (const e of flatEx(d)) {
+    if (!e.sets) continue;
+    if (e.id === id || altList(e).some(a => a.id === id)) return { sets:e.sets, rest:e.rest || 90 };
+  }
+  return null;
+}
+function clockDefaultSet(c, i){
+  const prev = c.log.slice(0, i).reverse().find(x => x && x.kg != null);
+  const rs = c.ref && c.ref.setData || [];
+  const ls = rs[i] || rs[rs.length-1];
+  const kg = prev ? prev.kg : (ls && ls.kg != null ? ls.kg : (c.ref && c.ref.kg != null ? c.ref.kg : null));
+  const reps = (ls && ls.reps) || (prev && prev.reps) || 8;
+  return { kg, reps };
+}
+function primeAudio(){
+  try { AC = AC || new (window.AudioContext||window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch(e){}
+}
+/* Guarda en el historial, serie a serie, lo que llevas de este ejercicio.
+   Todos los ejercicios hechos con el reloj el mismo día forman una sesión. */
+function clockPersist(c){
+  const key = 'r-' + dateKey(new Date(c.runId));
+  let h = S.history.find(x => x.id === key);
+  const done = c.log.filter(Boolean);
+  if (!h && !done.length) return;
+  if (!h) { h = { id:key, dayId:'reloj', ts:c.runId, dur:0, entries:[], vol:0, note:'' }; S.history.unshift(h); }
+  h.entries = (h.entries||[]).filter(e => e.runId !== c.runId);
+  if (done.length) {
+    const best = done.reduce((m,s) => (s.kg != null && (m == null || s.kg > m)) ? s.kg : m, null);
+    h.entries.push({ id:c.exId, baseId:c.exId, nm:c.exNm, runId:c.runId, sets:done.length,
+      reps:done.map(s => s.reps || '?').join(' / '), kg:best, setData:done.map(s => ({kg:s.kg, reps:s.reps})), ts:c.runId });
+    if (best != null && (!S.prs[c.exId] || best > S.prs[c.exId].kg)) S.prs[c.exId] = { kg:best, nm:c.exNm, ts:Date.now() };
+  }
+  if (!h.entries.length) { S.history = S.history.filter(x => x !== h); return; }
+  h.vol = Math.round(h.entries.reduce((a,e) => a + (e.setData||[]).reduce((b,s) => b + (+s.kg||0)*(+s.reps||0), 0), 0));
+  h.ts = Math.min(h.ts, c.runId);
+  h.dur = Math.max(h.dur||0, Date.now() - h.ts);
+  S.history.sort((a,b) => b.ts - a.ts);
+}
+function clockStart(){
+  const c = clk();
+  if (!c.exId && c.typing && c.custom.trim()) {
+    const nm = c.custom.trim().slice(0, 40), id = 'c-' + slugify(nm);
+    S.customEx = Array.isArray(S.customEx) ? S.customEx : [];
+    if (!S.customEx.some(x => x.id === id)) S.customEx.push({ id, nm });
+    c.exId = id; c.exNm = nm;
+  }
+  if (!c.exId) return;
+  c.exNm = c.exNm || clockName(c.exId);
+  c.typing = false; c.custom = '';
+  S.clockPrefs = (S.clockPrefs && typeof S.clockPrefs === 'object') ? S.clockPrefs : {};
+  S.clockPrefs[c.exId] = { sets:c.sets, rest:c.rest };
+  const last = lastFor(c.exId);
+  c.ref = last ? { ts:last.ts||null, kg:last.kg, setData:(last.setData||[]).map(s => ({kg:s.kg, reps:s.reps})) } : null;
+  Object.assign(c, { phase:'work', i:0, log:[], t0:Date.now(), runId:Date.now(), paused:false, draft:null, lastBeep:null });
+  rememberExercise(c.exId);
+  primeAudio(); haptic(20); save(); wake(true); renderHere(); clockLoop();
+}
+function clockSetDone(){
+  const c = clk(); if (c.phase !== 'work') return;
+  c.phase = 'log'; c.draft = clockDefaultSet(c, c.i);
+  primeAudio(); haptic(25); save(); renderHere(); clockLoop();
+}
+function clockSave(record){
+  const c = clk(); if (c.phase !== 'log') return;
+  if (record) {
+    const d = c.draft || {};
+    c.log[c.i] = { kg:(d.kg != null && d.kg !== '' && Number.isFinite(+d.kg)) ? +d.kg : null, reps:(+d.reps > 0) ? Math.round(+d.reps) : null };
+    clockPersist(c);
+  } else c.log[c.i] = null;
+  c.draft = null;
+  if (c.i < c.sets - 1) {
+    Object.assign(c, { phase:'rest', restTotal:c.rest*1000, restEnd:Date.now() + c.rest*1000, paused:false, left:0, lastBeep:null });
+  } else {
+    c.phase = 'done';
+    if (!S.active) wake(false);
+  }
+  haptic(20); save(); renderHere(); clockLoop();
+}
+function clockEndRest(alarm){
+  const c = clk(); if (c.phase !== 'rest') return;
+  Object.assign(c, { phase:'work', i:Math.min(c.i + 1, c.sets - 1), t0:Date.now(), paused:false, lastBeep:null });
+  save();
+  if (alarm) {
+    beep(true); setTimeout(() => beep(true), 260); setTimeout(() => beep(true), 520);
+    haptic([220,90,220,90,320]);
+    document.body.classList.add('ck-flash'); setTimeout(() => document.body.classList.remove('ck-flash'), 900);
+    if (VIEW !== 'reloj') toast(`<b>Fin del descanso</b><br>Serie ${c.i+1} de ${c.sets} · ${esc(c.exNm)}`);
+  }
+  if (VIEW === 'reloj') renderHere();
+  clockLoop();
+}
+function clockAdjust(d){
+  const c = clk(); if (c.phase !== 'rest') return;
+  if (c.paused) c.left = Math.max(1000, c.left + d*1000);
+  else { c.restEnd += d*1000; if (c.restEnd - Date.now() < 1000) c.restEnd = Date.now() + 1000; }
+  c.restTotal = Math.max(c.restTotal, (c.paused ? c.left : c.restEnd - Date.now()));
+  c.lastBeep = null; haptic(12); save(); paintClock();
+}
+function clockPause(){
+  const c = clk(); if (c.phase !== 'rest') return;
+  if (c.paused) { c.restEnd = Date.now() + c.left; c.paused = false; }
+  else { c.left = Math.max(0, c.restEnd - Date.now()); c.paused = true; }
+  haptic(12); save(); renderHere(); clockLoop();
+}
+function clockFinish(){
+  const c = clk();
+  c.phase = c.log.some(Boolean) ? 'done' : 'setup';
+  c.draft = null; c.paused = false;
+  if (!S.active) wake(false);
+  save(); renderHere(); clockLoop();
+}
+function clockNew(){
+  const c = clk();
+  Object.assign(c, { phase:'setup', exId:'', exNm:'', typing:false, custom:'', i:0, log:[], ref:null, draft:null, paused:false });
+  save(); renderHere(); clockLoop();
+}
+function clockMore(){
+  const c = clk(); if (c.phase !== 'done') return;
+  c.sets += 1; c.i = Math.max(0, c.log.length - 1);
+  Object.assign(c, { phase:'rest', restTotal:c.rest*1000, restEnd:Date.now() + c.rest*1000, paused:false, lastBeep:null });
+  primeAudio(); wake(true); save(); renderHere(); clockLoop();
+}
+let CLK_T = null;
+function clockLoop(){
+  clearInterval(CLK_T); CLK_T = null;
+  const c = S.clock;
+  if (c && (c.phase === 'work' || (c.phase === 'rest' && !c.paused))) CLK_T = setInterval(clockTick, 250);
+}
+function clockTick(){
+  const c = clk();
+  if (c.phase === 'rest' && !c.paused) {
+    const left = Math.ceil((c.restEnd - Date.now()) / 1000);
+    if (left <= 0) { clockEndRest(true); return; }
+    if (left <= 3 && c.lastBeep !== left) { c.lastBeep = left; beep(false); haptic(35); }
+  }
+  paintClock();
+}
+function paintClock(){
+  if (VIEW !== 'reloj') return;
+  const c = clk();
+  if (c.phase === 'work') { const n = $('#ck-sw'); if (n) n.textContent = mmss((Date.now() - c.t0) / 1000); return; }
+  if (c.phase !== 'rest') return;
+  const left = c.paused ? c.left : Math.max(0, c.restEnd - Date.now());
+  const t = $('#ck-time'), ring = $('#ck-ring');
+  if (t) { t.textContent = mmss(Math.ceil(left/1000)); t.classList.toggle('low', !c.paused && left <= 3500); }
+  if (ring) { const R = 88, C = 2*Math.PI*R, f = Math.max(0, Math.min(1, left / (c.restTotal || c.rest*1000)));
+    ring.setAttribute('stroke-dasharray', `${(C*f).toFixed(1)} ${C.toFixed(1)}`); }
+}
+function clockDots(c){
+  return `<div class="ck-dots" aria-hidden="true">${Array.from({length:c.sets}, (_,k) => {
+    const done = k < c.i || (k === c.i && ['log','rest','done'].includes(c.phase)) || (c.phase === 'done');
+    return `<i class="${done && c.log[k] !== undefined ? 'on' : ''}${k === c.i && c.phase === 'work' ? ' cur' : ''}"></i>`;
+  }).join('')}</div>`;
+}
+function clockRefText(id){
+  const e = lastFor(id); if (!e) return '';
+  const sets = (e.setData && e.setData.length) ? e.setData.map(s => setLabel(s)).join(' · ') : (e.kg != null ? `${e.kg} kg · ${e.reps||''}` : e.reps || '');
+  return sets + (e.ts ? ` (${dstr(e.ts)})` : '');
+}
+function renderReloj(){
+  const c = clk();
+  if (c.phase === 'work') return clockWork(c);
+  if (c.phase === 'log') return clockLogView(c);
+  if (c.phase === 'rest') return clockRestView(c);
+  if (c.phase === 'done') return clockDone(c);
+  return clockSetup(c);
+}
+function clockSetup(c){
+  const {rec, all} = clockExercises();
+  const opt = x => `<option value="${esc(x.id)}" ${x.id === c.exId ? 'selected' : ''}>${esc(x.nm)}</option>`;
+  const ready = !!(c.exId || (c.typing && c.custom.trim()));
+  const ref = c.exId ? clockRefText(c.exId) : '';
+  return `<div class="ck-card">
+    <label class="exm-field"><span>Ejercicio</span>
+      <select class="ex-select" data-act="ck-ex" aria-label="Ejercicio">
+        <option value="" ${!c.exId && !c.typing ? 'selected' : ''} disabled>Elige un ejercicio</option>
+        ${rec.length ? `<optgroup label="Recientes">${rec.map(opt).join('')}</optgroup>` : ''}
+        <optgroup label="Todos">${all.map(opt).join('')}</optgroup>
+        <option value="__new" ${c.typing ? 'selected' : ''}>＋ Escribir otro…</option>
+      </select></label>
+    ${c.typing ? `<label class="exm-field"><span>Nombre del ejercicio</span>
+      <input class="ck-text" data-act="ck-custom" maxlength="40" autocomplete="off" value="${esc(c.custom)}" placeholder="p. ej. Press militar"></label>` : ''}
+    ${ref ? `<div class="ck-ref">Última vez: <b>${esc(ref)}</b></div>` : ''}
+    <div class="ck-row"><span>Series</span>
+      <div class="ck-step"><button data-act="ck-sets" data-d="-1" aria-label="Una serie menos"${c.sets <= 1 ? ' disabled' : ''}>−</button><b id="ck-sets">${c.sets}</b><button data-act="ck-sets" data-d="1" aria-label="Una serie más"${c.sets >= 10 ? ' disabled' : ''}>+</button></div></div>
+    <div class="ck-row"><span>Descanso</span>
+      <div class="ck-step"><button data-act="ck-rest" data-d="-15" aria-label="Quince segundos menos"${c.rest <= 15 ? ' disabled' : ''}>−</button><b id="ck-rest">${mmss(c.rest)}</b><button data-act="ck-rest" data-d="15" aria-label="Quince segundos más"${c.rest >= 600 ? ' disabled' : ''}>+</button></div></div>
+    <div class="ck-chips" role="group" aria-label="Descansos habituales">${[60,90,120,150,180].map(s =>
+      `<button class="${c.rest === s ? 'on' : ''}" data-act="ck-restset" data-s="${s}" aria-pressed="${c.rest === s}">${mmss(s)}</button>`).join('')}</div>
+    <button class="finish ck-go" data-act="ck-start"${ready ? '' : ' disabled'}>${svg('play',0)} Empezar</button>
+  </div>
+  <div class="tip"><span>Con el reloj en marcha la pantalla no se apaga. Si sales de la app, sigue contando y al volver estará donde lo dejaste.</span></div>`;
+}
+function clockWork(c){
+  const rs = c.ref && c.ref.setData || [], ls = rs[c.i] || rs[rs.length-1];
+  const today = c.log.filter(Boolean);
+  return `<div class="ck-stage">
+    <div class="ck-ex">${esc(c.exNm)}</div>
+    <div class="ck-k">Serie</div>
+    <div class="ck-big"><b>${c.i + 1}</b><span>/ ${c.sets}</span></div>
+    ${clockDots(c)}
+    ${ls ? `<div class="ck-ref">La última vez esta serie: <b>${esc(setLabel(ls))}</b></div>` : ''}
+    <div class="ck-sw"><span id="ck-sw">${mmss((Date.now() - c.t0) / 1000)}</span> en la serie</div>
+    <button class="ck-done" data-act="ck-setdone">Serie hecha</button>
+    ${today.length ? `<div class="setlog">Hoy: ${today.map(s => esc(setLabel(s))).join(' · ')}</div>` : ''}
+    <button class="btn ck-quiet" data-act="ck-finish">Terminar ejercicio</button>
+  </div>`;
+}
+function clockLogView(c){
+  const s = c.draft || clockDefaultSet(c, c.i), last = c.i >= c.sets - 1;
+  return `<div class="ck-stage">
+    <div class="ck-ex">${esc(c.exNm)}</div>
+    <div class="ck-k">Serie ${c.i + 1} de ${c.sets} · ¿cómo ha ido?</div>
+    <div class="sete"><button data-act="ck-adj" data-f="kg" data-d="-2.5" aria-label="Menos peso">−</button>
+      <label class="val"><input class="ck-num" data-act="ck-kg" type="number" inputmode="decimal" step="0.5" min="0" max="1000" value="${s.kg != null ? s.kg : ''}" placeholder="—" aria-label="Peso en kg"><span>kg</span></label>
+      <button data-act="ck-adj" data-f="kg" data-d="2.5" aria-label="Más peso">+</button></div>
+    <div class="sete"><button data-act="ck-adj" data-f="reps" data-d="-1" aria-label="Menos repeticiones">−</button>
+      <label class="val"><input class="ck-num" data-act="ck-reps" type="number" inputmode="numeric" step="1" min="1" max="100" value="${s.reps || ''}" placeholder="—" aria-label="Repeticiones"><span>repeticiones</span></label>
+      <button data-act="ck-adj" data-f="reps" data-d="1" aria-label="Más repeticiones">+</button></div>
+    <button class="ck-done ck-save" data-act="ck-save">Guardar<small>${last ? 'y terminar el ejercicio' : `y descansar ${mmss(c.rest)}`}</small></button>
+    <button class="btn ck-quiet" data-act="ck-nolog">${last ? 'Terminar sin anotar' : 'Descansar sin anotar'}</button>
+  </div>`;
+}
+function clockRestView(c){
+  const left = c.paused ? c.left : Math.max(0, c.restEnd - Date.now());
+  const R = 88, C = 2*Math.PI*R, f = Math.max(0, Math.min(1, left / (c.restTotal || c.rest*1000)));
+  const today = c.log.filter(Boolean);
+  return `<div class="ck-stage rest">
+    <div class="ck-ex">${esc(c.exNm)}</div>
+    <div class="ck-k">${c.paused ? 'Descanso en pausa' : 'Descanso'}</div>
+    <div class="ck-ring${c.paused ? ' paused' : ''}">
+      <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="bg" cx="100" cy="100" r="${R}"/>
+        <circle id="ck-ring" class="fg" cx="100" cy="100" r="${R}" stroke-dasharray="${(C*f).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 100 100)"/></svg>
+      <div class="t" id="ck-time" role="timer">${mmss(Math.ceil(left/1000))}</div>
+    </div>
+    <div class="ck-next">Siguiente: <b>serie ${c.i + 2} de ${c.sets}</b></div>
+    <div class="ck-ctrl"><button data-act="ck-radj" data-d="-15" aria-label="Quince segundos menos">−15 s</button>
+      <button data-act="ck-pause">${c.paused ? 'Seguir' : 'Pausa'}</button>
+      <button data-act="ck-radj" data-d="15" aria-label="Quince segundos más">+15 s</button></div>
+    <button class="ck-done ghost" data-act="ck-skiprest">Empezar ya la serie ${c.i + 2}</button>
+    ${today.length ? `<div class="setlog">Hoy: ${today.map(s => esc(setLabel(s))).join(' · ')}</div>` : ''}
+    <button class="btn ck-quiet" data-act="ck-finish">Terminar ejercicio</button>
+  </div>`;
+}
+function clockDone(c){
+  const done = c.log.filter(Boolean);
+  const vol = Math.round(done.reduce((a,s) => a + (+s.kg||0)*(+s.reps||0), 0));
+  const best = done.reduce((m,s) => (s.kg != null && (m == null || s.kg > m)) ? s.kg : m, null);
+  const prev = c.ref ? ((c.ref.setData||[]).reduce((m,s) => (s && s.kg != null && (m == null || +s.kg > m)) ? +s.kg : m, null) ?? (c.ref.kg != null ? +c.ref.kg : null)) : null;
+  const d = (best != null && prev != null) ? Math.round((best - prev) * 10) / 10 : null;
+  const delta = d == null ? '' : d > 0 ? ` · <b class="up">+${d} kg vs la última</b>` : d < 0 ? ` · ${d} kg vs la última` : ' · igual que la última';
+  return `<div class="ck-stage">
+    <div class="ck-ok">${svg('check',3)}</div>
+    <div class="ck-ex">${esc(c.exNm)}</div>
+    <div class="ck-k">${done.length} ${done.length === 1 ? 'serie anotada' : 'series anotadas'}</div>
+    <div class="ck-sum">${done.length ? done.map(s => esc(setLabel(s))).join(' · ') : 'Sin pesos anotados'}</div>
+    ${vol ? `<div class="ck-ref">Volumen <b>${vol} kg</b>${delta}</div>` : ''}
+    <button class="ck-done" data-act="ck-new">Otro ejercicio</button>
+    <div class="btnrow"><button class="btn" data-act="ck-more">Una serie más</button><button class="btn" data-act="tab" data-v="historial">Ver registro</button></div>
+  </div>`;
+}
+function clockSub(){
+  const c = clk();
+  if (c.phase === 'setup') return 'Elige ejercicio, series y descanso';
+  if (c.phase === 'done') return 'Ejercicio terminado';
+  if (c.phase === 'rest') return `${c.exNm} · descanso antes de la serie ${c.i + 2}`;
+  return `${c.exNm} · serie ${c.i + 1} de ${c.sets}`;
+}
+
 /* ---------------- arranque ---------------- */
 (function(){
   const entry = applyEntry();
   const h = (location.hash||'').replace('#','').split('/');
   if (h[0] === 'day' && h[1] && dayById(h[1])) { VIEW = 'day'; DAYVIEW = h[1]; }
-  else if (['hoy','semana','historial','ajustes'].includes(h[0])) VIEW = h[0];
+  else if (['hoy','semana','reloj','historial','ajustes'].includes(h[0])) VIEW = h[0];
   else if (entry && entry.day && dayById(entry.day)) { VIEW = 'day'; DAYVIEW = entry.day; }
   else if (entry && entry.view) VIEW = entry.view;
   render();
   try { history.replaceState({v:VIEW,d:DAYVIEW}, '', '#'+VIEW+(DAYVIEW?'/'+DAYVIEW:'')); } catch(e){}
   try { localStorage.setItem('__probe','1'); localStorage.removeItem('__probe'); }
   catch(e){ setTimeout(() => toast('Este navegador no deja guardar datos: el historial no se conservará al cerrar.'), 900); }
-  if (S.active) wake(true);
+  if (S.active || clockActive()) wake(true);
+  clockLoop();
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     let reloading = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {

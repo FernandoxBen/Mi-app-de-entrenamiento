@@ -269,7 +269,8 @@ const server = http.createServer((req,res) => {
     await page.locator('#setsheet [data-act="set-close"]').last().click();
     await page.waitForFunction(()=>!document.querySelector('#setsheet').classList.contains('on'));
     await closeTimer();
-    await page.locator('[data-act="manual-timer"]').click();
+    // The in-session clock still has its manual mode; the Reloj tab is the full timer.
+    await page.evaluate(()=>timerMode('down'));
     assert.equal(await page.evaluate(()=>RT.running),false);
     assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Iniciar');
     const prepared=await page.locator('#sh-t').textContent();
@@ -449,7 +450,7 @@ const server = http.createServer((req,res) => {
     for(const width of [320,390,768])await checkLayout(width,'day','casa-20');
     await page.setViewportSize({width:390,height:844});
     await page.screenshot({path:path.join(root,'tests','home-circuit-preview.png'),fullPage:true});
-    assert.equal(await page.locator('#navtimer').isVisible(),false);
+    assert.deepEqual(await page.locator('#nav button').evaluateAll(els=>els.map(el=>el.dataset.v)),['hoy','reloj','historial','ajustes']);
     await page.waitForTimeout(2800);
     for(const width of [320,390]){
       await page.setViewportSize({width,height:844});
@@ -512,6 +513,92 @@ const server = http.createServer((req,res) => {
     await page.evaluate(()=>go('historial'));
     assert.equal(await page.locator('[data-act="lift-sel"]').inputValue(),'sentadilla');
     await page.evaluate(()=>{S.active=null;S.history=[];save()});
+    // RELOJ: choose exercise, sets and rest; it guides set → log → rest → next set and records every set.
+    await page.setViewportSize({width:390,height:844});
+    await page.evaluate(()=>{const d=864e5,now=Date.now();
+      S.active=null;S.clock=null;S.clockPrefs={};
+      S.history=[{id:'c0',dayId:'upper-a',ts:now-7*d,vol:1300,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 7',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8},{kg:57.5,reps:7}],ts:now-7*d}]}];
+      save();go('hoy')});
+    await page.locator('#nav [data-v="reloj"]').click();
+    assert.equal(await page.locator('[data-act="ck-start"]').isDisabled(),true,'cannot start without an exercise');
+    await page.locator('[data-act="ck-ex"]').selectOption('press-banca');
+    assert.deepEqual(await page.evaluate(()=>({sets:S.clock.sets,rest:S.clock.rest})),{sets:4,rest:150},'plan defaults');
+    assert.match(await page.locator('.ck-ref').textContent(),/60×8 · 60×8 · 57\.5×7/);
+    await page.locator('[data-act="ck-sets"][data-d="-1"]').click();
+    await page.locator('[data-act="ck-restset"][data-s="90"]').click();
+    await page.locator('[data-act="ck-start"]').click();
+    assert.deepEqual(await page.evaluate(()=>({ph:S.clock.phase,i:S.clock.i,n:S.clock.sets})),{ph:'work',i:0,n:3});
+    await page.locator('[data-act="ck-setdone"]').click();
+    assert.deepEqual(await page.evaluate(()=>[document.querySelector('[data-act="ck-kg"]').value,document.querySelector('[data-act="ck-reps"]').value]),['60','8'],'proposes last time');
+    await page.locator('[data-act="ck-adj"][data-f="kg"][data-d="2.5"]').click();
+    await page.locator('[data-act="ck-save"]').click();
+    const rest1=await page.evaluate(()=>({ph:S.clock.phase,left:Math.round((S.clock.restEnd-Date.now())/1000),sd:S.history.find(h=>h.dayId==='reloj').entries[0].setData}));
+    assert.equal(rest1.ph,'rest'); assert.ok(rest1.left>=88&&rest1.left<=90,`rest ${rest1.left}`);
+    assert.deepEqual(rest1.sd,[{kg:62.5,reps:8}],'each set is saved as soon as it is logged');
+    const end0=await page.evaluate(()=>S.clock.restEnd);
+    await page.locator('[data-act="ck-radj"][data-d="15"]').click();
+    assert.ok(await page.evaluate(e=>S.clock.restEnd-e>=14000,end0));
+    await page.locator('[data-act="ck-pause"]').click();
+    const frozen=await page.locator('#ck-time').textContent();
+    await page.waitForTimeout(1300);
+    assert.equal(await page.locator('#ck-time').textContent(),frozen,'pause freezes the countdown');
+    await page.locator('[data-act="ck-pause"]').click();
+    await page.reload();
+    assert.deepEqual(await page.evaluate(()=>({v:VIEW,ph:S.clock.phase})),{v:'reloj',ph:'rest'},'survives a reload');
+    await page.evaluate(()=>{S.clock.restEnd=Date.now()+1500;save();clockLoop()});
+    await page.waitForFunction(()=>S.clock.phase==='work',null,{timeout:5000});
+    assert.equal(await page.evaluate(()=>S.clock.i),1,'rest ends into the next set by itself');
+    await page.locator('[data-act="ck-setdone"]').click();
+    assert.equal(await page.locator('[data-act="ck-kg"]').inputValue(),'62.5','next set starts from today’s weight');
+    await page.locator('[data-act="ck-save"]').click();
+    await page.locator('[data-act="ck-skiprest"]').click();
+    await page.locator('[data-act="ck-setdone"]').click();
+    await page.locator('[data-act="ck-save"]').click();
+    const done=await page.evaluate(()=>({ph:S.clock.phase,sd:S.history.find(h=>h.dayId==='reloj').entries[0].setData,pr:S.prs['press-banca'].kg,sum:document.querySelector('.ck-sum').textContent}));
+    assert.equal(done.ph,'done');
+    assert.deepEqual(done.sd,[{kg:62.5,reps:8},{kg:62.5,reps:8},{kg:62.5,reps:7}]);
+    assert.equal(done.pr,62.5);
+    assert.match(await page.locator('.ck-stage').textContent(),/\+2\.5 kg vs la última/);
+    await page.locator('[data-act="ck-more"]').click();
+    assert.deepEqual(await page.evaluate(()=>({ph:S.clock.phase,n:S.clock.sets})),{ph:'rest',n:4},'one more set after finishing');
+    await page.locator('[data-act="ck-finish"]').click();
+    await page.locator('[data-act="ck-new"]').click();
+    assert.equal(await page.evaluate(()=>S.clock.phase),'setup');
+    // A custom exercise typed by hand becomes part of the list and remembers its sets and rest.
+    await page.locator('[data-act="ck-ex"]').selectOption('__new');
+    await page.locator('[data-act="ck-custom"]').fill('Press militar');
+    await page.locator('[data-act="ck-sets"][data-d="1"]').click();
+    await page.locator('[data-act="ck-start"]').click();
+    assert.deepEqual(await page.evaluate(()=>({id:S.clock.exId,nm:S.clock.exNm,pref:S.clockPrefs['c-press-militar']})),{id:'c-press-militar',nm:'Press militar',pref:{sets:5,rest:90}});
+    await page.locator('[data-act="ck-finish"]').click();
+    assert.equal(await page.evaluate(()=>S.clock.phase),'setup','finishing with nothing logged goes back to setup');
+    assert.ok(await page.locator('[data-act="ck-ex"] optgroup[label="Todos"] option[value="c-press-militar"]').count()===1,'custom exercise joins the list');
+    // The clock screens fit and keep 44px targets at every width.
+    for(const width of [320,360,390]){
+      await page.setViewportSize({width,height:844});
+      for(const ph of ['setup','work','log','rest','done']){
+        await page.evaluate(ph=>{S.clock={phase:ph,exId:'sentadilla',exNm:'Sentadilla con barra alta',typing:false,custom:'',sets:5,rest:150,i:2,log:[{kg:90,reps:5},{kg:90,reps:5}],t0:Date.now()-20000,restEnd:Date.now()+90000,restTotal:150000,paused:false,left:0,runId:Date.now()-300000,ref:{kg:90,setData:[{kg:90,reps:5}]},draft:null,lastBeep:null};save();go('reloj')},ph);
+        await page.waitForTimeout(120);
+        const L=await page.evaluate(()=>{const els=[...document.querySelectorAll('#app button,#app input,#app select')].filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0});
+          return {ov:document.documentElement.scrollWidth>innerWidth,small:els.filter(el=>el.getBoundingClientRect().height<44).map(el=>el.dataset.act||el.tagName),
+            main:Math.round((document.querySelector('.ck-done,.ck-go')||document.body).getBoundingClientRect().bottom),nav:Math.round(document.querySelector('#nav').getBoundingClientRect().top)}});
+        assert.equal(L.ov,false,`reloj ${ph} overflows at ${width}px`);
+        assert.deepEqual(L.small,[],`reloj ${ph} has small controls at ${width}px`);
+        assert.ok(L.main<L.nav,`reloj ${ph}: the main button is hidden behind the nav at ${width}px`);
+      }
+    }
+    await page.evaluate(()=>{S.clock=null;save()});
+    // Registro: a training done outside the app can be written down by hand.
+    await page.setViewportSize({width:320,height:844});
+    await page.evaluate(()=>{MANUAL=null;go('historial')});
+    await page.locator('.manual summary').click();
+    await page.locator('[data-act="mn-ex"]').selectOption('press-banca');
+    assert.equal(await page.locator('[data-act="mn-kg"]').count(),3,'prefills as many sets as last time');
+    await page.locator('[data-act="mn-kg"]').first().fill('65');
+    await page.locator('[data-act="mn-add"]').click();
+    await page.locator('[data-act="mn-save"]').click();
+    const manual=await page.evaluate(()=>{const h=S.history.find(x=>x.dayId==='manual');return {n:h.entries[0].setData.length,first:h.entries[0].setData[0],pr:S.prs['press-banca'].kg,name:[...document.querySelectorAll('.hitem .m b')].map(x=>x.textContent).includes('Registro a mano')}});
+    assert.deepEqual(manual,{n:4,first:{kg:65,reps:8},pr:65,name:true});
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));

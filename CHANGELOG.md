@@ -1,5 +1,17 @@
 # Cambios
 
+## 3.0.0 — 2026-10-23
+
+- La app se organiza en tres partes: **Hoy** (lo que te toca), **Reloj** (sigues un ejercicio serie a serie) y **Registro** (pesos, repeticiones y progreso). Ajustes sigue aparte.
+- Reloj nuevo. Eliges ejercicio de tu lista o escribes uno, pones series (1–10) y descanso (±15 s o 1:00 a 3:00) y te guía: serie en pantalla grande con lo que hiciste la última vez → «Serie hecha» → peso y repeticiones ya rellenos → cuenta atrás → siguiente serie, sola.
+- Durante el descanso: +15 s, −15 s, pausa y empezar ya. Pitidos y vibración en los tres últimos segundos y aviso al terminar, también si estás en otra pestaña.
+- La pantalla no se apaga con el reloj en marcha, y el reloj sobrevive a bloquear el móvil o cerrar la app: al volver está donde lo dejaste, y si el descanso terminó, ya te espera la serie siguiente.
+- Cada serie se guarda en el Registro en cuanto la anotas. Al terminar, resumen con volumen y comparación con la última vez; «Una serie más» si te quedan fuerzas.
+- El reloj recuerda las series y el descanso que usaste con cada ejercicio. Si no lo has hecho nunca con el reloj, parte de lo que marca tu plan.
+- Registro a mano: ejercicio, fecha y series, rellenas con la última vez, para anotar un entreno hecho sin la app.
+- Todo lo anterior sigue en Hoy: calentamiento, sesiones del plan, planificador semanal, extras y día metabólico. Mientras el reloj está en marcha, Hoy enseña un aviso para volver a él.
+- La pestaña Progreso se llama Registro, y la pestaña Semana pasa a estar dentro de Hoy («Planificar mis días»).
+
 ## 2.10.0 — 2026-10-23
 
 - Corregido: una copia de seguridad con entradas dañadas rompía Progreso y la pantalla del día, y seguía rota después de reiniciar. Ahora cada sesión guardada se limpia al cargar: fuera las entradas sin ejercicio y las series sin peso ni repeticiones.

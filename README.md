@@ -1,4 +1,8 @@
-# Entreno 2.10.0
+# Entreno 3.0.0
+
+## Novedades 3.0
+
+La app tiene tres partes. **Hoy** enseña el entreno que te toca, con el calentamiento, el planificador y los extras. **Reloj** es para entrenar: eliges ejercicio, series y descanso, y te lleva serie a serie: anotas peso y repeticiones al acabar cada una y arranca la cuenta atrás hasta la siguiente. La pantalla no se apaga y el reloj sigue aunque bloquees el móvil. **Registro** guarda cada serie y enseña el progreso por ejercicio; también puedes anotar un entreno a mano.
 
 ## Novedades 2.10
 
