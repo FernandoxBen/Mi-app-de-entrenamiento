@@ -1,4 +1,14 @@
-# Entreno 2.8.1
+# Entreno 2.10.0
+
+## Novedades 2.10
+
+Revisión completa. Una copia de seguridad dañada ya no rompe ninguna pantalla: las sesiones guardadas se limpian al cargar. Las hojas de edición oscurecen el fondo, se cierran tocando fuera y recogen el reloj en marcha a su botón flotante. Mientras anotas, la fila compara con la última vez (`+2,5 kg vs la última`), y Progreso recuerda el ejercicio que mirabas.
+
+## Novedades 2.9
+
+El registro es ahora serie a serie: cada una guarda su peso y sus repeticiones, y al marcarla parte de lo que hiciste la última vez. El botón de la serie enseña lo anotado y el editor se abre tocándola otra vez.
+
+La pestaña Progreso sustituye a Historial. Eliges un ejercicio y ves cuánto has subido respecto a la semana anterior, la curva de la mejor serie con su 1RM estimado, tu mejor marca y las últimas seis sesiones serie a serie, además del volumen de las últimas ocho semanas.
 
 ## Novedades 2.8.1
 

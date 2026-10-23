@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
+const VERSION = (fs.readFileSync(path.join(root,'index.html'),'utf8').match(/version:\s*'([^']+)'/)||[])[1];
 const server = http.createServer((req,res) => {
   const name = new URL(req.url,'http://localhost').pathname;
   const file = path.join(root, name === '/' ? 'index.html' : name);
@@ -81,8 +82,16 @@ const server = http.createServer((req,res) => {
     assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),false);
     await page.locator('[data-act="set"][data-k^="triceps-overhead|"]').first().click();
     assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),true);
-    await page.locator('[data-act="skip"]').click();
+    await closeTimer();
     await page.evaluate(()=>{S.active=null;save()});
+    // Opening a sheet tucks the running clock into its dock; bring it back to close it.
+    async function closeTimer(){
+      if(await page.evaluate(()=>document.querySelector('#scrim').classList.contains('on')))
+        await page.evaluate(()=>{EXMENU=null;SETEDIT=null;renderExMenu();renderSetSheet();});
+      const docked=await page.evaluate(()=>!document.querySelector('#sheet').classList.contains('on')&&getComputedStyle(document.querySelector('#timer-dock')).display!=='none');
+      if(docked) await page.locator('#timer-dock').click();
+      if(await page.evaluate(()=>document.querySelector('#sheet').classList.contains('on'))) await page.locator('[data-act="skip"]').click();
+    }
     async function checkLayout(width, view, day){
       await page.setViewportSize({width,height:844});
       await page.evaluate(({view,day})=>go(view,day),{view,day});
@@ -101,7 +110,7 @@ const server = http.createServer((req,res) => {
           if(Math.min(x.right,y.right)-Math.max(x.left,y.left)>2&&Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)>2)overlaps.push([a.outerHTML.slice(0,70),b.outerHTML.slice(0,70)]);
         }
         const small=els.filter(el=>el.matches('button,a.btn,summary')&&el.getBoundingClientRect().height<36).map(el=>el.outerHTML.slice(0,90));
-        const misalignedGroups=[...document.querySelectorAll('.btnrow,.readiness,.set-dots,.sheet.on .btns')].flatMap(group=>{
+        const misalignedGroups=[...document.querySelectorAll('.btnrow,.readiness,.sheet.on .btns')].flatMap(group=>{
           const controls=[...group.children].filter(el=>el.matches('button,a.btn')).map(el=>el.getBoundingClientRect());
           if(controls.length<2)return [];
           const sameRow=controls.every(r=>Math.abs(r.top-controls[0].top)<=2);
@@ -133,19 +142,44 @@ const server = http.createServer((req,res) => {
       const series=await page.locator('.track').first().evaluate(el=>{
         const dots=[...el.querySelectorAll('.dot')].map(x=>x.getBoundingClientRect());
         const weight=el.querySelector('.wgt').getBoundingClientRect();
-        return {gaps:dots.slice(1).map((x,i)=>Math.round(x.left-dots[i].right)),dy:Math.round(Math.abs(dots[0].y-weight.y))};
+        const xs=dots.map(d=>Math.round(d.x)),ys=dots.map(d=>Math.round(d.y));
+        const firstRow=xs.filter((x,i)=>ys[i]===ys[0]);
+        return {w:dots.map(d=>Math.round(d.width)),h:dots.map(d=>Math.round(d.height)),n:dots.length,
+          aligned:xs.every(x=>firstRow.includes(x)),
+          dy:Math.round(Math.abs(dots[0].y-weight.y))};
       });
-      assert.ok(series.gaps.every(g=>g===(width<=360?6:8)),`series buttons have uneven gaps at ${width}px`);
-      assert.ok(series.dy<=2,`weight control is not aligned with series buttons at ${width}px`);
+      assert.ok(series.w.every(w=>w===series.w[0]),`series buttons have uneven widths at ${width}px`);
+      assert.ok(series.h.every(h=>h>=44),`series buttons are under 44px at ${width}px`);
+      assert.ok(series.aligned,`series buttons do not line up in columns at ${width}px`);
+      assert.ok(series.dy<=2,`weight control is not aligned with the first row of series at ${width}px`);
     }
+    // Progress tab: one exercise at a time, with its chart and its own set history.
+    await page.evaluate(()=>{
+      const d=864e5,now=Date.now();
+      S.history=[
+        {id:'h2',dayId:'upper-a',ts:now-d,vol:1400,dur:36e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 8',kg:62.5,setData:[{kg:62.5,reps:8},{kg:62.5,reps:8},{kg:60,reps:8}],ts:now-d}]},
+        {id:'h1',dayId:'upper-a',ts:now-8*d,vol:1200,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 7',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8},{kg:57.5,reps:7}],ts:now-8*d}]}];
+      save();go('historial');
+    });
     for(const width of [320,390]){
       await page.setViewportSize({width,height:844});
-      await page.evaluate(()=>go('historial'));
-      const chips=await page.locator('.liftseg button').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}}));
-      assert.ok(chips.length>=6);
-      assert.ok(chips.every(c=>c.w===chips[0].w&&c.h===chips[0].h&&c.h>=44),`lift chips are uneven at ${width}px`);
-      const cols=[...new Set(chips.map(c=>c.x))],rows=[...new Set(chips.map(c=>c.y))];
-      assert.equal(chips.length,cols.length*rows.length,`lift chips do not fill a grid at ${width}px`);
+      await page.evaluate(()=>renderHere());
+      await page.waitForTimeout(150);
+      const prog=await page.evaluate(()=>{
+        const sel=document.querySelector('[data-act="lift-sel"]');
+        const r=sel?sel.getBoundingClientRect():null;
+        return {sel:!!sel,h:r?Math.round(r.height):0,opts:sel?[...sel.options].map(o=>o.value):[],
+          chart:!!document.querySelector('.pchart'),
+          weeks:document.querySelectorAll('.wvol .wv').length,
+          best:(document.querySelector('.pstats .v')||{}).textContent||'',
+          sets:[...document.querySelectorAll('.lrow .sets')].map(x=>x.textContent)};
+      });
+      assert.ok(prog.sel&&prog.h>=44,`the exercise selector is missing or small at ${width}px`);
+      assert.ok(prog.opts.includes('press-banca'),JSON.stringify(prog.opts));
+      assert.ok(prog.chart,`no progress chart at ${width}px`);
+      assert.equal(prog.weeks,8);
+      assert.match(prog.best,/62\.5/);
+      assert.ok(prog.sets.some(t=>/62\.5×8 · 62\.5×8 · 60×8/.test(t)),JSON.stringify(prog.sets));
     }
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('day','movilidad'));
@@ -157,7 +191,7 @@ const server = http.createServer((req,res) => {
     assert.ok(miniRows.length>0&&miniRows.every(n=>n.nameW>=n.w*0.5),'mini rows squeeze the movement name');
     await page.evaluate(()=>{S.prs={'press-banca':62,'roto':null,'sentadilla':{kg:'100',nm:'Sentadilla'}};save()});
     await page.reload();
-    const prs=await page.evaluate(()=>{go('historial');return {keys:Object.keys(S.prs).sort(),rows:document.querySelectorAll('.prow').length,text:[...document.querySelectorAll('.prow')].map(x=>x.textContent).join(' ')}});
+    const prs=await page.evaluate(()=>{go('historial');return {keys:Object.keys(S.prs).sort(),rows:document.querySelectorAll('.prow:not(.lrow)').length,text:[...document.querySelectorAll('.prow')].map(x=>x.textContent).join(' ')}});
     assert.deepEqual(prs.keys,['press-banca','sentadilla']);
     assert.equal(prs.rows,2);
     assert.equal(/undefined|Invalid Date|NaN/.test(prs.text),false);
@@ -194,18 +228,21 @@ const server = http.createServer((req,res) => {
     await openExMenu(/Press con mancuernas/);
     await page.locator('#exsheet [data-act="fav"]').click();
     assert.equal(await page.evaluate(()=>S.favorites['press-mancuernas']),true);
-    await page.locator('#exsheet [data-act="repslog"]').fill('9, 8, 8');
     // The first exercise cannot move up.
     assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').isDisabled(),true);
     await closeExMenu();
     await liveBench.locator('[data-act="set"]').first().click();
+    // Marking a set logs last time's numbers; the set sheet adjusts that set alone.
+    const firstUid=await page.evaluate(()=>S.active.exercises[0]._uid);
+    assert.deepEqual(await page.evaluate(uid=>S.active.setLog[uid][0],firstUid),{kg:30,reps:8});
+    assert.match(await liveBench.locator('.dot').first().textContent(),/30/);
     assert.deepEqual(await page.evaluate(()=>({open:document.querySelector('#sheet').classList.contains('on'),total:RT.total})),{open:true,total:120});
     await page.locator('[data-act="rest30"]').click();
     assert.equal(await page.evaluate(()=>RT.total),150);
     await page.locator('[data-act="timer-pause"]').click();
     assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Reanudar');
     await page.locator('[data-act="timer-pause"]').click();
-    await page.locator('[data-act="skip"]').click();
+    await closeTimer();
     const secondUid=await page.evaluate(()=>S.active.exercises[1]._uid);
     await page.locator(`[data-act="ex-menu"][data-slot="${secondUid}"]`).click();
     await page.locator('#exsheet [data-act="skip-ex"]').click();
@@ -216,12 +253,22 @@ const server = http.createServer((req,res) => {
     await page.locator(`[data-act="ex-menu"][data-slot="${addedUid}"]`).click();
     assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="1"]').isDisabled(),true);
     await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').click();
-    await page.locator('#exsheet [data-act="repslog"]').fill('12');
     await closeExMenu();
     const added=page.locator('.ex').filter({hasText:'Máquina de deltoide lateral'}).first();
     await added.locator('[data-act="kg"]').fill('8');
+    await added.locator('[data-act="kg"]').dispatchEvent('change');
     await added.locator('[data-act="set"]').first().click();
-    await page.locator('[data-act="skip"]').click();
+    // Tapping a logged set opens its editor: +2.5 kg and one more rep stay on that set.
+    await added.locator('.dot.on').first().click();
+    await page.locator('#setsheet.on').waitFor();
+    await page.locator('#setsheet [data-act="set-adj"][data-f="kg"][data-d="2.5"]').click();
+    await page.locator('#setsheet [data-act="set-adj"][data-f="reps"][data-d="1"]').click();
+    const lateralUid=await page.evaluate(()=>S.active.exercises.find(x=>x.id==='laterales-maquina')._uid);
+    const lateralSet=await page.evaluate(uid=>S.active.setLog[uid][0],lateralUid);
+    assert.equal(lateralSet.kg,10.5);
+    await page.locator('#setsheet [data-act="set-close"]').last().click();
+    await page.waitForFunction(()=>!document.querySelector('#setsheet').classList.contains('on'));
+    await closeTimer();
     await page.locator('[data-act="manual-timer"]').click();
     assert.equal(await page.evaluate(()=>RT.running),false);
     assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Iniciar');
@@ -243,13 +290,18 @@ const server = http.createServer((req,res) => {
     await page.waitForTimeout(350);
     await page.locator('[data-act="timer-pause"]').click();
     assert.deepEqual(await page.evaluate(()=>({mode:RT.mode,running:RT.running,visible:document.querySelector('#sheet').classList.contains('on')})),{mode:'up',running:false,visible:true});
-    await page.locator('[data-act="skip"]').click();
+    await closeTimer();
     assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),false);
     await page.screenshot({path:path.join(root,'tests','flexible-session-preview.png'),fullPage:true});
     await page.locator('[data-act="finish"]').click();
-    const flexible=await page.evaluate(()=>({ids:S.history[0].entries.map(e=>e.id),press:S.history[0].entries.find(e=>e.id==='press-mancuernas'),template:flatEx(dayById('upper-a'))[0].id,recents:S.recents.slice()}));
+    const flexible=await page.evaluate(()=>({ids:S.history[0].entries.map(e=>e.id),press:S.history[0].entries.find(e=>e.id==='press-mancuernas'),lateral:S.history[0].entries.find(e=>e.id==='laterales-maquina'),vol:S.history[0].vol,template:flatEx(dayById('upper-a'))[0].id,recents:S.recents.slice()}));
     assert.ok(flexible.ids.includes('press-mancuernas')&&flexible.ids.includes('laterales-maquina'));
-    assert.equal(flexible.press.reps,'9');
+    // Each set keeps its own weight and reps, and the entry's kg is the best set.
+    assert.deepEqual(flexible.press.setData,[{kg:30,reps:8}]);
+    assert.equal(flexible.press.reps,'8');
+    assert.equal(flexible.press.kg,30);
+    assert.equal(flexible.lateral.setData[0].kg,10.5);
+    assert.equal(flexible.vol,Math.round(30*8+10.5*flexible.lateral.setData[0].reps));
     assert.equal(flexible.template,'press-banca');
     assert.ok(flexible.recents.includes('press-mancuernas'));
     await page.evaluate(()=>go('day','upper-a'));
@@ -288,7 +340,8 @@ const server = http.createServer((req,res) => {
         width:Math.round(r.width),
         small:[...s.querySelectorAll('button,select,input')].filter(el=>el.getBoundingClientRect().height<44).map(el=>(el.dataset.act||el.tagName)+':'+Math.round(el.getBoundingClientRect().height))};
     });
-    assert.ok(['swap-ex','repslog','fav','skip-ex','move-ex'].every(a=>sheet.acts.includes(a)),JSON.stringify(sheet.acts));
+    assert.ok(['swap-ex','fav','skip-ex','move-ex'].every(a=>sheet.acts.includes(a)),JSON.stringify(sheet.acts));
+    assert.equal(sheet.acts.includes('repslog'),false,'reps are logged set by set, not in one field');
     assert.equal(sheet.width,320);
     assert.deepEqual(sheet.small,[],JSON.stringify(sheet));
     await closeExMenu();
@@ -405,6 +458,60 @@ const server = http.createServer((req,res) => {
       const gap=await page.evaluate(()=>document.querySelector('.plan-action').getBoundingClientRect().top-document.querySelector('.hero').getBoundingClientRect().bottom);
       assert.ok(gap>=16,'Planning button must have its own space after the workout');
     }
+    // A damaged backup (null entries, unusable sets) no longer breaks the screens.
+    await page.evaluate(()=>{localStorage.setItem('fit.v2',JSON.stringify({history:[null,{id:'z',dayId:'upper-a',ts:Date.now(),vol:'x',entries:[null,'roto',{id:'remo',nm:'Remo',sets:'2',reps:'10',kg:'mal',setData:[null,{kg:'x',reps:'y'},{kg:'40',reps:'10'}]}]}]}))});
+    await page.reload();
+    const healed=await page.evaluate(()=>{go('historial');const h=S.history[0];
+      return {sessions:S.history.length,entries:h.entries.length,sets:h.entries[0].setData,vol:h.vol,
+        broken:/undefined|NaN|Invalid Date|\[object Object\]/.test(document.body.innerText)}});
+    assert.equal(healed.sessions,1);
+    assert.equal(healed.entries,1);
+    assert.deepEqual(healed.sets,[{kg:40,reps:10}]);
+    assert.equal(healed.vol,0);
+    assert.equal(healed.broken,false);
+    // Sheets dim and block the screen behind them, and tapping outside closes them.
+    await page.evaluate(()=>{S.active=null;S.history=[];save();go('day','upper-a');startSession('upper-a')});
+    await page.locator('.ex').first().locator('.dot').first().click();
+    const tucked=await page.evaluate(()=>({timer:document.querySelector('#sheet').classList.contains('on')}));
+    await page.locator('.ex').first().locator('.dot.on').first().click();
+    await page.locator('#setsheet.on').waitFor();
+    const guarded=await page.evaluate(()=>({scrim:document.querySelector('#scrim').classList.contains('on'),
+      timer:document.querySelector('#sheet').classList.contains('on'),
+      dock:getComputedStyle(document.querySelector('#timer-dock')).display}));
+    assert.equal(tucked.timer,true,'marking a set opens the clock');
+    assert.deepEqual(guarded,{scrim:true,timer:false,dock:'block'},'opening a sheet should dim the screen and tuck the clock');
+    await page.locator('#scrim').click({position:{x:40,y:60}});
+    await page.waitForFunction(()=>!document.querySelector('#setsheet').classList.contains('on')&&!document.querySelector('#scrim').classList.contains('on'));
+    // The row says how today compares with last time.
+    await page.evaluate(()=>{const d=864e5,now=Date.now();
+      S.history=[{id:'p',dayId:'upper-a',ts:now-7*d,vol:1300,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:2,reps:'8 / 8',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8}],ts:now-7*d}]}];
+      S.active=null;save();go('day','upper-a');startSession('upper-a')});
+    await page.locator('.ex').first().locator('.dot').first().click();
+    await closeTimer();
+    await page.locator('.ex').first().locator('.dot.on').first().click();
+    await page.locator('#setsheet [data-act="set-adj"][data-f="kg"][data-d="2.5"]').click();
+    await page.locator('#setsheet [data-act="set-close"]').last().click();
+    assert.match(await page.locator('.setlog').first().textContent(),/\+2\.5 kg vs la última/);
+    // Every control in Ajustes and in the conditioning day is a real touch target.
+    for(const [view,day] of [['ajustes'],['day','crossfit']]){
+      await page.evaluate(({view,day})=>{S.active=null;save();go(view,day)},{view,day});
+      await page.waitForTimeout(150);
+      const small=await page.evaluate(()=>[...document.querySelectorAll('button,.sw,summary')].filter(el=>{
+        const s=getComputedStyle(el),r=el.getBoundingClientRect();
+        return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&!el.closest('#nav')&&!el.matches('.skip')&&!el.closest('.sheet:not(.on)')&&r.height<40;
+      }).map(el=>(el.dataset.act||el.className)+':'+Math.round(el.getBoundingClientRect().height)));
+      assert.deepEqual(small,[],`${view}${day?'/'+day:''} has controls under 40px`);
+    }
+    // Progress remembers the exercise you were looking at.
+    await page.evaluate(()=>{const d=864e5,now=Date.now();
+      S.history=[{id:'q1',dayId:'pierna',ts:now-d,vol:900,entries:[{id:'sentadilla',nm:'Sentadilla',sets:2,reps:'5 / 5',kg:90,setData:[{kg:90,reps:5},{kg:90,reps:5}],ts:now-d}]},
+                 {id:'q2',dayId:'upper-a',ts:now-2*d,vol:800,entries:[{id:'press-banca',nm:'Press de banca',sets:2,reps:'8 / 8',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8}],ts:now-2*d}]}];
+      S.active=null;save();go('historial')});
+    await page.locator('[data-act="lift-sel"]').selectOption('sentadilla');
+    await page.reload();
+    await page.evaluate(()=>go('historial'));
+    assert.equal(await page.locator('[data-act="lift-sel"]').inputValue(),'sentadilla');
+    await page.evaluate(()=>{S.active=null;S.history=[];save()});
     assert.deepEqual(errors,[]);
     await page.setViewportSize({width:390,height:844});
     await page.evaluate(()=>go('hoy'));
@@ -443,10 +550,10 @@ const server = http.createServer((req,res) => {
     await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.8.1');
+    await offlinePage.waitForFunction(v=>typeof P!=='undefined'&&P.version===v,VERSION);
     await offlineContext.setOffline(true);
     await offlinePage.reload();
-    await offlinePage.waitForFunction(()=>typeof P!=='undefined'&&P.version==='2.8.1');
+    await offlinePage.waitForFunction(v=>typeof P!=='undefined'&&P.version===v,VERSION);
     assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
     await offlineContext.close();
     assert.deepEqual(errors,[]);

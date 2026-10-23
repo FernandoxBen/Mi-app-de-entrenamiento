@@ -1,5 +1,25 @@
 # Cambios
 
+## 2.10.0 — 2026-10-23
+
+- Corregido: una copia de seguridad con entradas dañadas rompía Progreso y la pantalla del día, y seguía rota después de reiniciar. Ahora cada sesión guardada se limpia al cargar: fuera las entradas sin ejercicio y las series sin peso ni repeticiones.
+- Las hojas de edición oscurecen el fondo y se cierran tocando fuera; mientras están abiertas no se pulsa nada por detrás.
+- Al abrir una hoja, el reloj en marcha se recoge a su botón flotante en vez de quedar debajo.
+- Si marcas otra serie con el editor abierto, el editor pasa a esa serie.
+- La fila dice cómo va el ejercicio respecto a la última vez: `+2,5 kg vs la última`.
+- Progreso recuerda el ejercicio que estabas mirando.
+- Interruptores de Ajustes y reloj del bloque metabólico a 44 px.
+
+## 2.9.0 — 2026-10-23
+
+- Cada serie guarda su propio peso y sus repeticiones. Al marcarla toma lo que hiciste la última vez en ese mismo ejercicio; si ya has anotado una serie hoy, hereda esa.
+- El botón de la serie muestra lo anotado (`62.5` · `8 rep`) y debajo queda el resumen del ejercicio con el volumen del día.
+- Tocar una serie ya marcada abre su editor: peso en saltos de 2,5 kg, repeticiones de una en una, y quitar la serie.
+- La pestaña Historial pasa a llamarse Progreso y se reordena alrededor del ejercicio: selector con todos los ejercicios con historial, diferencia respecto a la semana anterior, curva de mejor serie con fechas y 1RM estimado, mejor marca, y las últimas seis veces serie a serie.
+- Volumen por semana de las últimas ocho semanas.
+- El peso de la fila pasa a ser la referencia con la que se marcan las series nuevas; las repeticiones ya no se escriben en un campo aparte.
+- El volumen de la sesión y los récords se calculan con el peso real de cada serie.
+
 ## 2.8.1 — 2026-09-27
 
 - Opción A elegida: plank pull-through 2×4–6/lado y woodchop ligero 2×6–8/lado antes del circuito metabólico.
