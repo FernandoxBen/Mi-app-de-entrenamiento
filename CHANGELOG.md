@@ -1,5 +1,18 @@
 # Cambios
 
+## 4.0.0 — 2026-11-01
+
+- Upper A y Upper B se unifican en Upper; Pierna pasa a llamarse Lower (mantiene su id `pierna`).
+- Migración automática: calendarios, historial, alternativas elegidas, una sesión 3.x a medias y el reloj en curso. Los accesos `?d=upper-a` y `?d=upper-b` abren Upper.
+- La pestaña Hoy pasa a ser Entrenos: entreno de hoy o, en día de descanso, Movilidad y Estiramientos; debajo, la lista de entrenos. Se elimina «Cómo llegas hoy».
+- Sesión nueva de Estiramientos (11 min) para días de descanso.
+- Planificador por días de la semana: un mismo entreno puede repetirse en varios días.
+- La vista de entreno ya no tiene campos de peso ni marcadores de serie: cada ejercicio o superserie lleva el botón Ir al reloj.
+- Reloj: llega con el ejercicio cargado, guía serie → descanso → serie y pide kilos y repeticiones de todas las series al terminar; propone el siguiente ejercicio; superseries por rondas; «Una serie más» y «Salir sin guardar».
+- Las rondas de los circuitos se guardan al momento en la sesión del día.
+- Corregido: los accesos directos pedían manifiestos e iconos que no existían.
+- Pruebas reescritas (`tests/planning.cjs`) para el flujo nuevo, la migración, el diseño a 320/390/768 px y el modo sin conexión.
+
 ## 3.0.0 — 2026-10-23
 
 - La app se organiza en tres partes: **Hoy** (lo que te toca), **Reloj** (sigues un ejercicio serie a serie) y **Registro** (pesos, repeticiones y progreso). Ajustes sigue aparte.

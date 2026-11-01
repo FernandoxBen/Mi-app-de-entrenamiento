@@ -1,5 +1,5 @@
-/* Entreno 3.0.0 · service worker */
-const V = 'entreno-v3.0.0';
+/* Entreno 4.0.0 · service worker */
+const V = 'entreno-v4.0.0';
 const SHELL = V + '-shell';
 const CORE = [
   './',
@@ -10,7 +10,9 @@ const CORE = [
   './icon-180.png',
   './icon-maskable.png',
   // iconos de los accesos rápidos al mantener pulsado
-  './ic-upper-a-192.png', './ic-pierna-192.png', './ic-upper-b-192.png', './ic-crossfit-192.png'
+  './ic-upper-192.png', './ic-pierna-192.png', './ic-crossfit-192.png',
+  // accesos de versiones anteriores que pueden seguir en la pantalla de inicio
+  './ic-upper-a-192.png', './ic-upper-b-192.png'
 ];
 
 self.addEventListener('install', e => {

@@ -1,4 +1,15 @@
-# Entreno 3.0.0
+# Entreno 4.0.0
+
+## Novedades 4.0
+
+**Upper y Lower.** Upper A y Upper B se unen en un único **Upper** (press de banca y jalón al pecho 4×6–8, remo 3×8–12, landmine 2×8–10 por lado, laterales + pájaros y bíceps + tríceps en superserie). Pierna pasa a llamarse **Lower**. El historial, las alternativas elegidas y tu calendario se conservan: lo que era Upper A o Upper B cuenta ahora como Upper, y los iconos antiguos de la pantalla de inicio abren el Upper nuevo.
+
+**Entrenos** sustituye a Hoy. Arriba sale lo que te toca hoy según tu semana; si es día de descanso, Movilidad o Estiramientos (sesión nueva de unos 11 minutos). Debajo, todos tus entrenos. Se quita «Cómo llegas hoy». El planificador va por días de la semana, así que Upper puede ir el lunes y el jueves.
+
+**Dentro de un entreno** solo se ve el entreno: ejercicio, series, repeticiones, descanso y cómo se hace. Cada ejercicio (o cada superserie) tiene un botón **Ir al reloj**.
+
+**Reloj.** Llega con el ejercicio, las series y el descanso cargados: pulsas Empezar serie 1 y te lleva serie → descanso → serie. Al terminar la última anotas de una vez los kilos y las repeticiones de todas las series, ya rellenas con lo de la última vez. Si cambias el peso de una serie, las siguientes con el mismo peso cambian también. Después te propone el siguiente ejercicio del entreno. Las superseries van por rondas y se anotan los dos ejercicios. Las rondas del metabólico y de los circuitos de casa se guardan solas.
+
 
 ## Novedades 3.0
 

@@ -1,4 +1,4 @@
-ENTRENO 2.0
+ENTRENO 4.0
 ============
 
 La app funciona directamente desde estos archivos y no necesita instalar paquetes.
@@ -17,11 +17,11 @@ INSTALACIÓN
 DATOS
   Los registros se guardan únicamente en el navegador del dispositivo.
   Usa Ajustes → Exportar para crear una copia JSON e Importar para restaurarla.
-  La versión 2.0 conserva automáticamente los datos de la versión anterior.
+  Cada versión conserva automáticamente los datos de las anteriores.
 
 ACTUALIZACIONES
   Al publicar una versión nueva, la app descarga los archivos y los aplica al
-  volver a cargar. Si hay una sesión activa, espera a terminarla antes de recargar.
+  volver a cargar. Si el reloj está en marcha, espera a anotar el ejercicio antes de recargar.
 
 AVISO
   El plan es una guía general. Detén cualquier ejercicio que cause dolor intenso,

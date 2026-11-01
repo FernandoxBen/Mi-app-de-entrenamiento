@@ -1,4 +1,6 @@
 // Run: node tests/planning.cjs (Playwright available via NODE_PATH or local install).
+// Entreno 4.0: Upper único y Lower, pestaña Entrenos, entreno sin campos de peso con
+// botón Ir al reloj, reloj que anota al final del ejercicio, migración desde 3.x.
 const {chromium} = require('playwright');
 const http = require('node:http');
 const fs = require('node:fs');
@@ -6,644 +8,381 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const VERSION = (fs.readFileSync(path.join(root,'index.html'),'utf8').match(/version:\s*'([^']+)'/)||[])[1];
+const types = {'.html':'text/html; charset=utf-8','.js':'application/javascript','.json':'application/json','.png':'image/png','.svg':'image/svg+xml'};
 const server = http.createServer((req,res) => {
   const name = new URL(req.url,'http://localhost').pathname;
   const file = path.join(root, name === '/' ? 'index.html' : name);
   if (!file.startsWith(root+path.sep)) {res.writeHead(403).end();return;}
-  try {res.setHeader('Content-Type',file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.js')?'application/javascript':'application/octet-stream');res.end(fs.readFileSync(file));}
+  try {res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file));}
   catch {res.writeHead(404).end();}
 });
+const MONDAY = '2026-11-02T18:00:00+01:00', FRIDAY = '2026-11-06T18:00:00+01:00';
+const shots = path.join(root,'tests');
+
 (async()=>{
   await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  const URL0 = `http://127.0.0.1:${server.address().port}/`;
   const browser = await chromium.launch({headless:true,channel:process.env.TEST_BROWSER || 'chrome'});
+  const errors=[];
+  async function open(when, init, url=URL0, width=390){
+    const ctx = await browser.newContext({viewport:{width,height:844},timezoneId:'Europe/Madrid',serviceWorkers:'block'});
+    const page = await ctx.newPage();
+    page.on('pageerror',e=>errors.push(e.message));
+    page.on('console',m=>{ if(m.type()==='error' && !/favicon/.test(m.text())) errors.push(m.text()); });
+    page.on('dialog',d=>d.accept());
+    await page.clock.install({time:new Date(when)});
+    if (init) await page.addInitScript(([k,v])=>{ if(!sessionStorage.getItem('seeded')){ localStorage.setItem(k,v); sessionStorage.setItem('seeded','1'); } }, ['fit.v2', JSON.stringify(init)]);
+    await page.goto(url);
+    return {ctx,page};
+  }
+  const txt = (page, sel='#app') => page.locator(sel).innerText();
+  async function checkLayout(page, width, view, day){
+    await page.setViewportSize({width,height:844});
+    await page.evaluate(({view,day})=>go(view,day),{view,day});
+    await page.waitForTimeout(120);
+    const L = await page.evaluate(()=>{
+      const els=[...document.querySelectorAll('#app button,#app select,#app input,#app a[href],#app summary')].filter(el=>{
+        const s=getComputedStyle(el),r=el.getBoundingClientRect();
+        const shut=el.closest('details:not([open])');
+        return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&!(shut&&!el.matches('summary'));
+      });
+      const overlaps=[];
+      for(let i=0;i<els.length;i++)for(let j=i+1;j<els.length;j++){
+        const a=els[i],b=els[j]; if(a.contains(b)||b.contains(a))continue;
+        const x=a.getBoundingClientRect(),y=b.getBoundingClientRect();
+        if(Math.min(x.right,y.right)-Math.max(x.left,y.left)>2&&Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)>2)overlaps.push([a.outerHTML.slice(0,70),b.outerHTML.slice(0,70)]);
+      }
+      const small=els.filter(el=>el.matches('button,select,input')&&el.getBoundingClientRect().height<44).map(el=>(el.dataset.act||el.className||el.tagName)+':'+Math.round(el.getBoundingClientRect().height));
+      const misaligned=[...document.querySelectorAll('#app .btnrow')].flatMap(g=>{
+        const c=[...g.children].filter(el=>el.matches('button,a.btn')).map(el=>el.getBoundingClientRect());
+        return c.length<2||c.every(r=>Math.abs(r.height-c[0].height)<=2)?[]:[g.className];
+      });
+      return {overflow:document.documentElement.scrollWidth>innerWidth, overlaps, small, misaligned,
+        broken:/undefined|NaN|Invalid Date|\[object Object\]/.test(document.body.innerText)};
+    });
+    const where = `${view}/${day||''} at ${width}px`;
+    assert.equal(L.overflow,false,`${where} overflows`);
+    assert.deepEqual(L.overlaps,[],`${where} has overlapping controls`);
+    assert.deepEqual(L.small,[],`${where} has controls under 44px`);
+    assert.deepEqual(L.misaligned,[],`${where} has misaligned button groups`);
+    assert.equal(L.broken,false,`${where} prints broken values`);
+  }
   try {
-    const context = await browser.newContext({viewport:{width:390,height:844},timezoneId:'Europe/Madrid',serviceWorkers:'block'});
-    const page = await context.newPage();
-    const errors=[];page.on('pageerror',e=>errors.push(e.message));
-    await page.goto(`http://127.0.0.1:${server.address().port}/`);
-    assert.equal(await page.locator('[data-id="calentamiento"]').count(),1);
-    // Preserve an old active workout while using the new independent warmup.
-    await page.evaluate(()=>{ S.active={dayId:'upper-a',t0:Date.now(),sets:{'press-banca|Press de banca':[true]},kg:{},warm:{0:true},rounds:{}};save(); });
-    await page.reload();
-    await page.locator('[data-id="calentamiento"]').click();
-    await page.locator('[data-act="warm-check"]').first().click();
-    await page.locator('[data-act="warm-done"]').click();
-    assert.equal(await page.evaluate(()=>S.active.sets['press-banca|Press de banca'][0]),true);
-    assert.equal(await page.evaluate(()=>warmRecord().done),true);
-    await page.reload();
-    assert.equal(await page.evaluate(()=>warmRecord().done),true);
-    await page.locator('[data-act="tab"][data-v="semana"]').click();
-    await page.locator('#plan-upper-a').selectOption('5');
-    assert.equal(await page.evaluate(()=>planFor(Date.now())['upper-a']),5);
-    // Reject collisions, preserve existing assignment.
-    await page.locator('#plan-upper-a').selectOption('2');
-    assert.equal(await page.locator('#plan-upper-a').inputValue(),'5');
-    await page.locator('[data-act="plan-week"][data-n="1"]').click();
-    await page.locator('#plan-upper-a').selectOption('6');
-    await page.reload();
-    assert.equal(await page.locator('#plan-upper-a').inputValue(),'5');
-    await page.locator('[data-act="plan-week"][data-n="1"]').click();
-    assert.equal(await page.locator('#plan-upper-a').inputValue(),'6');
-    await page.locator('#plan-upper-a').selectOption('-1');
-    assert.equal(await page.locator('#plan-upper-a').inputValue(),'-1');
-    // Today follows the calendar, and extras don't inflate weekly completion.
-    const actual = await page.evaluate(()=>{
-      const today=(new Date().getDay()+6)%7;
-      S.plans[dateKey(new Date(weekStart(Date.now())))]=Object.fromEntries(P.days.map(d=>[d.id,d.id==='upper-b'?today:-1]));
-      S.history=[{dayId:'upper-b',ts:Date.now()},{dayId:'movilidad',ts:Date.now()},{dayId:'agarre',ts:Date.now()}];
-      return {today:todayDay().id,count:weekSessions().size,embedded:P.days.some(d=>d.blocks.some(b=>b.t==='warmup'))};
-    });
-    assert.deepEqual(actual,{today:'upper-b',count:1,embedded:false});
-    const program = await page.evaluate(()=>{
-      const get=(day,id)=>flatEx(dayById(day)).find(e=>e.id===id);
-      return {
-        upperA:{landmine:get('upper-a','landmine').sets,curl:get('upper-a','curl-biceps').sets,triceps:get('upper-a','triceps-overhead').sets},
-        leg:{squat:[get('pierna','sentadilla').sets,get('pierna','sentadilla').reps],bulgarian:[get('pierna','bulgara').sets,get('pierna','bulgara').reps],nordic:get('pierna','nordico').sets},
-        upperB:{pulldown:!!get('upper-b','jalon'),hammer:get('upper-b','curl-martillo').sets,triceps:get('upper-b','triceps-polea').sets},
-        conditioning:{plank:get('crossfit','plank-pull-through').sets,chop:get('crossfit','woodchop-kb').sets},
-        guide:Object.keys(EX_GUIDE).length
-      };
-    });
-    assert.deepEqual(program,{upperA:{landmine:2,curl:3,triceps:3},leg:{squat:[3,'4–6'],bulgarian:[2,'6–8/pierna'],nordic:2},upperB:{pulldown:false,hammer:3,triceps:3},conditioning:{plank:2,chop:2},guide:33});
-    const warmup=await page.evaluate(()=>P.warmup.groups.flatMap(g=>g.items.map(x=>x.n)));
-    assert.deepEqual(warmup,['Cat-Cow',"World’s Greatest Stretch",'Quadruped Thoracic Rotation','Scapular Wall Slide','Scapular Push-up','Dead Bug','Glute Bridge','Knee-to-Wall Ankle Dorsiflexion']);
-    assert.equal(warmup.some(x=>/bici|band|banda|pasos laterales/i.test(x)),false);
-    assert.equal(await page.evaluate(()=>P.warmup.groups.concat([P.warmup.optional]).flatMap(g=>g.items).every(x=>x.es&&x.how&&x.d)),true);
-    assert.deepEqual(await page.evaluate(()=>P.warmup.optional.items.map(x=>x.n)),['Assisted Dead Hang']);
-    // Old copies and corrupt new fields receive safe defaults.
-    assert.equal(await page.evaluate(()=>{const old={plans:[],warmups:{bad:null}};normalizePlanning(old);return Object.keys(old.plans).length+Object.keys(old.warmups).length;}),0);
-    await page.evaluate(()=>go('hoy'));
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
-    // A superset starts rest after the pair, not after its first exercise.
-    await page.evaluate(()=>{S.active=null;save();go('day','upper-a')});
-    await page.locator('[data-act="start"]').click();
-    assert.ok(await page.locator('.exguide').count()>=6);
-    await page.locator('[data-act="set"][data-k^="curl-biceps|"]').first().click();
-    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),false);
-    await page.locator('[data-act="set"][data-k^="triceps-overhead|"]').first().click();
-    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),true);
-    await closeTimer();
-    await page.evaluate(()=>{S.active=null;save()});
-    // Opening a sheet tucks the running clock into its dock; bring it back to close it.
-    async function closeTimer(){
-      if(await page.evaluate(()=>document.querySelector('#scrim').classList.contains('on')))
-        await page.evaluate(()=>{EXMENU=null;SETEDIT=null;renderExMenu();renderSetSheet();});
-      const docked=await page.evaluate(()=>!document.querySelector('#sheet').classList.contains('on')&&getComputedStyle(document.querySelector('#timer-dock')).display!=='none');
-      if(docked) await page.locator('#timer-dock').click();
-      if(await page.evaluate(()=>document.querySelector('#sheet').classList.contains('on'))) await page.locator('[data-act="skip"]').click();
-    }
-    async function checkLayout(width, view, day){
-      await page.setViewportSize({width,height:844});
-      await page.evaluate(({view,day})=>go(view,day),{view,day});
-      await page.evaluate(()=>scrollTo(0,0));
-      await page.waitForTimeout(250);
-      const layout=await page.evaluate(()=>{
-        const overflow=document.documentElement.scrollWidth>window.innerWidth;
-        const els=[...document.querySelectorAll('button,select,input,a[href],summary')].filter(el=>{
-          const s=getComputedStyle(el),r=el.getBoundingClientRect();
-          return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&!el.matches('.skip')&&!el.closest('#nav')&&!el.closest('.sheet:not(.on)');
-        });
-        const overlaps=[];
-        for(let i=0;i<els.length;i++)for(let j=i+1;j<els.length;j++){
-          const a=els[i],b=els[j]; if(a.contains(b)||b.contains(a))continue;
-          const x=a.getBoundingClientRect(),y=b.getBoundingClientRect();
-          if(Math.min(x.right,y.right)-Math.max(x.left,y.left)>2&&Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)>2)overlaps.push([a.outerHTML.slice(0,70),b.outerHTML.slice(0,70)]);
-        }
-        const small=els.filter(el=>el.matches('button,a.btn,summary')&&el.getBoundingClientRect().height<36).map(el=>el.outerHTML.slice(0,90));
-        const misalignedGroups=[...document.querySelectorAll('.btnrow,.readiness,.sheet.on .btns')].flatMap(group=>{
-          const controls=[...group.children].filter(el=>el.matches('button,a.btn')).map(el=>el.getBoundingClientRect());
-          if(controls.length<2)return [];
-          const sameRow=controls.every(r=>Math.abs(r.top-controls[0].top)<=2);
-          const sameHeight=controls.every(r=>Math.abs(r.height-controls[0].height)<=2);
-          return sameRow&&sameHeight?[]:[group.className];
-        });
-        return {overflow,overlaps,small,misalignedGroups};
-      });
-      assert.equal(layout.overflow,false,`${view}/${day||''} overflows at ${width}px`);
-      assert.deepEqual(layout.overlaps,[],`${view}/${day||''} has overlapping controls at ${width}px`);
-      assert.deepEqual(layout.small,[],`${view}/${day||''} has controls under 36px at ${width}px`);
-      assert.deepEqual(layout.misalignedGroups,[],`${view}/${day||''} has misaligned button groups at ${width}px`);
-    }
-    for(const width of [320,390,768]) for(const [view,day] of [['hoy'],['semana'],['day','upper-a'],['day','pierna'],['day','upper-b'],['day','crossfit'],['day','calentamiento'],['historial'],['ajustes']]) await checkLayout(width,view,day);
-    for(const width of [320,390]){
-      await page.setViewportSize({width,height:844});
-      await page.evaluate(()=>go('day','calentamiento'));
-      const controls=await page.locator('.warm-check').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,w:r.width,h:r.height}}));
-      assert.ok(controls.length>=9);
-      assert.ok(controls.every(x=>x.x===controls[0].x&&x.w===44&&x.h===44),`warm-up controls are misaligned at ${width}px`);
-      const cards=await page.locator('.witem').evaluateAll(els=>els.map(el=>{
-        const c=el.getBoundingClientRect(),n=el.querySelector('.wname').getBoundingClientRect();
-        return {w:Math.round(c.width),nameW:Math.round(n.width),guide:!!el.querySelector('.warm-how'),marks:el.querySelectorAll('.warm-check').length};
-      }));
-      assert.ok(cards.every(c=>c.w===cards[0].w&&c.guide&&c.marks===1),`warm-up cards are inconsistent at ${width}px`);
-      assert.ok(cards.every(c=>c.nameW>=c.w*0.35),`warm-up names are squeezed at ${width}px`);
-      if(width===320)await page.screenshot({path:path.join(root,'tests','warmup-320-preview.png'),fullPage:true});
-      await page.evaluate(()=>go('day','upper-a'));
-      const series=await page.locator('.track').first().evaluate(el=>{
-        const dots=[...el.querySelectorAll('.dot')].map(x=>x.getBoundingClientRect());
-        const weight=el.querySelector('.wgt').getBoundingClientRect();
-        const xs=dots.map(d=>Math.round(d.x)),ys=dots.map(d=>Math.round(d.y));
-        const firstRow=xs.filter((x,i)=>ys[i]===ys[0]);
-        return {w:dots.map(d=>Math.round(d.width)),h:dots.map(d=>Math.round(d.height)),n:dots.length,
-          aligned:xs.every(x=>firstRow.includes(x)),
-          dy:Math.round(Math.abs(dots[0].y-weight.y))};
-      });
-      assert.ok(series.w.every(w=>w===series.w[0]),`series buttons have uneven widths at ${width}px`);
-      assert.ok(series.h.every(h=>h>=44),`series buttons are under 44px at ${width}px`);
-      assert.ok(series.aligned,`series buttons do not line up in columns at ${width}px`);
-      assert.ok(series.dy<=2,`weight control is not aligned with the first row of series at ${width}px`);
-    }
-    // Progress tab: one exercise at a time, with its chart and its own set history.
-    await page.evaluate(()=>{
-      const d=864e5,now=Date.now();
-      S.history=[
-        {id:'h2',dayId:'upper-a',ts:now-d,vol:1400,dur:36e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 8',kg:62.5,setData:[{kg:62.5,reps:8},{kg:62.5,reps:8},{kg:60,reps:8}],ts:now-d}]},
-        {id:'h1',dayId:'upper-a',ts:now-8*d,vol:1200,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 7',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8},{kg:57.5,reps:7}],ts:now-8*d}]}];
-      save();go('historial');
-    });
-    for(const width of [320,390]){
-      await page.setViewportSize({width,height:844});
-      await page.evaluate(()=>renderHere());
-      await page.waitForTimeout(150);
-      const prog=await page.evaluate(()=>{
-        const sel=document.querySelector('[data-act="lift-sel"]');
-        const r=sel?sel.getBoundingClientRect():null;
-        return {sel:!!sel,h:r?Math.round(r.height):0,opts:sel?[...sel.options].map(o=>o.value):[],
-          chart:!!document.querySelector('.pchart'),
-          weeks:document.querySelectorAll('.wvol .wv').length,
-          best:(document.querySelector('.pstats .v')||{}).textContent||'',
-          sets:[...document.querySelectorAll('.lrow .sets')].map(x=>x.textContent)};
-      });
-      assert.ok(prog.sel&&prog.h>=44,`the exercise selector is missing or small at ${width}px`);
-      assert.ok(prog.opts.includes('press-banca'),JSON.stringify(prog.opts));
-      assert.ok(prog.chart,`no progress chart at ${width}px`);
-      assert.equal(prog.weeks,8);
-      assert.match(prog.best,/62\.5/);
-      assert.ok(prog.sets.some(t=>/62\.5×8 · 62\.5×8 · 60×8/.test(t)),JSON.stringify(prog.sets));
-    }
-    await page.setViewportSize({width:390,height:844});
-    await page.evaluate(()=>go('day','movilidad'));
-    await page.evaluate(()=>document.querySelectorAll('.sec.fold').forEach(el=>el.click()));
-    const miniRows=await page.locator('.mini .m').evaluateAll(els=>els.map(el=>{
-      const r=el.getBoundingClientRect(),n=el.querySelector('b').getBoundingClientRect();
-      return {w:Math.round(r.width),nameW:Math.round(n.width)};
+    /* ---------- 1. Datos de la 3.x: plan, historial, alternativas, sesión abierta y reloj ---------- */
+    const legacy = {
+      settings:{restStrength:120,restStandard:60,sound:false,vibe:false},
+      readiness:{'2026-11-02':'alta'},
+      history:[{id:'s1',dayId:'upper-a',ts:Date.parse('2026-10-26T18:00:00+01:00'),vol:1500,dur:36e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 7',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8},{kg:57.5,reps:7}]}]},
+               {id:'s2',dayId:'upper-b',ts:Date.parse('2026-10-29T18:00:00+01:00'),vol:900,entries:[{id:'curl-martillo',nm:'Curl martillo',sets:2,reps:'12 / 12',kg:14,setData:[{kg:14,reps:12},{kg:14,reps:12}]}]}],
+      plans:{'2026-11-02':{'upper-a':0,pierna:1,'upper-b':3,crossfit:2},'2026-11-09':{'upper-a':0,'upper-b':5,pierna:-1,crossfit:2}},
+      drafts:{'upper-b':{'jalon-neutro|Jalón al pecho neutro':'dominadas-bw'}},
+      active:{dayId:'upper-a',t0:Date.parse('2026-10-31T10:00:00+01:00'),sets:{'remo|Remo':[true,true]},setLog:{'remo|Remo':[{kg:50,reps:10},{kg:50,reps:9}]},exercises:[{_uid:'remo|Remo',id:'remo',nm:'Remo en máquina con apoyo'}],kg:{},rounds:{}},
+      clock:{phase:'rest',exId:'sentadilla',exNm:'Sentadilla con barra',sets:3,rest:150,i:0,log:[{kg:90,reps:5}],t0:1,restEnd:Date.parse(MONDAY)+60000,restTotal:150000,runId:Date.parse(MONDAY)-60000,ref:{kg:85,setData:[{kg:85,reps:5}]}}
+    };
+    let {ctx,page} = await open(MONDAY, legacy);
+    const mig = await page.evaluate(()=>({
+      plans:S.plans, days:[...new Set(S.history.map(h=>h.dayId))].sort(), drafts:S.drafts, active:'active' in S, readiness:'readiness' in S,
+      closed:S.history.find(h=>h.id.startsWith('s'+Date.parse('2026-10-31T10:00:00+01:00'))),
+      clock:{phase:S.clock.phase,items:S.clock.items,done:S.clock.done,rows:S.clock.rows,ref:Object.keys(S.clock.ref)}
     }));
-    assert.ok(miniRows.length>0&&miniRows.every(n=>n.nameW>=n.w*0.5),'mini rows squeeze the movement name');
-    await page.evaluate(()=>{S.prs={'press-banca':62,'roto':null,'sentadilla':{kg:'100',nm:'Sentadilla'}};save()});
-    await page.reload();
-    const prs=await page.evaluate(()=>{go('historial');return {keys:Object.keys(S.prs).sort(),rows:document.querySelectorAll('.prow:not(.lrow)').length,text:[...document.querySelectorAll('.prow')].map(x=>x.textContent).join(' ')}});
-    assert.deepEqual(prs.keys,['press-banca','sentadilla']);
-    assert.equal(prs.rows,2);
-    assert.equal(/undefined|Invalid Date|NaN/.test(prs.text),false);
-    await page.evaluate(()=>{S.prs={};save()});
-    // Editing an exercise happens in the ⋯ sheet, not in the row.
-    async function openExMenu(nameRe){
-      await page.locator('.ex').filter({hasText:nameRe}).first().locator('[data-act="ex-menu"]').click();
-      await page.locator('#exsheet.on').waitFor();
+    assert.deepEqual(mig.plans,{'2026-11-02':['upper','pierna','crossfit','upper',null,null,null],'2026-11-09':['upper',null,'crossfit',null,null,'upper',null]});
+    assert.deepEqual(mig.days,['upper']);
+    assert.deepEqual(mig.drafts,{upper:{'jalon-neutro|Jalón al pecho neutro':'dominadas-bw'}});
+    assert.equal(mig.active,false); assert.equal(mig.readiness,false);
+    assert.deepEqual(mig.closed.entries.map(e=>[e.id,e.setData]),[['remo',[{kg:50,reps:10},{kg:50,reps:9}]]],'a half-done 3.x session is kept');
+    assert.equal(mig.closed.dayId,'upper');
+    assert.deepEqual(mig.clock,{phase:'rest',items:[{id:'sentadilla',nm:'Sentadilla con barra'}],done:1,rows:{sentadilla:[{kg:90,reps:5}]},ref:['sentadilla']},'a 3.x clock in rest keeps going');
+    assert.match(await page.locator('.ck-banner').innerText(),/Descansando[\s\S]*Sentadilla con barra[\s\S]*Serie 2 de 3/i);
+    await ctx.close();
+    // Old home-screen icons and links still land on the unified Upper.
+    for (const url of [URL0+'index.html?d=upper-a', URL0+'index.html?d=upper-b', URL0+'#day/upper-a']) {
+      ({ctx,page} = await open(MONDAY, null, url));
+      assert.equal(await page.locator('#top h1').innerText(),'Upper', url);
+      await ctx.close();
     }
-    async function closeExMenu(){
-      await page.locator('#exsheet [data-act="ex-menu-close"]').first().click();
-      await page.waitForFunction(()=>!document.querySelector('#exsheet').classList.contains('on'));
-    }
-    // Flexible session: draft swap, independent history, preload, favorite, add, skip and reorder.
-    await page.evaluate(()=>{
-      const ts=Date.now()-864e5;
-      S.active=null;S.drafts={};S.favorites={};S.recents=[];
-      S.settings.restStrength=120;S.settings.restStandard=60;
-      S.history=[{id:'seed',dayId:'upper-a',ts,dur:2400000,vol:2160,note:'',entries:[{id:'press-mancuernas',nm:'Press con mancuernas',sets:3,reps:'8 / 8 / 7',kg:30,setData:[{kg:30,reps:8},{kg:30,reps:8},{kg:30,reps:7}],ts}]}];save();go('day','upper-a');
-    });
-    // The row itself carries no editing controls.
-    assert.equal(await page.locator('.ex select').count(),0);
-    assert.equal(await page.locator('.ex [data-act="move-ex"], .ex [data-act="skip-ex"], .ex [data-act="fav"], .ex [data-act="repslog"]').count(),0);
-    await openExMenu(/Press de banca/);
-    await page.locator('#exsheet select.ex-select').selectOption('press-mancuernas');
-    await closeExMenu();
-    assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-mancuernas');
-    await page.locator('[data-act="start"]').click();
-    await checkLayout(320,'day','upper-a');
-    await page.setViewportSize({width:390,height:844});
-    const liveBench=page.locator('.ex').filter({hasText:'Press con mancuernas'}).first();
-    assert.equal(await liveBench.locator('[data-act="kg"]').inputValue(),'30');
-    assert.match(await liveBench.textContent(),/8 \/ 8 \/ 7/);
-    await openExMenu(/Press con mancuernas/);
-    await page.locator('#exsheet [data-act="fav"]').click();
-    assert.equal(await page.evaluate(()=>S.favorites['press-mancuernas']),true);
-    // The first exercise cannot move up.
-    assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').isDisabled(),true);
-    await closeExMenu();
-    await liveBench.locator('[data-act="set"]').first().click();
-    // Marking a set logs last time's numbers; the set sheet adjusts that set alone.
-    const firstUid=await page.evaluate(()=>S.active.exercises[0]._uid);
-    assert.deepEqual(await page.evaluate(uid=>S.active.setLog[uid][0],firstUid),{kg:30,reps:8});
-    assert.match(await liveBench.locator('.dot').first().textContent(),/30/);
-    assert.deepEqual(await page.evaluate(()=>({open:document.querySelector('#sheet').classList.contains('on'),total:RT.total})),{open:true,total:120});
-    await page.locator('[data-act="rest30"]').click();
-    assert.equal(await page.evaluate(()=>RT.total),150);
-    await page.locator('[data-act="timer-pause"]').click();
-    assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Reanudar');
-    await page.locator('[data-act="timer-pause"]').click();
-    await closeTimer();
-    const secondUid=await page.evaluate(()=>S.active.exercises[1]._uid);
-    await page.locator(`[data-act="ex-menu"][data-slot="${secondUid}"]`).click();
-    await page.locator('#exsheet [data-act="skip-ex"]').click();
-    await closeExMenu();
-    assert.equal(await page.evaluate(uid=>S.active.exercises.find(x=>x._uid===uid).skipped,secondUid),true);
-    await page.locator('[data-act="add-ex"]').selectOption('laterales-maquina');
-    const addedUid=await page.evaluate(()=>S.active.exercises.at(-1)._uid);
-    await page.locator(`[data-act="ex-menu"][data-slot="${addedUid}"]`).click();
-    assert.equal(await page.locator('#exsheet [data-act="move-ex"][data-d="1"]').isDisabled(),true);
-    await page.locator('#exsheet [data-act="move-ex"][data-d="-1"]').click();
-    await closeExMenu();
-    const added=page.locator('.ex').filter({hasText:'Máquina de deltoide lateral'}).first();
-    await added.locator('[data-act="kg"]').fill('8');
-    await added.locator('[data-act="kg"]').dispatchEvent('change');
-    await added.locator('[data-act="set"]').first().click();
-    // Tapping a logged set opens its editor: +2.5 kg and one more rep stay on that set.
-    await added.locator('.dot.on').first().click();
-    await page.locator('#setsheet.on').waitFor();
-    await page.locator('#setsheet [data-act="set-adj"][data-f="kg"][data-d="2.5"]').click();
-    await page.locator('#setsheet [data-act="set-adj"][data-f="reps"][data-d="1"]').click();
-    const lateralUid=await page.evaluate(()=>S.active.exercises.find(x=>x.id==='laterales-maquina')._uid);
-    const lateralSet=await page.evaluate(uid=>S.active.setLog[uid][0],lateralUid);
-    assert.equal(lateralSet.kg,10.5);
-    await page.locator('#setsheet [data-act="set-close"]').last().click();
-    await page.waitForFunction(()=>!document.querySelector('#setsheet').classList.contains('on'));
-    await closeTimer();
-    // The in-session clock still has its manual mode; the Reloj tab is the full timer.
-    await page.evaluate(()=>timerMode('down'));
-    assert.equal(await page.evaluate(()=>RT.running),false);
-    assert.equal(await page.locator('[data-act="timer-pause"]').textContent(),'Iniciar');
-    const prepared=await page.locator('#sh-t').textContent();
-    await page.waitForTimeout(1100);
-    assert.equal(await page.locator('#sh-t').textContent(),prepared);
-    await page.locator('[data-act="rest30"]').click();
-    assert.equal(await page.evaluate(()=>RT.running),false);
-    await page.locator('[data-act="timer-pause"]').click();
-    assert.equal(await page.evaluate(()=>RT.running),true);
-    await page.locator('[data-act="timer-reset"]').click();
-    assert.equal(await page.evaluate(()=>RT.running),false);
+
+    /* ---------- 2. Entrenos: lo que toca hoy y la lista ---------- */
+    ({ctx,page} = await open(MONDAY));
+    assert.deepEqual(await page.locator('#nav button').evaluateAll(els=>els.map(el=>[el.dataset.v,el.innerText.trim()])),[['hoy','Entrenos'],['reloj','Reloj'],['historial','Registro'],['ajustes','Ajustes']]);
+    assert.equal(await page.locator('#top h1').innerText().then(t=>t.startsWith('Entrenos')),true);
+    assert.equal(await page.locator('.readiness').count(),0,'no «Cómo llegas hoy»');
+    assert.doesNotMatch(await txt(page),/Cómo llegas/i);
+    assert.equal(await page.locator('.herocard h2').innerText(),'Upper');
+    assert.deepEqual(await page.locator('.hero-list li').allInnerTexts(),['Press de banca','Jalón al pecho neutro','Remo en máquina con apoyo','Landmine press','Elevaciones laterales + Pájaros','Curl de bíceps + Extensión de tríceps sobre cabeza']);
+    assert.deepEqual(await page.locator('.cards').first().locator('.tt').allInnerTexts(),['Upper','Lower','Metabólico + core']);
+    assert.match(await page.locator('.dcard').first().innerText(),/Lunes · Jueves/i);
+    assert.equal(await page.locator('[data-id="calentamiento"]').count(),2,'warm-up card on gym days and in the list');
+    assert.match(await page.locator('.week-line').innerText(),/0 de 4/i);
+    await page.screenshot({path:path.join(shots,'mobile-preview.png'),fullPage:true});
+    await ctx.close();
+    // A rest day proposes mobility or stretching.
+    ({ctx,page} = await open(FRIDAY));
+    assert.match(await page.locator('.herocard').innerText(),/Día de descanso/i);
+    assert.deepEqual(await page.locator('.herocard [data-act="open"]').evaluateAll(b=>b.map(x=>x.dataset.id)),['movilidad','estiramientos']);
+    assert.equal(await page.locator('.warm-entry').count(),0);
+    await page.screenshot({path:path.join(shots,'rest-day-preview.png'),fullPage:true});
+    await page.locator('.herocard [data-id="estiramientos"]').click();
+    assert.equal(await page.locator('#top h1').innerText(),'Estiramientos');
+    assert.equal(await page.locator('.witem').count(),12);
+    assert.equal(await page.locator('[data-act="to-clock"]').count(),0,'holds have no clock button');
+    await page.locator('.witem summary').first().click();
+    assert.match(await page.locator('.witem').first().innerText(),/Inhala por la nariz/i);
+    await page.screenshot({path:path.join(shots,'stretching-preview.png'),fullPage:true});
+    // Planner: the same training on several days, rest days, warnings.
     await page.evaluate(()=>go('semana'));
-    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),true);
-    await page.evaluate(()=>go('day','upper-a'));
-    await page.locator('[data-act="timer-mode"][data-mode="up"]').click();
-    assert.equal(await page.evaluate(()=>RT.running),false);
-    await page.locator('[data-act="timer-pause"]').click();
-    await page.waitForTimeout(350);
-    await page.locator('[data-act="timer-pause"]').click();
-    assert.deepEqual(await page.evaluate(()=>({mode:RT.mode,running:RT.running,visible:document.querySelector('#sheet').classList.contains('on')})),{mode:'up',running:false,visible:true});
-    await closeTimer();
-    assert.equal(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),false);
-    await page.screenshot({path:path.join(root,'tests','flexible-session-preview.png'),fullPage:true});
-    await page.locator('[data-act="finish"]').click();
-    const flexible=await page.evaluate(()=>({ids:S.history[0].entries.map(e=>e.id),press:S.history[0].entries.find(e=>e.id==='press-mancuernas'),lateral:S.history[0].entries.find(e=>e.id==='laterales-maquina'),vol:S.history[0].vol,template:flatEx(dayById('upper-a'))[0].id,recents:S.recents.slice()}));
-    assert.ok(flexible.ids.includes('press-mancuernas')&&flexible.ids.includes('laterales-maquina'));
-    // Each set keeps its own weight and reps, and the entry's kg is the best set.
-    assert.deepEqual(flexible.press.setData,[{kg:30,reps:8}]);
-    assert.equal(flexible.press.reps,'8');
-    assert.equal(flexible.press.kg,30);
-    assert.equal(flexible.lateral.setData[0].kg,10.5);
-    assert.equal(flexible.vol,Math.round(30*8+10.5*flexible.lateral.setData[0].reps));
-    assert.equal(flexible.template,'press-banca');
-    assert.ok(flexible.recents.includes('press-mancuernas'));
-    await page.evaluate(()=>go('day','upper-a'));
-    await openExMenu(/Press con mancuernas/);
-    await page.locator('#exsheet select.ex-select').selectOption('press-banca');
-    await closeExMenu();
-    assert.equal(await page.evaluate(()=>S.drafts['upper-a']['press-banca|Press de banca']),'press-banca');
-    await page.evaluate(()=>go('ajustes'));
-    await page.locator('[data-setting="restStrength"]').fill('135');await page.locator('[data-setting="restStrength"]').blur();
-    await page.locator('[data-setting="restStandard"]').fill('75');await page.locator('[data-setting="restStandard"]').blur();
-    await page.reload();
-    assert.deepEqual(await page.evaluate(()=>[S.settings.restStrength,S.settings.restStandard]),[135,75]);
-    // The session row stays legible and thin: name, guide, series, weight and ⋯.
-    await page.evaluate(()=>{S.active=null;save();go('day','upper-a');startSession('upper-a')});
-    for(const width of [320,360,390]){
-      await page.setViewportSize({width,height:844});
-      await page.evaluate(()=>scrollTo(0,0));
-      await page.waitForTimeout(200);
-      const rows=await page.locator('.ex').evaluateAll(els=>els.map(ex=>{
-        const name=ex.querySelector('.exname'),edit=ex.querySelector('.ex-edit'),r=edit?edit.getBoundingClientRect():null;
-        return {controls:ex.querySelectorAll('button,select,input,summary').length,
-          cut:name?name.scrollWidth>name.clientWidth+1:false,
-          edit:r?[Math.round(r.width),Math.round(r.height)]:null};
-      }));
-      assert.ok(rows.length>=6);
-      assert.ok(rows.every(r=>r.controls<=7),`too many controls per exercise at ${width}px: ${Math.max(...rows.map(r=>r.controls))}`);
-      assert.ok(rows.every(r=>!r.cut),`the exercise name is cut at ${width}px`);
-      assert.ok(rows.every(r=>r.edit&&r.edit[0]===44&&r.edit[1]===44),`the ⋯ button is not 44px at ${width}px`);
-    }
-    // The sheet carries the editing controls, fits the screen and keeps 44px targets.
-    await page.setViewportSize({width:320,height:844});
-    await openExMenu(/Press de banca/);
-    const sheet=await page.evaluate(()=>{
-      const s=document.querySelector('#exsheet'),r=s.getBoundingClientRect();
-      return {acts:[...s.querySelectorAll('[data-act]')].map(el=>el.dataset.act),
-        width:Math.round(r.width),
-        small:[...s.querySelectorAll('button,select,input')].filter(el=>el.getBoundingClientRect().height<44).map(el=>(el.dataset.act||el.tagName)+':'+Math.round(el.getBoundingClientRect().height))};
-    });
-    assert.ok(['swap-ex','fav','skip-ex','move-ex'].every(a=>sheet.acts.includes(a)),JSON.stringify(sheet.acts));
-    assert.equal(sheet.acts.includes('repslog'),false,'reps are logged set by set, not in one field');
-    assert.equal(sheet.width,320);
-    assert.deepEqual(sheet.small,[],JSON.stringify(sheet));
-    await closeExMenu();
-    await page.evaluate(()=>{S.active=null;save()});
-    // 3+1 counts the three essential sessions, preserves saved schedules and old exercise history.
-    const plan26=await page.evaluate(()=>{
-      const sessions=P.days.map(d=>({id:d.id,ex:flatEx(d)}));
-      const oldPlans=JSON.stringify(S.plans);
-      const fresh=planFor(new Date(2040,0,2));
-      return {fresh,plansUnchanged:JSON.stringify(S.plans)===oldPlans,
-        uppers:sessions.filter(d=>d.id.startsWith('upper')).map(d=>({landmine:d.ex.find(e=>e.id==='landmine').sets,jalon:d.ex.find(e=>e.id==='jalon-neutro').sets,core:d.ex.some(e=>e.id==='core-anti')})),
-        legEffective:sessions.find(d=>d.id==='pierna').ex.reduce((s,e)=>s+e.sets,0)};
-    });
-    assert.deepEqual(plan26,{fresh:{'upper-a':0,pierna:1,'upper-b':3,crossfit:2},plansUnchanged:true,uppers:[{landmine:2,jalon:4,core:true},{landmine:2,jalon:3,core:false}],legEffective:14});
-    await page.evaluate(()=>{
-      S.history.push({id:'old-pullup',dayId:'upper-a',ts:1,entries:[{id:'dominada-lastrada',nm:'Dominadas lastradas',sets:4,reps:'5',kg:15}]});
-      S.drafts={};save();go('day','upper-a');startSession('upper-a');
-    });
-    await openExMenu(/Jalón al pecho neutro/);
-    await page.locator('#exsheet select').selectOption('dominada-lastrada');
-    await closeExMenu();
-    assert.match(await page.locator('.ex').filter({hasText:'Dominadas lastradas'}).first().textContent(),/15 kg/);
-    await openExMenu(/Dominadas lastradas/);
-    await page.locator('#exsheet select').selectOption('jalon-neutro');
-    await closeExMenu();
-    const pull=page.locator('.ex').filter({hasText:'Jalón al pecho neutro'}).first();
-    assert.equal(await pull.locator('[data-act="kg"]').inputValue(),'');
-    await pull.locator('[data-act="kg"]').fill('50');
-    await pull.locator('[data-act="kg"]').blur();
-    await pull.locator('[data-act="set"]').first().click();
-    const deadline=await page.evaluate(()=>RT.end);
-    await page.locator('[data-act="timer-minimize"]').click();
+    assert.equal(await page.locator('select[data-plan-day]').count(),7);
+    await page.locator('#plan-4').selectOption('upper');
+    assert.deepEqual(await page.evaluate(()=>planFor(Date.now())),['upper','pierna','crossfit','upper','upper',null,null]);
+    assert.match(await txt(page),/Upper el jueves y el viernes seguidos/i);
+    await page.screenshot({path:path.join(shots,'planner-preview.png'),fullPage:true});
+    await page.evaluate(()=>go('hoy'));
+    assert.equal(await page.locator('.herocard h2').innerText(),'Upper','today follows the plan');
+    assert.match(await page.locator('.dcard').first().innerText(),/Lunes · Jueves · Viernes/i);
     await page.evaluate(()=>go('semana'));
-    assert.equal(await page.locator('#timer-dock').isVisible(),true);
-    await page.locator('#timer-dock').click();
-    assert.equal(await page.evaluate(()=>RT.end),deadline);
-    await page.locator('[data-act="timer-close"]').click();
-    assert.equal(await page.evaluate(()=>RT.running),false);
-    assert.equal(await page.locator('#timer-dock').isVisible(),false);
-    await page.evaluate(()=>go('day','upper-a'));
-    await page.locator('[data-act="finish"]').click();
+    await page.locator('#plan-4').selectOption('');
+    await page.locator('#plan-1').selectOption('crossfit');
+    assert.match(await txt(page),/Lower y Metabólico|Metabólico/i);
+    await page.locator('[data-act="plan-week"][data-n="1"]').click();
+    assert.deepEqual(await page.evaluate(()=>planFor(planDate())),['upper','pierna','crossfit','upper',null,null,null],'other weeks keep the default');
+    await ctx.close();
+
+    /* ---------- 3. El programa: Upper único y Lower ---------- */
+    ({ctx,page} = await open(MONDAY));
+    const prog = await page.evaluate(()=>({
+      ids:P.days.map(d=>d.id), names:P.days.map(d=>d.name),
+      upper:flatEx(dayById('upper')).map(e=>[e.id,e.sets,e.reps]),
+      lower:flatEx(dayById('pierna')).map(e=>e.id),
+      units:dayUnits(dayById('upper')).map(u=>u.map(e=>e.id).join('+')),
+      extras:P.extras.map(d=>d.id)
+    }));
+    assert.deepEqual(prog.ids,['upper','pierna','crossfit']);
+    assert.deepEqual(prog.names,['Upper','Lower','Metabólico + core']);
+    assert.deepEqual(prog.upper,[['press-banca',4,'6–8'],['jalon-neutro',4,'6–8'],['remo',3,'8–12'],['landmine',2,'8–10/lado'],['elev-laterales',3,'12–15'],['pajaros',3,'12–15'],['curl-biceps',3,'10–12'],['triceps-overhead',3,'10–15']]);
+    assert.deepEqual(prog.lower,['sentadilla','bulgara','nordico','gemelo','pallof','rueda']);
+    assert.deepEqual(prog.units,['press-banca','jalon-neutro','remo','landmine','elev-laterales+pajaros','curl-biceps+triceps-overhead']);
+    assert.ok(prog.extras.includes('estiramientos'));
+
+    /* ---------- 4. Dentro del entreno: ver y Ir al reloj, sin campos de peso ---------- */
+    await page.evaluate(()=>{S.history=[{id:'p',dayId:'upper',ts:Date.now()-7*864e5,vol:1400,dur:36e5,entries:[{id:'press-banca',nm:'Press de banca',sets:4,reps:'8 / 8 / 7 / 7',kg:62.5,setData:[{kg:62.5,reps:8},{kg:62.5,reps:8},{kg:60,reps:7},{kg:60,reps:7}]}]}];save();go('day','upper')});
+    assert.equal(await page.locator('#app input').count(),0,'no kg or reps fields in the training');
+    assert.equal(await page.locator('#app .dot').count(),0,'no set markers in the training');
+    assert.equal(await page.locator('[data-act="to-clock"]').count(),6,'one button per exercise, one per superset');
+    assert.deepEqual(await page.locator('.ss [data-act="to-clock"]').allInnerTexts(),['Ir al reloj · superserie','Ir al reloj · superserie']);
+    assert.match(await page.locator('.ex').first().innerText(),/Última vez: 62.5×8 · 62.5×8 · 60×7 · 60×7/i);
+    await page.screenshot({path:path.join(shots,'upper-preview.png'),fullPage:true});
+    // ⋯ swaps the exercise of a slot; the clock then uses that one.
+    await page.locator('.ex').nth(1).locator('[data-act="ex-menu"]').click();
+    assert.equal(await page.evaluate(()=>document.querySelector('#scrim').classList.contains('on')),true);
+    await page.locator('#exsheet select').selectOption('dominadas-asistidas');
+    await page.locator('#exsheet [data-act="ex-menu-close"]').last().click();
+    assert.match(await page.locator('.ex').nth(1).innerText(),/Dominadas asistidas[\s\S]*cambiado/i);
+
+    /* ---------- 5. Reloj desde el entreno: series, descansos y anotar al final ---------- */
+    await page.locator('.ex').first().locator('[data-act="to-clock"]').click();
+    assert.equal(await page.evaluate(()=>VIEW),'reloj');
+    const ready = await page.evaluate(()=>({items:S.clock.items,sets:S.clock.sets,rest:S.clock.rest,phase:S.clock.phase,day:S.clock.dayId}));
+    assert.deepEqual(ready,{items:[{id:'press-banca',nm:'Press de banca'}],sets:4,rest:120,phase:'setup',day:'upper'});
+    assert.match(await txt(page),/Upper · ejercicio 1 de 6[\s\S]*Objetivo 6–8 · la última vez 62.5×8/i);
+    await page.screenshot({path:path.join(shots,'reloj-listo-preview.png')});
+    await page.locator('[data-act="ck-rest"][data-d="15"]').click();
+    await page.locator('[data-act="ck-start"]').click();
+    assert.match(await page.locator('.ck-done').innerText(),/Serie hecha[\s\S]*descansar 2:15/i);
+    assert.match(await txt(page),/la última vez 62.5×8/i);
+    await page.screenshot({path:path.join(shots,'reloj-serie-preview.png')});
+    await page.locator('[data-act="ck-setdone"]').click();
+    assert.equal(await page.evaluate(()=>S.clock.phase),'rest');
+    assert.match(await txt(page),/1 de 4 hechas[\s\S]*Siguiente: serie 2 de 4/i);
+    // The rest survives a reload and its end starts the next set with an alarm.
     await page.reload();
-    assert.deepEqual(await page.evaluate(()=>[lastFor('jalon-neutro').kg,lastFor('dominada-lastrada').kg]),[50,15]);
-    // Pair labels and automatic rest survive the flattened live-session display.
-    await page.evaluate(()=>{go('day','upper-b');startSession('upper-b')});
-    await page.locator('[data-act="set"][data-k^="elev-laterales|"]').first().click();
-    assert.equal(await page.locator('#sheet').isVisible(),false);
-    await page.locator('[data-act="set"][data-k^="pajaros|"]').first().click();
-    assert.equal(await page.locator('#sheet').isVisible(),true);
-    assert.ok(await page.locator('.pair-label').count()>=4);
-    await page.evaluate(()=>{skipRest();S.active=null;save();go('day','pierna');startSession('pierna')});
-    assert.match(await page.locator('.prep-card').textContent(),/Goblet Squat/);
-    assert.equal(await page.locator('.prep-card [data-act="set"]').count(),0);
-    // All six metabolic variants: common warmup, two chosen exercises, timer and distinct history.
-    for(const family of [0,1])for(const variant of [0,1,2]){
-      const key=family?'metabolic-kb':'metabolic-cross';
-      await page.evaluate(({family,variant,key})=>{S.active=null;S.drafts.crossfit={};S.picks['metabolic-family']=family;S.picks[key]=variant;save();go('day','crossfit');startSession('crossfit')},{family,variant,key});
-      assert.equal(await page.evaluate(()=>S.active.exercises.length),2);
-      assert.equal(await page.locator('[data-act="wod"]').count(),1);
-      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'1200');
-      assert.match(await page.locator('#app').textContent(),/Calentamiento habitual/);
-      assert.match(await page.locator('#app').textContent(),/World’s Greatest Stretch/);
-      assert.equal(await page.locator('[data-act="pick"][data-k="'+key+'"]').count(),3);
-      await openExMenu(/Plank pull-through/);
-      await page.locator('#exsheet select').selectOption('pallof');
-      await closeExMenu();
-      await openExMenu(/Woodchop ligero/);
-      await page.locator('#exsheet select').selectOption('bird-dog');
-      await closeExMenu();
-      await page.locator('[data-act="set"][data-k^="woodchop-kb|"]').first().click();
-      await page.evaluate(()=>skipRest());
-      await page.locator('[data-act="wod"]').click();
-      assert.equal(await page.evaluate(()=>RT.running),true);
-      await page.locator('[data-act="timer-minimize"]').click();
-      await page.reload();
-      assert.deepEqual(await page.evaluate(()=>S.active.exercises.map(e=>e.id)),['pallof','bird-dog']);
-      await page.evaluate(()=>skipRest());
+    assert.equal(await page.evaluate(()=>S.clock.phase),'rest');
+    await page.evaluate(()=>{S.clock.restEnd=Date.now()-10;clockTick()});
+    assert.deepEqual(await page.evaluate(()=>[S.clock.phase,S.clock.done]),['work',1]);
+    assert.match(await page.locator('.ck-big').innerText(),/2\s*\/ 4/i);
+    for (let i=0;i<2;i++){ await page.locator('[data-act="ck-setdone"]').click(); await page.locator('[data-act="ck-skiprest"]').click(); }
+    assert.match(await page.locator('.ck-done').innerText(),/y anotar/i,'the last set leads to the log');
+    await page.locator('[data-act="ck-setdone"]').click();
+    assert.equal(await page.evaluate(()=>S.clock.phase),'log');
+    // Prefilled with last time, set by set; a new weight rolls down to the sets that had the same.
+    const kgs = () => page.locator('[data-act="lg-kg"]').evaluateAll(els=>els.map(e=>e.value));
+    const reps = () => page.locator('[data-act="lg-reps"]').evaluateAll(els=>els.map(e=>e.value));
+    assert.deepEqual(await kgs(),['62.5','62.5','60','60']);
+    assert.deepEqual(await reps(),['8','8','7','7']);
+    await page.screenshot({path:path.join(shots,'reloj-anotar-preview.png')});
+    await page.locator('[data-act="lg-kg"]').first().fill('65');
+    assert.deepEqual(await kgs(),['65','65','60','60']);
+    await page.locator('[data-act="lg-reps"]').nth(3).fill('6');
+    await page.locator('[data-act="ck-save"]').click();
+    const saved = await page.evaluate(()=>{const h=S.history[0];return {id:h.id,day:h.dayId,e:h.entries.map(e=>[e.id,e.kg,e.setData]),pr:S.prs['press-banca'].kg,phase:S.clock.phase}});
+    assert.deepEqual(saved,{id:'r-2026-11-02-upper',day:'upper',e:[['press-banca',65,[{kg:65,reps:8},{kg:65,reps:8},{kg:60,reps:7},{kg:60,reps:6}]]],pr:65,phase:'done'});
+    assert.match(await txt(page),/\+2.5 kg vs la última/i);
+    assert.match(await page.locator('[data-act="ck-next"]').innerText(),/Dominadas asistidas/i);
+    await page.screenshot({path:path.join(shots,'reloj-hecho-preview.png')});
+    // One more set: rest → set → log again; the entry is replaced, not duplicated.
+    await page.locator('[data-act="ck-more"]').click();
+    await page.locator('[data-act="ck-skiprest"]').click();
+    await page.locator('[data-act="ck-setdone"]').click();
+    assert.deepEqual(await kgs(),['65','65','60','60','60']);
+    await page.locator('[data-act="ck-save"]').click();
+    assert.deepEqual(await page.evaluate(()=>S.history[0].entries.map(e=>[e.id,e.sets])),[['press-banca',5]]);
+    // Next exercise straight from the clock.
+    await page.locator('[data-act="ck-next"]').click();
+    assert.deepEqual(await page.evaluate(()=>[S.clock.phase,S.clock.items[0].id,S.clock.sets]),['setup','dominadas-asistidas',4]);
+    // The training shows what is done today.
+    await page.evaluate(()=>go('day','upper'));
+    assert.match(await page.locator('.ex').first().innerText(),/Hoy: 65×8 · 65×8 · 60×7 · 60×6 · 60×6/i);
+    assert.match(await page.locator('.ex').first().locator('[data-act="to-clock"]').innerText(),/Otra vez al reloj/i);
+    assert.equal(await page.locator('.ex.full').count(),1);
+
+    /* ---------- 6. Superserie, guardas y terminar antes ---------- */
+    await page.locator('.ss').first().locator('[data-act="to-clock"]').click();
+    assert.deepEqual(await page.evaluate(()=>[S.clock.items.map(x=>x.id),S.clock.sets,S.clock.rest]),[['elev-laterales','pajaros'],3,60]);
+    assert.match(await txt(page),/Superserie: haz los dos seguidos/i);
+    await page.locator('[data-act="ck-start"]').click();
+    assert.match(await txt(page),/Ronda[\s\S]*Ronda hecha/i);
+    // Another exercise can't start while this one runs: the button takes you back here.
+    await page.evaluate(()=>go('day','upper'));
+    assert.match(await page.locator('.ck-banner').innerText(),/Serie en marcha[\s\S]*Elevaciones laterales \+ Pájaros/i);
+    assert.equal(await page.locator('.to-clock.live').count(),1);
+    await page.locator('.ex').nth(2).locator('[data-act="to-clock"]').click();
+    assert.equal(await page.evaluate(()=>VIEW),'reloj');
+    assert.deepEqual(await page.evaluate(()=>S.clock.items.map(x=>x.id)),['elev-laterales','pajaros']);
+    assert.match(await page.locator('#toast').innerText(),/sigue en el reloj/i);
+    await page.locator('[data-act="ck-setdone"]').click();
+    await page.locator('[data-act="ck-skiprest"]').click();
+    await page.locator('[data-act="ck-setdone"]').click();
+    await page.locator('[data-act="ck-finish"]').click();
+    assert.equal(await page.locator('.lg-card').count(),2,'one card per exercise of the pair');
+    assert.equal(await page.locator('[data-act="lg-kg"]').count(),4,'only the two rounds done');
+    assert.equal(await page.locator('[data-act="ck-save"]').isDisabled(),false);
+    await page.locator('[data-act="lg-kg"]').nth(0).fill('10');
+    await page.locator('[data-act="lg-reps"]').nth(0).fill('14');
+    await page.locator('[data-act="lg-reps"]').nth(1).fill('12');
+    await page.locator('[data-act="lg-kg"]').nth(2).fill('8');
+    await page.locator('[data-act="lg-reps"]').nth(2).fill('15');
+    await page.locator('[data-act="lg-reps"]').nth(3).fill('15');
+    await page.locator('[data-act="ck-save"]').click();
+    assert.deepEqual(await page.evaluate(()=>S.history[0].entries.filter(e=>e.id!=='press-banca').map(e=>[e.id,e.setData])),
+      [['elev-laterales',[{kg:10,reps:14},{kg:10,reps:12}]],['pajaros',[{kg:8,reps:15},{kg:8,reps:15}]]]);
+    // Leaving without saving and cancelling with no sets done.
+    await page.locator('[data-act="ck-new"]').click();
+    await page.locator('[data-act="ck-ex"]').selectOption('sentadilla');
+    assert.deepEqual(await page.evaluate(()=>[S.clock.dayId,S.clock.sets]),['',3]);
+    await page.locator('[data-act="ck-start"]').click();
+    await page.locator('[data-act="ck-finish"]').click();
+    assert.equal(await page.evaluate(()=>S.clock.phase),'setup','no sets: the exercise is cancelled');
+    await page.locator('[data-act="ck-start"]').click();
+    await page.locator('[data-act="ck-setdone"]').click();
+    await page.locator('[data-act="ck-finish"]').click();
+    await page.locator('[data-act="ck-discard"]').click();
+    assert.equal(await page.evaluate(()=>[S.clock.phase,S.history.some(h=>h.entries.some(e=>e.id==='sentadilla'))].join()),'setup,false');
+    // A custom exercise typed by hand goes to the day's «Reloj» session.
+    await page.locator('[data-act="ck-ex"]').selectOption('__new');
+    await page.locator('[data-act="ck-custom"]').fill('Press militar');
+    await page.locator('[data-act="ck-start"]').click();
+    await page.locator('[data-act="ck-finish"]').click();
+    await page.locator('[data-act="ck-start"]').click();
+    await page.locator('[data-act="ck-setdone"]').click();
+    await page.locator('[data-act="ck-finish"]').click();
+    await page.locator('[data-act="lg-kg"]').first().fill('30');
+    await page.locator('[data-act="lg-reps"]').first().fill('10');
+    await page.locator('[data-act="ck-save"]').click();
+    assert.deepEqual(await page.evaluate(()=>{const h=S.history.find(x=>x.dayId==='reloj');return [h.id,h.entries[0].id,h.entries[0].setData]}),['r-2026-11-02','c-press-militar',[{kg:30,reps:10}]]);
+    assert.equal(await page.locator('[data-act="ck-next"]').count(),0);
+
+    /* ---------- 7. Rondas del metabólico y extras de casa ---------- */
+    for (const [id,sec] of [['crossfit','1200'],['casa-20','900'],['casa-libre-suave','900']]) {
+      await page.evaluate(id=>go('day',id),id);
+      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),sec);
+      assert.equal(await page.locator('[data-act="rnd"][data-d="-1"]').isDisabled(),true);
       await page.locator('[data-act="rnd"][data-d="1"]').click();
-      await page.locator('[data-act="finish"]').click();
-      assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.id==='bird-dog')),true);
-      assert.equal(await page.evaluate(()=>S.history[0].entries.some(e=>e.id==='dead-bug')),false);
+      await page.locator('[data-act="rnd"][data-d="1"]').click();
+      await page.reload();
+      assert.equal(await page.locator('.rounds-n').innerText(),'2');
+      assert.deepEqual(await page.evaluate(id=>{const h=S.history.find(x=>x.id==='r-2026-11-02-'+id);return [h.dayId,h.entries[0].sets,h.entries[0].reps]},id),[id,2,'rondas']);
+      await page.locator('[data-act="rnd"][data-d="-1"]').click();
+      await page.locator('[data-act="rnd"][data-d="-1"]').click();
+      assert.equal(await page.evaluate(id=>S.history.some(x=>x.id==='r-2026-11-02-'+id),id),false,'zero rounds leaves no empty session');
     }
-    await page.evaluate(()=>{go('day','crossfit');startSession('crossfit')});
-    assert.deepEqual(await page.evaluate(()=>S.active.exercises.map(e=>e.id)),['pallof','bird-dog']);
-    await page.evaluate(()=>{S.active=null;save()});
-    // Home circuit remains optional, preserves schedules and stores its own rounds.
-    const beforeHome=await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size}));
-    await page.evaluate(()=>{go('day','casa-20');startSession('casa-20')});
-    assert.match(await page.locator('.session-head').textContent(),/Registro por rondas/);
-    assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'900');
+    await page.evaluate(()=>go('day','crossfit'));
+    assert.equal(await page.locator('[data-act="to-clock"]').count(),2,'the two preparation exercises go to the clock');
     await page.locator('[data-act="wod"]').click();
     assert.equal(await page.evaluate(()=>RT.running),true);
     await page.locator('[data-act="timer-minimize"]').click();
-    await page.locator('[data-act="rnd"][data-d="1"]').click();
-    await page.locator('#snote').fill('15 kg · RPE 6 · una ronda de prueba');
-    await page.locator('#snote').blur();
-    await page.reload();
-    assert.equal(await page.evaluate(()=>Object.values(S.active.rounds)[0]),1);
     await page.evaluate(()=>skipRest());
-    await page.locator('[data-act="finish"]').click();
-    await page.reload();
-    assert.deepEqual(await page.evaluate(()=>({day:S.history[0].dayId,rounds:S.history[0].entries[0].sets,note:S.history[0].note})),{day:'casa-20',rounds:1,note:'15 kg · RPE 6 · una ronda de prueba'});
-    assert.deepEqual(await page.evaluate(()=>({plans:JSON.stringify(S.plans),count:weekSessions().size})),beforeHome);
-    assert.equal(await page.evaluate(()=>new Set(S.history.filter(h=>h.dayId==='crossfit').flatMap(h=>h.entries.filter(e=>e.reps==='rondas').map(e=>e.id))).size>=6),true);
-    for(const width of [320,390,768])await checkLayout(width,'day','casa-20');
-    await page.setViewportSize({width:390,height:844});
-    await page.screenshot({path:path.join(root,'tests','home-circuit-preview.png'),fullPage:true});
-    assert.deepEqual(await page.locator('#nav button').evaluateAll(els=>els.map(el=>el.dataset.v)),['hoy','reloj','historial','ajustes']);
-    await page.waitForTimeout(2800);
-    for(const width of [320,390]){
-      await page.setViewportSize({width,height:844});
-      await page.evaluate(()=>go('hoy'));
-      await page.waitForTimeout(300);
-      const gap=await page.evaluate(()=>document.querySelector('.plan-action').getBoundingClientRect().top-document.querySelector('.hero').getBoundingClientRect().bottom);
-      assert.ok(gap>=16,'Planning button must have its own space after the workout');
-    }
-    // A damaged backup (null entries, unusable sets) no longer breaks the screens.
-    await page.evaluate(()=>{localStorage.setItem('fit.v2',JSON.stringify({history:[null,{id:'z',dayId:'upper-a',ts:Date.now(),vol:'x',entries:[null,'roto',{id:'remo',nm:'Remo',sets:'2',reps:'10',kg:'mal',setData:[null,{kg:'x',reps:'y'},{kg:'40',reps:'10'}]}]}]}))});
-    await page.reload();
-    const healed=await page.evaluate(()=>{go('historial');const h=S.history[0];
-      return {sessions:S.history.length,entries:h.entries.length,sets:h.entries[0].setData,vol:h.vol,
-        broken:/undefined|NaN|Invalid Date|\[object Object\]/.test(document.body.innerText)}});
-    assert.equal(healed.sessions,1);
-    assert.equal(healed.entries,1);
-    assert.deepEqual(healed.sets,[{kg:40,reps:10}]);
-    assert.equal(healed.vol,0);
-    assert.equal(healed.broken,false);
-    // Sheets dim and block the screen behind them, and tapping outside closes them.
-    await page.evaluate(()=>{S.active=null;S.history=[];save();go('day','upper-a');startSession('upper-a')});
-    await page.locator('.ex').first().locator('.dot').first().click();
-    const tucked=await page.evaluate(()=>({timer:document.querySelector('#sheet').classList.contains('on')}));
-    await page.locator('.ex').first().locator('.dot.on').first().click();
-    await page.locator('#setsheet.on').waitFor();
-    const guarded=await page.evaluate(()=>({scrim:document.querySelector('#scrim').classList.contains('on'),
-      timer:document.querySelector('#sheet').classList.contains('on'),
-      dock:getComputedStyle(document.querySelector('#timer-dock')).display}));
-    assert.equal(tucked.timer,true,'marking a set opens the clock');
-    assert.deepEqual(guarded,{scrim:true,timer:false,dock:'block'},'opening a sheet should dim the screen and tuck the clock');
-    await page.locator('#scrim').click({position:{x:40,y:60}});
-    await page.waitForFunction(()=>!document.querySelector('#setsheet').classList.contains('on')&&!document.querySelector('#scrim').classList.contains('on'));
-    // The row says how today compares with last time.
-    await page.evaluate(()=>{const d=864e5,now=Date.now();
-      S.history=[{id:'p',dayId:'upper-a',ts:now-7*d,vol:1300,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:2,reps:'8 / 8',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8}],ts:now-7*d}]}];
-      S.active=null;save();go('day','upper-a');startSession('upper-a')});
-    await page.locator('.ex').first().locator('.dot').first().click();
-    await closeTimer();
-    await page.locator('.ex').first().locator('.dot.on').first().click();
-    await page.locator('#setsheet [data-act="set-adj"][data-f="kg"][data-d="2.5"]').click();
-    await page.locator('#setsheet [data-act="set-close"]').last().click();
-    assert.match(await page.locator('.setlog').first().textContent(),/\+2\.5 kg vs la última/);
-    // Every control in Ajustes and in the conditioning day is a real touch target.
-    for(const [view,day] of [['ajustes'],['day','crossfit']]){
-      await page.evaluate(({view,day})=>{S.active=null;save();go(view,day)},{view,day});
-      await page.waitForTimeout(150);
-      const small=await page.evaluate(()=>[...document.querySelectorAll('button,.sw,summary')].filter(el=>{
-        const s=getComputedStyle(el),r=el.getBoundingClientRect();
-        return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&!el.closest('#nav')&&!el.matches('.skip')&&!el.closest('.sheet:not(.on)')&&r.height<40;
-      }).map(el=>(el.dataset.act||el.className)+':'+Math.round(el.getBoundingClientRect().height)));
-      assert.deepEqual(small,[],`${view}${day?'/'+day:''} has controls under 40px`);
-    }
-    // Progress remembers the exercise you were looking at.
-    await page.evaluate(()=>{const d=864e5,now=Date.now();
-      S.history=[{id:'q1',dayId:'pierna',ts:now-d,vol:900,entries:[{id:'sentadilla',nm:'Sentadilla',sets:2,reps:'5 / 5',kg:90,setData:[{kg:90,reps:5},{kg:90,reps:5}],ts:now-d}]},
-                 {id:'q2',dayId:'upper-a',ts:now-2*d,vol:800,entries:[{id:'press-banca',nm:'Press de banca',sets:2,reps:'8 / 8',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8}],ts:now-2*d}]}];
-      S.active=null;save();go('historial')});
-    await page.locator('[data-act="lift-sel"]').selectOption('sentadilla');
+    await page.screenshot({path:path.join(shots,'crossfit-preview.png'),fullPage:true});
+
+    /* ---------- 8. Registro ---------- */
+    await page.evaluate(()=>go('historial'));
+    assert.deepEqual((await page.locator('.hitem .m b').allInnerTexts()).slice(0,3),['Reloj','Upper','Upper']);
+    await page.locator('[data-act="lift-sel"]').selectOption('elev-laterales');
     await page.reload();
     await page.evaluate(()=>go('historial'));
-    assert.equal(await page.locator('[data-act="lift-sel"]').inputValue(),'sentadilla');
-    await page.evaluate(()=>{S.active=null;S.history=[];save()});
-    // RELOJ: choose exercise, sets and rest; it guides set → log → rest → next set and records every set.
-    await page.setViewportSize({width:390,height:844});
-    await page.evaluate(()=>{const d=864e5,now=Date.now();
-      S.active=null;S.clock=null;S.clockPrefs={};
-      S.history=[{id:'c0',dayId:'upper-a',ts:now-7*d,vol:1300,dur:35e5,entries:[{id:'press-banca',nm:'Press de banca',sets:3,reps:'8 / 8 / 7',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8},{kg:57.5,reps:7}],ts:now-7*d}]}];
-      save();go('hoy')});
-    await page.locator('#nav [data-v="reloj"]').click();
-    assert.equal(await page.locator('[data-act="ck-start"]').isDisabled(),true,'cannot start without an exercise');
-    await page.locator('[data-act="ck-ex"]').selectOption('press-banca');
-    assert.deepEqual(await page.evaluate(()=>({sets:S.clock.sets,rest:S.clock.rest})),{sets:4,rest:150},'plan defaults');
-    assert.match(await page.locator('.ck-ref').textContent(),/60×8 · 60×8 · 57\.5×7/);
-    await page.locator('[data-act="ck-sets"][data-d="-1"]').click();
-    await page.locator('[data-act="ck-restset"][data-s="90"]').click();
-    await page.locator('[data-act="ck-start"]').click();
-    assert.deepEqual(await page.evaluate(()=>({ph:S.clock.phase,i:S.clock.i,n:S.clock.sets})),{ph:'work',i:0,n:3});
-    await page.locator('[data-act="ck-setdone"]').click();
-    assert.deepEqual(await page.evaluate(()=>[document.querySelector('[data-act="ck-kg"]').value,document.querySelector('[data-act="ck-reps"]').value]),['60','8'],'proposes last time');
-    await page.locator('[data-act="ck-adj"][data-f="kg"][data-d="2.5"]').click();
-    await page.locator('[data-act="ck-save"]').click();
-    const rest1=await page.evaluate(()=>({ph:S.clock.phase,left:Math.round((S.clock.restEnd-Date.now())/1000),sd:S.history.find(h=>h.dayId==='reloj').entries[0].setData}));
-    assert.equal(rest1.ph,'rest'); assert.ok(rest1.left>=88&&rest1.left<=90,`rest ${rest1.left}`);
-    assert.deepEqual(rest1.sd,[{kg:62.5,reps:8}],'each set is saved as soon as it is logged');
-    const end0=await page.evaluate(()=>S.clock.restEnd);
-    await page.locator('[data-act="ck-radj"][data-d="15"]').click();
-    assert.ok(await page.evaluate(e=>S.clock.restEnd-e>=14000,end0));
-    await page.locator('[data-act="ck-pause"]').click();
-    const frozen=await page.locator('#ck-time').textContent();
-    await page.waitForTimeout(1300);
-    assert.equal(await page.locator('#ck-time').textContent(),frozen,'pause freezes the countdown');
-    await page.locator('[data-act="ck-pause"]').click();
-    await page.reload();
-    assert.deepEqual(await page.evaluate(()=>({v:VIEW,ph:S.clock.phase})),{v:'reloj',ph:'rest'},'survives a reload');
-    await page.evaluate(()=>{S.clock.restEnd=Date.now()+1500;save();clockLoop()});
-    await page.waitForFunction(()=>S.clock.phase==='work',null,{timeout:5000});
-    assert.equal(await page.evaluate(()=>S.clock.i),1,'rest ends into the next set by itself');
-    await page.locator('[data-act="ck-setdone"]').click();
-    assert.equal(await page.locator('[data-act="ck-kg"]').inputValue(),'62.5','next set starts from today’s weight');
-    await page.locator('[data-act="ck-save"]').click();
-    await page.locator('[data-act="ck-skiprest"]').click();
-    await page.locator('[data-act="ck-setdone"]').click();
-    await page.locator('[data-act="ck-save"]').click();
-    const done=await page.evaluate(()=>({ph:S.clock.phase,sd:S.history.find(h=>h.dayId==='reloj').entries[0].setData,pr:S.prs['press-banca'].kg,sum:document.querySelector('.ck-sum').textContent}));
-    assert.equal(done.ph,'done');
-    assert.deepEqual(done.sd,[{kg:62.5,reps:8},{kg:62.5,reps:8},{kg:62.5,reps:7}]);
-    assert.equal(done.pr,62.5);
-    assert.match(await page.locator('.ck-stage').textContent(),/\+2\.5 kg vs la última/);
-    await page.locator('[data-act="ck-more"]').click();
-    assert.deepEqual(await page.evaluate(()=>({ph:S.clock.phase,n:S.clock.sets})),{ph:'rest',n:4},'one more set after finishing');
-    await page.locator('[data-act="ck-finish"]').click();
-    await page.locator('[data-act="ck-new"]').click();
-    assert.equal(await page.evaluate(()=>S.clock.phase),'setup');
-    // A custom exercise typed by hand becomes part of the list and remembers its sets and rest.
-    await page.locator('[data-act="ck-ex"]').selectOption('__new');
-    await page.locator('[data-act="ck-custom"]').fill('Press militar');
-    await page.locator('[data-act="ck-sets"][data-d="1"]').click();
-    await page.locator('[data-act="ck-start"]').click();
-    assert.deepEqual(await page.evaluate(()=>({id:S.clock.exId,nm:S.clock.exNm,pref:S.clockPrefs['c-press-militar']})),{id:'c-press-militar',nm:'Press militar',pref:{sets:5,rest:90}});
-    await page.locator('[data-act="ck-finish"]').click();
-    assert.equal(await page.evaluate(()=>S.clock.phase),'setup','finishing with nothing logged goes back to setup');
-    assert.ok(await page.locator('[data-act="ck-ex"] optgroup[label="Todos"] option[value="c-press-militar"]').count()===1,'custom exercise joins the list');
-    // The clock screens fit and keep 44px targets at every width.
-    for(const width of [320,360,390]){
-      await page.setViewportSize({width,height:844});
-      for(const ph of ['setup','work','log','rest','done']){
-        await page.evaluate(ph=>{S.clock={phase:ph,exId:'sentadilla',exNm:'Sentadilla con barra alta',typing:false,custom:'',sets:5,rest:150,i:2,log:[{kg:90,reps:5},{kg:90,reps:5}],t0:Date.now()-20000,restEnd:Date.now()+90000,restTotal:150000,paused:false,left:0,runId:Date.now()-300000,ref:{kg:90,setData:[{kg:90,reps:5}]},draft:null,lastBeep:null};save();go('reloj')},ph);
-        await page.waitForTimeout(120);
-        const L=await page.evaluate(()=>{const els=[...document.querySelectorAll('#app button,#app input,#app select')].filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0});
-          return {ov:document.documentElement.scrollWidth>innerWidth,small:els.filter(el=>el.getBoundingClientRect().height<44).map(el=>el.dataset.act||el.tagName),
-            main:Math.round((document.querySelector('.ck-done,.ck-go')||document.body).getBoundingClientRect().bottom),nav:Math.round(document.querySelector('#nav').getBoundingClientRect().top)}});
-        assert.equal(L.ov,false,`reloj ${ph} overflows at ${width}px`);
-        assert.deepEqual(L.small,[],`reloj ${ph} has small controls at ${width}px`);
-        assert.ok(L.main<L.nav,`reloj ${ph}: the main button is hidden behind the nav at ${width}px`);
-      }
-    }
-    await page.evaluate(()=>{S.clock=null;save()});
-    // Registro: a training done outside the app can be written down by hand.
-    await page.setViewportSize({width:320,height:844});
-    await page.evaluate(()=>{MANUAL=null;go('historial')});
+    assert.equal(await page.locator('[data-act="lift-sel"]').inputValue(),'elev-laterales');
     await page.locator('.manual summary').click();
     await page.locator('[data-act="mn-ex"]').selectOption('press-banca');
-    assert.equal(await page.locator('[data-act="mn-kg"]').count(),3,'prefills as many sets as last time');
-    await page.locator('[data-act="mn-kg"]').first().fill('65');
-    await page.locator('[data-act="mn-add"]').click();
+    assert.equal(await page.locator('[data-act="mn-kg"]').count(),5,'prefills as many sets as last time');
     await page.locator('[data-act="mn-save"]').click();
-    const manual=await page.evaluate(()=>{const h=S.history.find(x=>x.dayId==='manual');return {n:h.entries[0].setData.length,first:h.entries[0].setData[0],pr:S.prs['press-banca'].kg,name:[...document.querySelectorAll('.hitem .m b')].map(x=>x.textContent).includes('Registro a mano')}});
-    assert.deepEqual(manual,{n:4,first:{kg:65,reps:8},pr:65,name:true});
-    assert.deepEqual(errors,[]);
-    await page.setViewportSize({width:390,height:844});
-    await page.evaluate(()=>go('hoy'));
-    await page.screenshot({path:path.join(root,'tests','mobile-preview.png'),fullPage:true});
-    await page.evaluate(()=>go('semana'));
-    await page.screenshot({path:path.join(root,'tests','planner-preview.png'),fullPage:true});
-    await page.evaluate(()=>go('day','calentamiento'));
-    await page.screenshot({path:path.join(root,'tests','warmup-preview.png'),fullPage:true});
-    for(const id of ['upper-a','pierna','upper-b','crossfit']){
-      await page.evaluate(id=>go('day',id),id);
-      await page.screenshot({path:path.join(root,'tests',`${id}-preview.png`),fullPage:true});
-    }
-    await page.setViewportSize({width:320,height:844});
+    assert.equal(await page.evaluate(()=>S.history.some(h=>h.dayId==='manual')),true);
+    // A damaged backup no longer breaks the screens.
+    await page.evaluate(()=>{localStorage.setItem('fit.v2',JSON.stringify({history:[null,{id:'z',dayId:'upper-a',ts:Date.now(),vol:'x',entries:[null,'roto',{id:'remo',nm:'Remo',sets:'2',reps:'10',kg:'mal',setData:[null,{kg:'x',reps:'y'},{kg:'40',reps:'10'}]}]}],plans:{'2026-11-02':'roto','x':[]},clock:{phase:'log',items:'mal'}}))});
+    await page.reload();
+    const healed=await page.evaluate(()=>{go('historial');const h=S.history[0];
+      return {sessions:S.history.length,day:h.dayId,sets:h.entries[0].setData,plans:S.plans,clock:S.clock.phase,
+        broken:/undefined|NaN|Invalid Date|\[object Object\]/.test(document.body.innerText)}});
+    assert.deepEqual(healed,{sessions:1,day:'upper',sets:[{kg:40,reps:10}],plans:{},clock:'setup',broken:false});
+    // Importing a 3.x backup goes through the same migration.
+    await page.evaluate(l=>{S=sanitizeState(JSON.parse(JSON.stringify(l)));save();go('hoy')},legacy);
+    assert.equal(await page.evaluate(()=>S.plans['2026-11-02'].join()),'upper,pierna,crossfit,upper,,,');
+    await ctx.close();
+
+    /* ---------- 9. Diseño en móvil, tablet y todas las pantallas del reloj ---------- */
+    ({ctx,page} = await open(MONDAY, {history:[{id:'p',dayId:'upper',ts:Date.parse(MONDAY)-7*864e5,vol:1400,entries:[{id:'press-banca',nm:'Press de banca',sets:2,reps:'8 / 8',kg:60,setData:[{kg:60,reps:8},{kg:60,reps:8}]}]}]}));
+    for (const width of [320,390,768])
+      for (const [view,day] of [['hoy'],['semana'],['day','upper'],['day','pierna'],['day','crossfit'],['day','estiramientos'],['day','movilidad'],['day','calentamiento'],['day','casa-20'],['day','agarre'],['historial'],['ajustes'],['reloj']])
+        await checkLayout(page,width,view,day);
     await page.evaluate(()=>go('day','pierna'));
-    const nordic=page.locator('.ex').filter({hasText:'Curl nórdico'}).first();
-    await nordic.locator('summary').click();
-    assert.match(await nordic.textContent(),/fija bien los tobillos/);
-    assert.match(await nordic.textContent(),/Curl femoral sentado/);
-    await page.screenshot({path:path.join(root,'tests','nordic-guide-preview.png'),fullPage:true});
-    await page.evaluate(()=>go('day','crossfit'));
-    assert.match(await page.locator('#app').textContent(),/World’s Greatest Stretch/);
-    assert.equal(await page.evaluate(()=>flatEx(dayById('crossfit')).length),2);
-    await page.screenshot({path:path.join(root,'tests','mobility-guide-preview.png'),fullPage:true});
-    for(const id of ['casa-libre-cardio','casa-libre-suave','casa-pesas-metabolico']){
-      for(const width of [320,390])await checkLayout(width,'day',id);
-      await page.evaluate(id=>{go('day',id);startSession(id)},id);
-      assert.equal(await page.locator('[data-act="wod"]').getAttribute('data-sec'),'900');
-      await page.locator('[data-act="rnd"][data-d="1"]').click();
-      await page.locator('[data-act="finish"]').click();
-      await page.reload();
-      assert.equal(await page.evaluate(()=>S.history[0].dayId),id);
+    await page.screenshot({path:path.join(shots,'pierna-preview.png'),fullPage:true});
+    await page.evaluate(()=>go('day','calentamiento'));
+    await page.screenshot({path:path.join(shots,'warmup-preview.png'),fullPage:true});
+    const pair = [{id:'curl-biceps',nm:'Curl de bíceps'},{id:'triceps-overhead',nm:'Extensión de tríceps por encima de la cabeza'}];
+    for (const width of [320,360,390]) for (const items of [[{id:'sentadilla',nm:'Sentadilla con barra'}], pair]) for (const ph of ['setup','work','rest','log','done']) {
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(({ph,items})=>{
+        const rows=Object.fromEntries(items.map(x=>[x.id,[{kg:90,reps:5},{kg:90,reps:5},{kg:87.5,reps:4}]]));
+        S.clock={phase:ph,items,dayId:'upper',target:Object.fromEntries(items.map(x=>[x.id,'10–12'])),sets:3,rest:150,done:ph==='work'?2:3,t0:Date.now()-20000,restEnd:Date.now()+90000,restTotal:150000,paused:false,left:0,runId:Date.now()-300000,ref:Object.fromEntries(items.map(x=>[x.id,{kg:90,setData:[{kg:90,reps:5}]}])),rows,saved:ph==='done',custom:'',typing:false};
+        if(ph==='rest')S.clock.done=2;
+        save();go('reloj')},{ph,items});
+      await page.waitForTimeout(80);
+      const L=await page.evaluate(()=>{const els=[...document.querySelectorAll('#app button,#app input,#app select')].filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0});
+        const main=document.querySelector('.ck-done,.ck-go');
+        return {ov:document.documentElement.scrollWidth>innerWidth,small:els.filter(el=>el.getBoundingClientRect().height<44).map(el=>el.dataset.act||el.tagName),
+          main:main?Math.round(main.getBoundingClientRect().bottom):0,nav:Math.round(document.querySelector('#nav').getBoundingClientRect().top),
+          broken:/undefined|NaN|\[object Object\]/.test(document.querySelector('#app').innerText)}});
+      const where=`reloj ${ph} ${items.length>1?'pair':'single'} at ${width}px`;
+      assert.equal(L.ov,false,`${where} overflows`);
+      assert.deepEqual(L.small,[],`${where} has small controls`);
+      assert.equal(L.broken,false,`${where} prints broken values`);
+      if (ph!=='log' && ph!=='done') assert.ok(L.main<L.nav,`${where}: the main button is hidden behind the nav`);
     }
-    // The installed shell opens the new program offline without touching the user's browser.
+    await ctx.close();
+
+    /* ---------- 10. Sin conexión ---------- */
     const offlineContext=await browser.newContext({serviceWorkers:'allow'});
     const offlinePage=await offlineContext.newPage();
-    await offlinePage.goto(`http://127.0.0.1:${server.address().port}/`);
+    offlinePage.on('pageerror',e=>errors.push(e.message));
+    await offlinePage.goto(URL0);
     await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
     await offlinePage.waitForTimeout(500);
     await offlinePage.waitForFunction(v=>typeof P!=='undefined'&&P.version===v,VERSION);
     await offlineContext.setOffline(true);
     await offlinePage.reload();
     await offlinePage.waitForFunction(v=>typeof P!=='undefined'&&P.version===v,VERSION);
-    assert.match(await offlinePage.locator('.home-intro').textContent(),/3 \+ 1/);
+    assert.match(await offlinePage.locator('#nav').innerText(),/Entrenos/i);
+    await offlinePage.goto(URL0+'index.html?d=upper');
+    assert.equal(await offlinePage.locator('#top h1').innerText(),'Upper');
     await offlineContext.close();
+
     assert.deepEqual(errors,[]);
-    console.log('PASS: migration, planning, flexible exercises, independent history, configurable timers, guides and responsive controls.');
+    console.log(`PASS ${VERSION}: 3.x migration, Entrenos, planner, unified Upper and Lower, Ir al reloj, log at the end, supersets, rounds, Registro, layout and offline.`);
   } finally {await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
